@@ -8,7 +8,11 @@ export async function getMarketCodes() {
   return response.data;
 }
 
-export async function getCandleByMinutes() {}
+export async function getCandleByMinutes(market: string, unit: number = 1, count: number = 1) {
+  const query = `/candles/minutes/${unit}?market=KRW-BTC&count=${count}`;
+  const response = await axios.get(BASE_URL + query);
+  return response.data;
+}
 
 export async function getCandleByDays(market: string, count: number = 1) {
   const query = `/candles/days?market=${market}&count=${count}`;
