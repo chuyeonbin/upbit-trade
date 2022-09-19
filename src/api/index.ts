@@ -39,3 +39,9 @@ export async function getPresentPrice(market: string) {
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
+
+export async function getOrderBook(market: string) {
+  const query = `/orderbook?markets=${market}`;
+  const response = await axios.get(BASE_URL + query);
+  return response.data;
+}
