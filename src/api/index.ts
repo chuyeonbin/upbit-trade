@@ -29,7 +29,13 @@ export async function getCandleByMonths(market: string, count: number = 1) {
 }
 
 export async function getRecentContract(market: string, count: number = 1) {
-  const query = `trades/ticks?market=${market}&count=${count}`;
+  const query = `/trades/ticks?market=${market}&count=${count}`;
+  const response = await axios.get(BASE_URL + query);
+  return response.data;
+}
+
+export async function getPresentPrice(market: string) {
+  const query = `/ticker?markets=${market}`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
