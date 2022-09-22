@@ -10,7 +10,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <GlobalStyle />
+      <App />
     </Provider>
-    <App />
   </React.StrictMode>,
 );

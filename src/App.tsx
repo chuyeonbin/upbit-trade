@@ -1,4 +1,12 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { socketConnectionRequest } from './store/modules/socket';
+
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(socketConnectionRequest());
+  }, []);
   return <div>upbit-clone</div>;
 }
 
