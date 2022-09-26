@@ -1,4 +1,4 @@
-import { EventChannel, eventChannel } from 'redux-saga';
+import { END, EventChannel, eventChannel } from 'redux-saga';
 import { all, call, fork, take, takeEvery } from 'redux-saga/effects';
 import { createSocket } from '../../utils/socket';
 import { socketConnectionRequest } from '../modules/socket';
@@ -21,6 +21,10 @@ function channelConnection(): EventChannel<any> {
 
     ws.onerror = (error) => {
       throw error;
+    };
+
+    ws.close = () => {
+      emitter(END);
     };
 
     return function unsubscribe() {
