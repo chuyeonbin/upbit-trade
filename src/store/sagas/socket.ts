@@ -1,48 +1,50 @@
-import { AxiosResponse } from 'axios';
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import {
-  socketConnectionError,
-  socketConnectionRequest,
-  socketConnectionSuccess,
-} from '../modules/socket';
+import { EventChannel, eventChannel } from 'redux-saga';
+import { all, call, fork, take, takeEvery } from 'redux-saga/effects';
+import { createSocket } from '../../utils/socket';
+import { socketConnectionRequest } from '../modules/socket';
 
-function socketConnectionPrmise(): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const ws = new WebSocket('wss://api.upbit.com/websocket/v1');
-    ws.binaryType = 'arraybuffer';
+function channelConnection(): EventChannel<any> {
+  return eventChannel((emitter) => {
+    const ws = createSocket();
 
     ws.onopen = () => {
-      const msg = [{ ticket: 'test' }, { type: 'trade', codes: ['KRW-BTC', 'KRW-ETH'] }];
-      const msg1 = JSON.stringify(msg);
+      const msg = JSON.stringify([{ ticket: 'upbit' }, { type: 'trade', codes: ['KRW-BTC'] }]);
 
-      ws.send(msg1);
-
-      resolve('connect!');
+      ws.send(msg);
     };
 
     ws.onmessage = (event) => {
       const enc = new TextDecoder('utf-8');
       const arr = new Uint8Array(event.data);
-      console.log(enc.decode(arr));
+      emitter(enc.decode(arr));
     };
 
     ws.onerror = (error) => {
-      reject(error);
+      throw error;
+    };
+
+    return function unsubscribe() {
+      ws.close();
     };
   });
 }
 
 function* socketConnection() {
+  const channel: EventChannel<any> = yield call(channelConnection);
+
   try {
-    const result: AxiosResponse<any> = yield call(socketConnectionPrmise);
-    yield put(socketConnectionSuccess(result.data));
+    while (true) {
+      const msg: string = yield take(channel);
+      console.log(msg);
+    }
   } catch (error) {
-    yield put(socketConnectionError(error));
+    console.error(error);
+    channel.close();
   }
 }
 
 function* watchSocketConnection() {
-  yield takeLatest(socketConnectionRequest, socketConnection);
+  yield takeEvery(socketConnectionRequest, socketConnection);
 }
 
 export default function* socketSaga() {

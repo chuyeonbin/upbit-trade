@@ -1,12 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { SocketState } from '../../types/state';
 
 const initialState: SocketState = {
   socket: null,
-
-  socketConnectionLoading: false,
-  socketConnectionDone: false,
-  socketConnectionError: null,
 };
 
 const socketSlice = createSlice({
@@ -14,19 +10,11 @@ const socketSlice = createSlice({
   name: 'socket',
   reducers: {
     socketConnectionRequest: (state) => {
-      state.socketConnectionLoading = true;
-    },
-    socketConnectionSuccess: (state, { payload }: PayloadAction<any>) => {
-      console.log(payload);
-    },
-    socketConnectionError: (state, { payload }: PayloadAction<any>) => {
-      state.socketConnectionLoading = false;
-      state.socketConnectionError = payload;
+      console.log('socketConnection');
     },
   },
 });
 
-export const { socketConnectionRequest, socketConnectionSuccess, socketConnectionError } =
-  socketSlice.actions;
+export const { socketConnectionRequest } = socketSlice.actions;
 
 export default socketSlice.reducer;
