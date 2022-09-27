@@ -1,6 +1,6 @@
 import { configureStore, Reducer, AnyAction } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
-import { RootState } from '../types/state';
+import RootState from '../types/state';
 import rootReducer from './rootReducer';
 import rootSaga from './sagas';
 
