@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { socketConnectionRequest } from './store/modules';
+import { socketConnectionRequest } from './store/modules/socket';
 
 function App() {
   const dispatch = useDispatch();

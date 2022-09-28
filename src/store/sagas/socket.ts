@@ -1,7 +1,11 @@
 import { END, EventChannel, eventChannel } from 'redux-saga';
-import { all, call, fork, take, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, take, takeEvery } from 'redux-saga/effects';
 import { createSocket } from '../../utils/socket';
-import { socketConnectionRequest } from '../modules';
+import {
+  socketConnectionError,
+  socketConnectionRequest,
+  socketConnectionSuccess,
+} from '../modules/socket';
 
 function channelConnection(): EventChannel<any> {
   return eventChannel((emitter) => {
@@ -44,6 +48,7 @@ function* socketConnection() {
   } catch (error) {
     console.error(error);
     channel.close();
+    yield put(socketConnectionError(error));
   }
 }
 
