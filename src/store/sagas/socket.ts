@@ -37,18 +37,25 @@ function channelConnection(): EventChannel<any> {
   });
 }
 
-function* socketConnection() {
-  const channel: EventChannel<any> = yield call(channelConnection);
+function closeChannel(channel: EventChannel<any> | null) {
+  if (channel) {
+    channel.close();
+  }
+}
 
+function* socketConnection() {
+  let channel: EventChannel<any>;
   try {
+    channel = yield call(channelConnection);
     while (true) {
       const msg: string = yield take(channel);
       console.log(msg);
     }
   } catch (error) {
     console.error(error);
-    channel.close();
     yield put(socketConnectionError(error));
+  } finally {
+    closeChannel(channel!);
   }
 }
 
