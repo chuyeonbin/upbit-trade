@@ -5,9 +5,9 @@ import { loadMarketListError, loadMarketListRequest, loadMarketListSuccess } fro
 function* loadMarketList() {
   try {
     const marketList: SagaReturnType<typeof getMarketCodes> = yield call(getMarketCodes);
-    put(loadMarketListSuccess(marketList));
+    yield put(loadMarketListSuccess(marketList));
   } catch (error) {
-    put(loadMarketListError({ error }));
+    yield put(loadMarketListError({ error }));
     console.error(error);
   }
 }
