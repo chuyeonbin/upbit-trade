@@ -1,4 +1,4 @@
-import { all, call, fork, put, SagaReturnType, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
 import { getMarketCodes } from '../../api';
 import { loadMarketListError, loadMarketListRequest, loadMarketListSuccess } from '../modules/coin';
 
@@ -13,7 +13,7 @@ function* loadMarketList() {
 }
 
 function* watchLoadMarketList() {
-  yield takeEvery(loadMarketListRequest, loadMarketList);
+  yield takeLatest(loadMarketListRequest, loadMarketList);
 }
 
 export default function* coinSaga() {
