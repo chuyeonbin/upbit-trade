@@ -25,13 +25,6 @@ const coinSlice = createSlice({
 
       // market이 KRW로 시작하는거만 필터링
       state.marketList = payload.filter((value) => value.market.substring(0, 3) === 'KRW');
-
-      payload.filter((value) => {
-        if (value.market.substring(0, 3) === 'KRW') {
-          console.log(value);
-          return value;
-        }
-      });
     },
     loadMarketListError: (state, { payload }) => {
       state.loadMarketListLoading = false;
