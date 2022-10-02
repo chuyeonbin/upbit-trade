@@ -21,14 +21,14 @@ const socketSlice = createSlice({
       state.socketConnectionDone = true;
       console.log('socket Connect!');
     },
-    socketConnectionError: (state, { payload }) => {
+    socketConnectionFailure: (state, { payload }) => {
       state.socketConnectionLoading = false;
       state.socketConnectionError = payload.error;
     },
   },
 });
 
-export const { socketConnectionRequest, socketConnectionSuccess, socketConnectionError } =
+export const { socketConnectionRequest, socketConnectionSuccess, socketConnectionFailure } =
   socketSlice.actions;
 
 export default socketSlice.reducer;
