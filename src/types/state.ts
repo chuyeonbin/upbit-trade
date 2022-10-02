@@ -2,7 +2,7 @@ import { MarketCodes } from '.';
 
 export interface SocketState {
   socketConnectionLoading: boolean;
-  socketConnectionSuccess: boolean;
+  socketConnectionDone: boolean;
   socketConnectionError: Error | null;
 }
 
@@ -10,7 +10,7 @@ export interface CoinState {
   marketList: MarketCodes;
 
   loadMarketListLoading: boolean;
-  loadMarketListSuccess: boolean;
+  loadMarketListDone: boolean;
   loadMarketListError: Error | null;
 }
 

@@ -6,7 +6,7 @@ const initialState: CoinState = {
   marketList: [],
 
   loadMarketListLoading: false,
-  loadMarketListSuccess: false,
+  loadMarketListDone: false,
   loadMarketListError: null,
 };
 
@@ -16,12 +16,12 @@ const coinSlice = createSlice({
   reducers: {
     loadMarketListRequest: (state) => {
       state.loadMarketListLoading = true;
-      state.loadMarketListSuccess = false;
+      state.loadMarketListDone = false;
       state.loadMarketListError = null;
     },
     loadMarketListSuccess: (state, { payload }: PayloadAction<MarketCodes>) => {
       state.loadMarketListLoading = false;
-      state.loadMarketListSuccess = true;
+      state.loadMarketListDone = true;
 
       // market이 KRW로 시작하는거만 필터링
       state.marketList = payload.filter((value) => value.market.substring(0, 3) === 'KRW');

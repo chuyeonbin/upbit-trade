@@ -3,7 +3,7 @@ import { SocketState } from '../../types/state';
 
 const initialState: SocketState = {
   socketConnectionLoading: false,
-  socketConnectionSuccess: false,
+  socketConnectionDone: false,
   socketConnectionError: null,
 };
 
@@ -13,12 +13,12 @@ const socketSlice = createSlice({
   reducers: {
     socketConnectionRequest: (state) => {
       state.socketConnectionLoading = true;
-      state.socketConnectionSuccess = false;
+      state.socketConnectionDone = false;
       state.socketConnectionError = null;
     },
     socketConnectionSuccess: (state) => {
       state.socketConnectionLoading = false;
-      state.socketConnectionSuccess = true;
+      state.socketConnectionDone = true;
       console.log('socket Connect!');
     },
     socketConnectionError: (state, { payload }) => {
