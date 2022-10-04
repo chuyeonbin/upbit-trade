@@ -1,7 +1,8 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { END, EventChannel, eventChannel } from 'redux-saga';
 import { all, call, fork, put, take, takeEvery } from 'redux-saga/effects';
 import { createSocket } from '../../utils/socket';
-import { socketConnectionFailure, socketConnectionRequest } from '../modules/socket';
+import { presentPriceSocketFailure, presentPriceSocketRequest } from '../modules/socket';
 
 function channelConnection(): EventChannel<string> {
   return eventChannel((emitter) => {
@@ -39,7 +40,8 @@ function closeChannel(channel: EventChannel<string> | null) {
   }
 }
 
-function* socketConnection() {
+function* socketConnection({ payload }: PayloadAction<any>) {
+  console.log(payload);
   let channel: EventChannel<string>;
   try {
     channel = yield call(channelConnection);
@@ -49,16 +51,16 @@ function* socketConnection() {
     }
   } catch (error) {
     console.error(error);
-    yield put(socketConnectionFailure(error));
+    yield put(presentPriceSocketFailure(error));
   } finally {
     closeChannel(channel!);
   }
 }
 
-function* watchSocketConnection() {
-  yield takeEvery(socketConnectionRequest, socketConnection);
+function* watchPresentPriceSocket() {
+  yield takeEvery(presentPriceSocketRequest, socketConnection);
 }
 
 export default function* socketSaga() {
-  yield all([fork(watchSocketConnection)]);
+  yield all([fork(watchPresentPriceSocket)]);
 }

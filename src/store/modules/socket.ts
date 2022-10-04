@@ -2,33 +2,32 @@ import { createSlice } from '@reduxjs/toolkit';
 import { SocketState } from '../../types/state';
 
 const initialState: SocketState = {
-  socketConnectionLoading: false,
-  socketConnectionDone: false,
-  socketConnectionError: null,
+  presentPriceSocketLoading: false,
+  presentPriceSocketDone: false,
+  presentPriceSocketError: null,
 };
 
 const socketSlice = createSlice({
   initialState,
   name: 'socket',
   reducers: {
-    socketConnectionRequest: (state) => {
-      state.socketConnectionLoading = true;
-      state.socketConnectionDone = false;
-      state.socketConnectionError = null;
+    presentPriceSocketRequest: (state) => {
+      state.presentPriceSocketLoading = true;
+      state.presentPriceSocketDone = false;
+      state.presentPriceSocketError = null;
     },
-    socketConnectionSuccess: (state) => {
-      state.socketConnectionLoading = false;
-      state.socketConnectionDone = true;
-      console.log('socket Connect!');
+    presentPriceSocketSuccess: (state) => {
+      state.presentPriceSocketLoading = false;
+      state.presentPriceSocketDone = true;
     },
-    socketConnectionFailure: (state, { payload }) => {
-      state.socketConnectionLoading = false;
-      state.socketConnectionError = payload.error;
+    presentPriceSocketFailure: (state, { payload }) => {
+      state.presentPriceSocketLoading = false;
+      state.presentPriceSocketError = payload.error;
     },
   },
 });
 
-export const { socketConnectionRequest, socketConnectionSuccess, socketConnectionFailure } =
+export const { presentPriceSocketRequest, presentPriceSocketSuccess, presentPriceSocketFailure } =
   socketSlice.actions;
 
 export default socketSlice.reducer;
