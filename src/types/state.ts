@@ -1,9 +1,9 @@
 import { MarketCodes } from '.';
 
 export interface SocketState {
-  socketConnectionLoading: boolean;
-  socketConnectionDone: boolean;
-  socketConnectionError: Error | null;
+  presentPriceSocketLoading: boolean;
+  presentPriceSocketDone: boolean;
+  presentPriceSocketError: Error | null;
 }
 
 export interface CoinState {
