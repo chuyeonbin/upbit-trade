@@ -8,6 +8,10 @@ export interface SocketState {
   tradeSocketLoading: boolean;
   tradeSocketDone: boolean;
   tradeSocketError: Error | null;
+
+  orderbookSocketLoading: boolean;
+  orderbookSocketDone: boolean;
+  orderbookSocketError: Error | null;
 }
 
 export interface CoinState {
