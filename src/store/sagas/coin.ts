@@ -1,4 +1,4 @@
-import { all, call, fork, put, SagaReturnType, takeLatest } from 'redux-saga/effects';
+import { call, put, SagaReturnType } from 'redux-saga/effects';
 import { getMarketCodes } from '../../api';
 import {
   loadMarketListFailure,
@@ -6,7 +6,8 @@ import {
   loadMarketListSuccess,
 } from '../modules/coin';
 
-function* loadMarketList() {
+export function* loadMarketList() {
+  yield put(loadMarketListRequest());
   try {
     const marketList: SagaReturnType<typeof getMarketCodes> = yield call(getMarketCodes);
     yield put(loadMarketListSuccess(marketList));
@@ -14,12 +15,4 @@ function* loadMarketList() {
     yield put(loadMarketListFailure({ error }));
     console.error(error);
   }
-}
-
-function* watchLoadMarketList() {
-  yield takeLatest(loadMarketListRequest, loadMarketList);
-}
-
-export default function* coinSaga() {
-  yield all([fork(watchLoadMarketList)]);
 }
