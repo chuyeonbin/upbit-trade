@@ -4,6 +4,10 @@ export interface SocketState {
   presentPriceSocketLoading: boolean;
   presentPriceSocketDone: boolean;
   presentPriceSocketError: Error | null;
+
+  tradeSocketLoading: boolean;
+  tradeSocketDone: boolean;
+  tradeSocketError: Error | null;
 }
 
 export interface CoinState {
