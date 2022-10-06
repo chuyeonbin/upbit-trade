@@ -1,8 +1,9 @@
-import { all, fork, select, takeEvery } from 'redux-saga/effects';
+import { all, fork, put, select, takeEvery } from 'redux-saga/effects';
+import { presentPriceSocketRequest, tradeSocketRequest } from '../modules/socket';
 import { startInit } from '../modules/start';
 import { RootState } from '../store';
 import { loadMarketList } from './coin';
-import { presentPriceSocketSaga } from './socket';
+import socketSaga from './socket';
 
 function* initSaga() {
   yield loadMarketList();
@@ -11,7 +12,8 @@ function* initSaga() {
 
   const codes = coin.marketList.map((value) => value.market);
 
-  yield presentPriceSocketSaga(codes); // 현재가 소켓 연결
+  yield put(presentPriceSocketRequest(codes)); // 현재가 소켓 연결 요청
+  yield put(tradeSocketRequest(['KRW-BTC'])); // 체결가 소켓 연결 요청
 }
 
 function* watchStart() {
@@ -19,5 +21,5 @@ function* watchStart() {
 }
 
 export default function* rootSaga() {
-  yield all([fork(watchStart)]);
+  yield all([fork(watchStart), fork(socketSaga)]);
 }

@@ -1,11 +1,18 @@
-import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import {
+  ActionCreatorWithoutPayload,
+  ActionCreatorWithPayload,
+  PayloadAction,
+} from '@reduxjs/toolkit';
 import { END, EventChannel, eventChannel } from 'redux-saga';
-import { call, put, take } from 'redux-saga/effects';
+import { all, call, fork, put, take, takeEvery } from 'redux-saga/effects';
 import { createSocket } from '../../utils/socket';
 import {
   presentPriceSocketSuccess,
   presentPriceSocketFailure,
   presentPriceSocketRequest,
+  tradeSocketRequest,
+  tradeSocketSuccess,
+  tradeSocketFailure,
 } from '../modules/socket';
 
 function channelConnection(field: {
@@ -53,14 +60,12 @@ export function* socketConnection(
     codes: string[];
   },
   action: {
-    request: ActionCreatorWithoutPayload<string>;
     success: ActionCreatorWithoutPayload<string>;
     failure: ActionCreatorWithPayload<any, string>;
   },
 ) {
   let channel: EventChannel<string>;
   try {
-    yield put(action.request());
     channel = yield call(channelConnection, field);
     yield put(action.success());
     while (true) {
@@ -75,13 +80,35 @@ export function* socketConnection(
   }
 }
 
-export function* presentPriceSocketSaga(codes: string[]) {
+export function* presentPriceSocketSaga({ payload }: PayloadAction<string[]>) {
   yield socketConnection(
-    { type: 'ticker', codes },
+    { type: 'ticker', codes: payload },
     {
-      request: presentPriceSocketRequest,
       success: presentPriceSocketSuccess,
       failure: presentPriceSocketFailure,
     },
   );
+}
+
+export function* tradeSocketSaga({ payload }: PayloadAction<string[]>) {
+  console.log('tradeSaga');
+  yield socketConnection(
+    { type: 'trade', codes: payload },
+    {
+      success: tradeSocketSuccess,
+      failure: tradeSocketFailure,
+    },
+  );
+}
+
+function* watchPresentPriceSocketSaga() {
+  yield takeEvery(presentPriceSocketRequest, presentPriceSocketSaga);
+}
+
+function* watchTradeSocketSaga() {
+  yield takeEvery(tradeSocketRequest, tradeSocketSaga);
+}
+
+export default function* socketSaga() {
+  yield all([fork(watchPresentPriceSocketSaga), fork(watchTradeSocketSaga)]);
 }
