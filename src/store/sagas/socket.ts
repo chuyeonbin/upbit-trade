@@ -2,6 +2,11 @@ import { ActionCreatorWithoutPayload, ActionCreatorWithPayload } from '@reduxjs/
 import { END, EventChannel, eventChannel } from 'redux-saga';
 import { call, put, take } from 'redux-saga/effects';
 import { createSocket } from '../../utils/socket';
+import {
+  presentPriceSocketSuccess,
+  presentPriceSocketFailure,
+  presentPriceSocketRequest,
+} from '../modules/socket';
 
 function channelConnection(field: {
   type: 'ticker' | 'trade' | 'orderbook';
@@ -68,4 +73,15 @@ export function* socketConnection(
   } finally {
     closeChannel(channel!);
   }
+}
+
+export function* presentPriceSocketSaga(codes: string[]) {
+  yield socketConnection(
+    { type: 'ticker', codes },
+    {
+      request: presentPriceSocketRequest,
+      success: presentPriceSocketSuccess,
+      failure: presentPriceSocketFailure,
+    },
+  );
 }
