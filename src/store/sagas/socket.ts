@@ -13,6 +13,7 @@ import {
   tradeSocketRequest,
   tradeSocketSuccess,
   tradeSocketFailure,
+  orderbookSocketRequest,
 } from '../modules/socket';
 
 function channelConnection(field: {
@@ -81,6 +82,7 @@ export function* socketConnection(
 }
 
 export function* presentPriceSocketSaga({ payload }: PayloadAction<string[]>) {
+  console.log('presentPriceSaga');
   yield socketConnection(
     { type: 'ticker', codes: payload },
     {
@@ -101,6 +103,17 @@ export function* tradeSocketSaga({ payload }: PayloadAction<string[]>) {
   );
 }
 
+function* orderbookSocketSaga({ payload }: PayloadAction<string[]>) {
+  console.log('orderbookSaga');
+  yield socketConnection(
+    { type: 'orderbook', codes: payload },
+    {
+      success: tradeSocketSuccess,
+      failure: tradeSocketFailure,
+    },
+  );
+}
+
 function* watchPresentPriceSocketSaga() {
   yield takeEvery(presentPriceSocketRequest, presentPriceSocketSaga);
 }
@@ -109,6 +122,14 @@ function* watchTradeSocketSaga() {
   yield takeEvery(tradeSocketRequest, tradeSocketSaga);
 }
 
+function* watchOrderbookSocketSaga() {
+  yield takeEvery(orderbookSocketRequest, orderbookSocketSaga);
+}
+
 export default function* socketSaga() {
-  yield all([fork(watchPresentPriceSocketSaga), fork(watchTradeSocketSaga)]);
+  yield all([
+    fork(watchPresentPriceSocketSaga),
+    fork(watchTradeSocketSaga),
+    fork(watchOrderbookSocketSaga),
+  ]);
 }

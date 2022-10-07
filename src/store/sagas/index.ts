@@ -1,5 +1,9 @@
 import { all, fork, put, select, takeEvery } from 'redux-saga/effects';
-import { presentPriceSocketRequest, tradeSocketRequest } from '../modules/socket';
+import {
+  orderbookSocketRequest,
+  presentPriceSocketRequest,
+  tradeSocketRequest,
+} from '../modules/socket';
 import { startInit } from '../modules/start';
 import { RootState } from '../store';
 import { loadMarketList } from './coin';
@@ -14,6 +18,8 @@ function* initSaga() {
 
   yield put(presentPriceSocketRequest(codes)); // 현재가 소켓 연결 요청
   yield put(tradeSocketRequest(['KRW-BTC'])); // 체결가 소켓 연결 요청
+
+  yield put(orderbookSocketRequest(['KRW-BTC.10'])); // 호가 소켓 연결 요청
 }
 
 function* watchStart() {
