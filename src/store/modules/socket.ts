@@ -9,6 +9,10 @@ const initialState: SocketState = {
   tradeSocketLoading: false,
   tradeSocketDone: false,
   tradeSocketError: null,
+
+  orderbookSocketLoading: false,
+  orderbookSocketDone: false,
+  orderbookSocketError: null,
 };
 
 const socketSlice = createSlice({
@@ -41,6 +45,19 @@ const socketSlice = createSlice({
       state.tradeSocketLoading = false;
       state.tradeSocketError = payload.error;
     },
+    orderbookSocketRequest: (state, { payload }: PayloadAction<string[]>) => {
+      state.orderbookSocketLoading = true;
+      state.orderbookSocketDone = false;
+      state.orderbookSocketError = null;
+    },
+    orderbookSocketSuccess: (state) => {
+      state.orderbookSocketLoading = false;
+      state.orderbookSocketDone = true;
+    },
+    orderbookSocketFailure: (state, { payload }) => {
+      state.orderbookSocketLoading = false;
+      state.orderbookSocketError = payload.error;
+    },
   },
 });
 
@@ -51,6 +68,9 @@ export const {
   tradeSocketRequest,
   tradeSocketSuccess,
   tradeSocketFailure,
+  orderbookSocketRequest,
+  orderbookSocketSuccess,
+  orderbookSocketFailure,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;
