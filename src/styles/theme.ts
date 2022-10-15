@@ -4,6 +4,7 @@ const colors = {
   darkGray: '#666',
   lightGray: '#d5d6dc',
   lightBlue: '#1976d2',
+  lightRed: '#c84a31',
 };
 
 const fontSize = {
