@@ -3,8 +3,9 @@ import {
   ActionCreatorWithPayload,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { END, EventChannel, eventChannel } from 'redux-saga';
-import { all, call, fork, put, take, takeEvery } from 'redux-saga/effects';
+import { configConsumerProps } from 'antd/lib/config-provider';
+import { buffers, END, EventChannel, eventChannel } from 'redux-saga';
+import { all, call, delay, fork, put, take, takeEvery, flush } from 'redux-saga/effects';
 import { createSocket } from '../../utils/socket';
 import {
   presentPriceSocketSuccess,
@@ -26,7 +27,7 @@ function channelConnection(field: {
     const ws = createSocket();
 
     ws.onopen = () => {
-      const msg = JSON.stringify([{ ticket: 'upbit' }, { type: field.type, codes: ['KRW-BTC'] }]);
+      const msg = JSON.stringify([{ ticket: 'upbit' }, { type: field.type, codes: field.codes }]);
 
       ws.send(msg);
     };
@@ -34,7 +35,7 @@ function channelConnection(field: {
     ws.onmessage = (event) => {
       const enc = new TextDecoder('utf-8');
       const arr = new Uint8Array(event.data);
-      emitter(enc.decode(arr));
+      emitter(JSON.parse(enc.decode(arr)));
     };
 
     ws.onerror = (error) => {
@@ -48,7 +49,7 @@ function channelConnection(field: {
     return function unsubscribe() {
       ws.close();
     };
-  });
+  }, buffers.expanding(200) || buffers.none());
 }
 
 function closeChannel(channel: EventChannel<string> | null) {
@@ -72,8 +73,13 @@ export function* socketConnection(
     channel = yield call(channelConnection, field);
     yield put(action.success());
     while (true) {
-      const msg: string = yield take(channel);
-      console.log(msg);
+      const msg: string[] = yield flush(channel);
+
+      if (msg.length) {
+        console.log(msg);
+      }
+
+      yield delay(500); // 1초마다 업데이트
     }
   } catch (error) {
     console.error(error);
