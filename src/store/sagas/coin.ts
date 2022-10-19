@@ -1,5 +1,6 @@
-import { call, put, SagaReturnType } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { getMarketCodes } from '../../api';
+import { MarketCodes } from '../../types';
 import {
   loadMarketListFailure,
   loadMarketListRequest,
@@ -9,7 +10,7 @@ import {
 export function* loadMarketList() {
   yield put(loadMarketListRequest());
   try {
-    const marketList: SagaReturnType<typeof getMarketCodes> = yield call(getMarketCodes);
+    const marketList: MarketCodes = yield call(getMarketCodes);
     yield put(loadMarketListSuccess(marketList));
   } catch (error) {
     yield put(loadMarketListFailure({ error }));
