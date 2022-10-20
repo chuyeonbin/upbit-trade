@@ -6,7 +6,7 @@ import {
 } from '../modules/socket';
 import { startInit } from '../modules/start';
 import { RootState } from '../store';
-import { loadMarketList } from './coin';
+import { loadMarketList, loadTickerList } from './coin';
 import socketSaga from './socket';
 
 function* initSaga() {
@@ -14,12 +14,14 @@ function* initSaga() {
 
   const { coin }: RootState = yield select();
 
-  const codes = coin.marketList.map((value) => value.market);
+  const markets = coin.marketList.map((value) => value.market);
 
-  yield put(presentPriceSocketRequest(codes)); // 현재가 소켓 연결 요청
-  yield put(tradeSocketRequest(['KRW-BTC'])); // 체결가 소켓 연결 요청
+  yield loadTickerList(markets);
 
-  yield put(orderbookSocketRequest(['KRW-BTC.10'])); // 호가 소켓 연결 요청
+  yield put(presentPriceSocketRequest(markets)); // 현재가 소켓 연결 요청
+
+  // yield put(tradeSocketRequest(['KRW-BTC'])); // 체결가 소켓 연결 요청
+  // yield put(orderbookSocketRequest(['KRW-BTC.10'])); // 호가 소켓 연결 요청
 }
 
 function* watchStart() {
