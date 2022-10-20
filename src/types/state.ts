@@ -1,4 +1,4 @@
-import { MarketCodes } from '.';
+import { MarketCodes, PresentPrices } from '.';
 
 export interface SocketState {
   presentPriceSocketLoading: boolean;
@@ -17,9 +17,15 @@ export interface SocketState {
 export interface CoinState {
   marketList: MarketCodes;
 
+  tickerList: PresentPrices;
+
   loadMarketListLoading: boolean;
   loadMarketListDone: boolean;
   loadMarketListError: Error | null;
+
+  loadTickerListLoading: boolean;
+  loadTickerListDone: boolean;
+  loadTickerListError: Error | null;
 }
 
 export default interface RootState {
