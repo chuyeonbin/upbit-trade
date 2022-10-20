@@ -44,8 +44,8 @@ export async function getRecentContract(market: string, count: number): Promise<
   return response.data;
 }
 
-export async function getPresentPrice(market: string): Promise<PresentPrices> {
-  const query = `/ticker?markets=${market}`;
+export async function getPresentPrice(markets: string[]): Promise<PresentPrices> {
+  const query = `/ticker?markets=${markets.join(',')}`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
