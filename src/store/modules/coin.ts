@@ -1,13 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarketCodes } from '../../types';
+import { MarketCodes, PresentPrices } from '../../types';
+import { RealTimeTickers } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
 const initialState: CoinState = {
   marketList: [],
 
+  tickerList: [],
+
   loadMarketListLoading: false,
   loadMarketListDone: false,
   loadMarketListError: null,
+
+  loadTickerListLoading: false,
+  loadTickerListDone: false,
+  loadTickerListError: null,
 };
 
 const coinSlice = createSlice({
@@ -30,10 +37,31 @@ const coinSlice = createSlice({
       state.loadMarketListLoading = false;
       state.loadMarketListError = payload.error;
     },
+    loadTickerListRequest: (state) => {
+      state.loadTickerListLoading = true;
+      state.loadTickerListDone = false;
+      state.loadTickerListError = null;
+    },
+    loadTickerListSuccess: (state, { payload }: PayloadAction<PresentPrices>) => {
+      state.loadTickerListLoading = false;
+      state.loadTickerListDone = true;
+
+      state.tickerList = payload;
+    },
+    loadTickerListFailure: (state, { payload }) => {
+      state.loadTickerListLoading = false;
+      state.loadTickerListError = payload.error;
+    },
   },
 });
 
-export const { loadMarketListRequest, loadMarketListSuccess, loadMarketListFailure } =
-  coinSlice.actions;
+export const {
+  loadMarketListRequest,
+  loadMarketListSuccess,
+  loadMarketListFailure,
+  loadTickerListRequest,
+  loadTickerListSuccess,
+  loadTickerListFailure,
+} = coinSlice.actions;
 
 export default coinSlice.reducer;
