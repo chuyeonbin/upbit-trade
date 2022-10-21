@@ -6,7 +6,7 @@ import { CoinState } from '../../types/state';
 const initialState: CoinState = {
   marketList: [],
 
-  tickerList: [],
+  tickerList: {},
 
   loadMarketListLoading: false,
   loadMarketListDone: false,
@@ -31,7 +31,15 @@ const coinSlice = createSlice({
       state.loadMarketListDone = true;
 
       // market이 KRW로 시작하는거만 필터링
-      state.marketList = payload.filter((value) => value.market.substring(0, 3) === 'KRW');
+      payload.forEach((data) => {
+        if (data.market.substring(0, 3) === 'KRW') {
+          state.marketList.push({
+            code: data.market,
+            koreanName: data.korean_name,
+            englishName: data.english_name,
+          });
+        }
+      });
     },
     loadMarketListFailure: (state, { payload }) => {
       state.loadMarketListLoading = false;
@@ -45,12 +53,29 @@ const coinSlice = createSlice({
     loadTickerListSuccess: (state, { payload }: PayloadAction<PresentPrices>) => {
       state.loadTickerListLoading = false;
       state.loadTickerListDone = true;
-
-      state.tickerList = payload;
     },
     loadTickerListFailure: (state, { payload }) => {
       state.loadTickerListLoading = false;
       state.loadTickerListError = payload.error;
+    },
+    updateTickerList: (state, { payload }: PayloadAction<RealTimeTickers>) => {
+      // 중복으로 들어온 코인 제거
+      const tickerList = payload.filter((item, i) => {
+        return (
+          payload.findIndex((item2) => {
+            return item.code === item2.code;
+          }) === i
+        );
+      });
+
+      // 코인별 현재가 state 업데이트
+      tickerList.forEach((ticker, index) => {
+        state.tickerList[tickerList[index].code] = {
+          tradePrice: ticker.trade_price,
+          changePrice: ticker.change_price,
+          accTradePrice24h: ticker.acc_trade_price_24h,
+        };
+      });
     },
   },
 });
@@ -62,6 +87,7 @@ export const {
   loadTickerListRequest,
   loadTickerListSuccess,
   loadTickerListFailure,
+  updateTickerList,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
