@@ -1,5 +1,3 @@
-import { MarketCodes, PresentPrices } from '.';
-
 export interface SocketState {
   presentPriceSocketLoading: boolean;
   presentPriceSocketDone: boolean;
@@ -15,9 +13,19 @@ export interface SocketState {
 }
 
 export interface CoinState {
-  marketList: MarketCodes;
+  marketList: {
+    code: string;
+    koreanName: string;
+    englishName: string;
+  }[];
 
-  tickerList: PresentPrices;
+  tickerList: {
+    [key: string]: {
+      tradePrice: number;
+      changePrice: number;
+      accTradePrice24h: number;
+    };
+  };
 
   loadMarketListLoading: boolean;
   loadMarketListDone: boolean;
