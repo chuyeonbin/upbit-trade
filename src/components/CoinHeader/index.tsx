@@ -162,6 +162,7 @@ const ATV24H = styled.p`
   border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
 
   & > span > i {
+    font-size: ${({ theme }) => theme.fontSize.microSmall};
     color: ${({ theme }) => theme.colors.darkGray};
   }
 `;
@@ -173,6 +174,7 @@ const ATP24H = styled.p`
   font-size: 12px;
 
   & > span > i {
+    font-size: ${({ theme }) => theme.fontSize.microSmall};
     color: ${({ theme }) => theme.colors.darkGray};
   }
 `;
