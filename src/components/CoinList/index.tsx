@@ -7,7 +7,9 @@ import { useAppSelector } from '../../store/store';
 
 export default function CoinList() {
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const { marketList } = useAppSelector((state) => state.coin);
+  const marketList = useAppSelector((state) => state.coin.marketList);
+
+  const tickerList = useAppSelector((state) => state.coin.tickerList);
 
   const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
   const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
@@ -42,22 +44,28 @@ export default function CoinList() {
             ))}
           </TableRow>
         </CoinHead>
-        <CoinBody>
-          {marketList.map((value, index) => (
-            <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <CoinCell sx={{ '&&': { p: '0 14px' } }}>
-                <Star style={{ fontSize: '16px' }} />
-              </CoinCell>
-              <CoinCell>
-                <p style={{ cursor: 'pointer' }}>{value.korean_name}</p>
-                <p>DOGE/KRW</p>
-              </CoinCell>
-              <CoinCell>27,000,000</CoinCell>
-              <CoinCell>+11.55%</CoinCell>
-              <CoinCell style={{ fontSize: '12px' }}>700,000 백만</CoinCell>
-            </TableRow>
-          ))}
-        </CoinBody>
+        {Object.keys(tickerList).length > 0 ? (
+          <>
+            <CoinBody>
+              {marketList.map((value, index) => (
+                <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <CoinCell sx={{ '&&': { p: '0 14px' } }}>
+                    <Star style={{ fontSize: '16px' }} />
+                  </CoinCell>
+                  <CoinCell>
+                    <p style={{ cursor: 'pointer' }}>{value.koreanName}</p>
+                    <p>{value.code.substring(4)}/KRW</p>
+                  </CoinCell>
+                  <CoinCell>{tickerList[value.code].tradePrice}</CoinCell>
+                  <CoinCell>{tickerList[value.code].signedChangePrice}</CoinCell>
+                  <CoinCell style={{ fontSize: '12px' }}>700,000 백만</CoinCell>
+                </TableRow>
+              ))}
+            </CoinBody>
+          </>
+        ) : (
+          <></>
+        )}
       </CoinTable>
     </Wrapper>
   );
