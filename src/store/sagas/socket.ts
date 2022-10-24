@@ -4,8 +4,10 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { buffers, END, EventChannel, eventChannel } from 'redux-saga';
-import { all, call, delay, fork, put, take, takeEvery, flush } from 'redux-saga/effects';
+import { all, call, delay, fork, put, takeEvery, flush } from 'redux-saga/effects';
+import { RealTimeTickers } from '../../types/realTime';
 import { createSocket } from '../../utils/socket';
+import { updateTickerList } from '../modules/coin';
 import {
   presentPriceSocketSuccess,
   presentPriceSocketFailure,
@@ -26,8 +28,7 @@ function channelConnection(field: {
     const ws = createSocket();
 
     ws.onopen = () => {
-      const msg = JSON.stringify([{ ticket: 'upbit' }, { type: field.type, codes: field.codes }]);
-
+      const msg = JSON.stringify([{ ticket: 'upbit' }, field]);
       ws.send(msg);
     };
 
@@ -72,13 +73,13 @@ export function* socketConnection(
     channel = yield call(channelConnection, field);
     yield put(action.success());
     while (true) {
-      const msg: string[] = yield flush(channel);
+      const msg: RealTimeTickers = yield flush(channel);
 
       if (msg.length) {
-        console.log(msg);
+        yield put(updateTickerList(msg));
       }
 
-      yield delay(500); // 1초마다 업데이트
+      yield delay(1000); // 1초마다 업데이트
     }
   } catch (error) {
     console.error(error);
