@@ -68,12 +68,16 @@ const coinSlice = createSlice({
         );
       });
 
+      console.log(payload);
+
       // 코인별 현재가 state 업데이트
       tickerList.forEach((ticker, index) => {
         state.tickerList[tickerList[index].code] = {
           tradePrice: ticker.trade_price,
           changePrice: ticker.change_price,
           accTradePrice24h: ticker.acc_trade_price_24h,
+          signedChangePrice: ticker.signed_change_price,
+          signedChangeRate: ticker.signed_change_rate,
         };
       });
     },
