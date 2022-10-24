@@ -54,11 +54,13 @@ export default function CoinList() {
                   </CoinCell>
                   <CoinCell>
                     <p style={{ cursor: 'pointer' }}>{value.koreanName}</p>
-                    <p>{value.code.substring(4)}/KRW</p>
+                    <p style={{ fontSize: '10px', color: '#666' }}>{value.code.substring(4)}/KRW</p>
                   </CoinCell>
-                  <CoinCell>{tickerList[value.code].tradePrice}</CoinCell>
+                  <CoinCell sx={{ fontWeight: 600 }}>{tickerList[value.code].tradePrice}</CoinCell>
                   <CoinCell>{tickerList[value.code].signedChangePrice}</CoinCell>
-                  <CoinCell style={{ fontSize: '12px' }}>700,000 백만</CoinCell>
+                  <CoinCell style={{ fontSize: '12px' }}>
+                    700,000<i>백만</i>
+                  </CoinCell>
                 </TableRow>
               ))}
             </CoinBody>
@@ -145,14 +147,20 @@ const CoinCell = styled(TableCell)`
     font-size: 12px;
     font-weight: 500;
   }
+
+  & > i {
+    color: #666;
+  }
 `;
 
 const CoinBody = styled(TableBody)`
   & > tr {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
     &:hover {
       background-color: #f4f5f8;
     }
   }
+
   & > tr > td {
     border-bottom: 0;
   }
