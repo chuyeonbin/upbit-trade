@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import StarIcon from '@mui/icons-material/Star';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useAppSelector } from '../../store/store';
+import { dayToDayFormat, tradingValueFormat } from '../../utils';
 
 export default function CoinList() {
   const [selectedTab, setSelectedTab] = useState<number>(0);
@@ -57,9 +58,19 @@ export default function CoinList() {
                     <p style={{ fontSize: '10px', color: '#666' }}>{value.code.substring(4)}/KRW</p>
                   </CoinCell>
                   <CoinCell sx={{ fontWeight: 600 }}>{tickerList[value.code].tradePrice}</CoinCell>
-                  <CoinCell>{tickerList[value.code].signedChangePrice}</CoinCell>
+                  <CoinCell>
+                    <p>
+                      {dayToDayFormat(
+                        tickerList[value.code].signedChangePrice,
+                        tickerList[value.code].prevClosingPrice,
+                      )}
+                      %
+                    </p>
+                    <p>{tickerList[value.code].signedChangePrice}</p>
+                  </CoinCell>
                   <CoinCell style={{ fontSize: '12px' }}>
-                    700,000<i>백만</i>
+                    {tradingValueFormat(tickerList[value.code].accTradePrice24h)}
+                    <i>백만</i>
                   </CoinCell>
                 </TableRow>
               ))}
