@@ -20,5 +20,5 @@ export function signedChangePriceFormat(signedChangePrice: number) {
     return signedChangePrice.toFixed(2);
   }
 
-  return signedChangePrice;
+  return signedChangePrice.toLocaleString();
 }
