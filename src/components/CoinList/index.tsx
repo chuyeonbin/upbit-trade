@@ -25,11 +25,7 @@ export default function CoinList() {
       </CoinSerach>
       <TabList>
         {tabList.map((tab, index) => (
-          <TabItem
-            key={index}
-            onClick={() => handleTabClick(index)}
-            selected={selectedTab === index}
-          >
+          <TabItem key={tab} onClick={() => handleTabClick(index)} selected={selectedTab === index}>
             <a href='#'>{tab}</a>
           </TabItem>
         ))}
@@ -38,46 +34,48 @@ export default function CoinList() {
         <CoinHead>
           <TableRow>
             <TableCell sx={{ border: 0 }} />
-            {tableHead.map((value, index) => (
-              <TableCell key={index} sx={{ border: 0 }}>
+            {tableHead.map((value) => (
+              <TableCell key={value} sx={{ border: 0 }}>
                 {value}
               </TableCell>
             ))}
           </TableRow>
         </CoinHead>
         {Object.keys(tickerList).length > 0 ? (
-          <>
-            <CoinBody>
-              {marketList.map((value, index) => (
-                <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <CoinCell sx={{ '&&': { p: '0 14px' } }}>
-                    <Star style={{ fontSize: '16px' }} />
-                  </CoinCell>
-                  <CoinCell>
-                    <p style={{ cursor: 'pointer' }}>{value.koreanName}</p>
-                    <p style={{ fontSize: '10px', color: '#666' }}>{value.code.substring(4)}/KRW</p>
-                  </CoinCell>
-                  <CoinCell sx={{ fontWeight: 600 }}>
-                    {tickerList[value.code].tradePrice.toLocaleString()}
-                  </CoinCell>
-                  <CoinCell>
-                    <p>
-                      {dayToDayFormat(
-                        tickerList[value.code].signedChangePrice,
-                        tickerList[value.code].prevClosingPrice,
-                      )}
-                      %
-                    </p>
-                    <p>{signedChangePriceFormat(tickerList[value.code].signedChangePrice)}</p>
-                  </CoinCell>
-                  <CoinCell style={{ fontSize: '12px' }}>
-                    {tradingValueFormat(tickerList[value.code].accTradePrice24h)}
-                    <i>백만</i>
-                  </CoinCell>
-                </TableRow>
-              ))}
-            </CoinBody>
-          </>
+          <CoinBody>
+            {marketList.map((value) => (
+              <CoinRow
+                change={tickerList[value.code].signedChangePrice}
+                key={value.englishName}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <CoinCell sx={{ '&&': { p: '0 14px' } }}>
+                  <Star style={{ fontSize: '16px' }} />
+                </CoinCell>
+                <CoinCell>
+                  <p style={{ cursor: 'pointer' }}>{value.koreanName}</p>
+                  <p style={{ fontSize: '10px', color: '#666' }}>{value.code.substring(4)}/KRW</p>
+                </CoinCell>
+                <CoinCell sx={{ fontWeight: 600 }}>
+                  {tickerList[value.code].tradePrice.toLocaleString()}
+                </CoinCell>
+                <CoinCell>
+                  <p>
+                    {dayToDayFormat(
+                      tickerList[value.code].signedChangePrice,
+                      tickerList[value.code].prevClosingPrice,
+                    )}
+                    %
+                  </p>
+                  <p>{signedChangePriceFormat(tickerList[value.code].signedChangePrice)}</p>
+                </CoinCell>
+                <CoinCell style={{ fontSize: '12px' }}>
+                  {tradingValueFormat(tickerList[value.code].accTradePrice24h)}
+                  <i>백만</i>
+                </CoinCell>
+              </CoinRow>
+            ))}
+          </CoinBody>
         ) : (
           <></>
         )}
@@ -167,21 +165,31 @@ const CoinCell = styled(TableCell)`
 `;
 
 const CoinBody = styled(TableBody)`
-  & > tr {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
-    &:hover {
-      background-color: #f4f5f8;
-    }
-  }
-
-  & > tr > td {
-    border-bottom: 0;
-  }
-
   & > tr > td:nth-child(1) {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  & > tr > td:nth-child(2) {
+    color: black;
+  }
+
+  & > tr > td:nth-child(5) {
+    color: black;
+  }
+`;
+
+const CoinRow = styled(TableRow)<{ change: number }>`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
+  &:hover {
+    background-color: #f4f5f8;
+  }
+
+  & > td {
+    color: ${({ change, theme }) =>
+      change > 0 ? theme.colors.lightRed : change < 0 ? theme.colors.lightBlue : 'black'};
+    border-bottom: 0;
   }
 `;
 
