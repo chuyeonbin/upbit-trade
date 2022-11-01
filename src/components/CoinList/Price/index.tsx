@@ -7,7 +7,20 @@ interface PriceProps {
 }
 
 export default function Price({ price }: PriceProps) {
-  return <CoinCell>{price.toLocaleString()}</CoinCell>;
+  const prevPriceRef = useRef(price);
+
+  useEffect(() => {
+    if (price !== prevPriceRef.current) {
+      prevPriceRef.current = price;
+    }
+  }, [price]);
+
+  return (
+    <CoinCell>
+      {price.toLocaleString()}
+      {price > prevPriceRef.current ? <Up /> : price < prevPriceRef.current ? <Down /> : null}
+    </CoinCell>
+  );
 }
 
 const Highlight = styled.span`
