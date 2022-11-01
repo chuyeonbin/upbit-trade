@@ -5,6 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useAppSelector } from '../../store/store';
 import { dayToDayFormat, signedChangePriceFormat, tradingValueFormat } from '../../utils';
+import Price from './Price';
 
 export default function CoinList() {
   const [selectedTab, setSelectedTab] = useState<number>(0);
@@ -44,11 +45,7 @@ export default function CoinList() {
         {Object.keys(tickerList).length > 0 ? (
           <CoinBody>
             {marketList.map((value) => (
-              <CoinRow
-                change={tickerList[value.code].signedChangePrice}
-                key={value.englishName}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
+              <CoinRow change={tickerList[value.code].signedChangePrice} key={value.englishName}>
                 <CoinCell sx={{ '&&': { p: '0 14px' } }}>
                   <Star style={{ fontSize: '16px' }} />
                 </CoinCell>
@@ -56,9 +53,7 @@ export default function CoinList() {
                   <p style={{ cursor: 'pointer' }}>{value.koreanName}</p>
                   <p style={{ fontSize: '10px', color: '#666' }}>{value.code.substring(4)}/KRW</p>
                 </CoinCell>
-                <CoinCell sx={{ fontWeight: 600 }}>
-                  {tickerList[value.code].tradePrice.toLocaleString()}
-                </CoinCell>
+                <Price price={tickerList[value.code].tradePrice} />
                 <CoinCell>
                   <p>
                     {dayToDayFormat(
@@ -69,7 +64,7 @@ export default function CoinList() {
                   </p>
                   <p>{signedChangePriceFormat(tickerList[value.code].signedChangePrice)}</p>
                 </CoinCell>
-                <CoinCell style={{ fontSize: '12px' }}>
+                <CoinCell>
                   {tradingValueFormat(tickerList[value.code].accTradePrice24h)}
                   <i>백만</i>
                 </CoinCell>
@@ -173,6 +168,11 @@ const CoinBody = styled(TableBody)`
 
   & > tr > td:nth-child(2) {
     color: black;
+  }
+
+  & > tr > td:nth-child(3) {
+    position: relative;
+    font-weight: 600;
   }
 
   & > tr > td:nth-child(5) {
