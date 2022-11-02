@@ -24,8 +24,8 @@ export interface CoinState {
       tradePrice: number;
       changePrice: number;
       accTradePrice24h: number;
+      prevClosingPrice: number;
       signedChangePrice: number;
-      signedChangeRate: number;
     };
   };
 

@@ -77,7 +77,7 @@ const coinSlice = createSlice({
           changePrice: ticker.change_price,
           accTradePrice24h: ticker.acc_trade_price_24h,
           signedChangePrice: ticker.signed_change_price,
-          signedChangeRate: ticker.signed_change_rate,
+          prevClosingPrice: ticker.prev_closing_price,
         };
       });
     },
