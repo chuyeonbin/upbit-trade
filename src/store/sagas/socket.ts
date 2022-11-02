@@ -6,7 +6,7 @@ import {
 import { buffers, END, EventChannel, eventChannel } from 'redux-saga';
 import { all, call, delay, fork, put, takeEvery, flush } from 'redux-saga/effects';
 import { RealTimeTickers } from '../../types/realTime';
-import { createSocket } from '../../utils/socket';
+import { createSocket } from '../../utils';
 import { updateTickerList } from '../modules/coin';
 import {
   presentPriceSocketSuccess,
@@ -79,7 +79,7 @@ export function* socketConnection(
         yield put(updateTickerList(msg));
       }
 
-      yield delay(1000); // 1초마다 업데이트
+      yield delay(500); // 0.5초마다 업데이트
     }
   } catch (error) {
     console.error(error);
