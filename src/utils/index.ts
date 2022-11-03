@@ -23,6 +23,10 @@ export function signedChangePriceFormat(signedChangePrice: number) {
   return signedChangePrice.toLocaleString();
 }
 
+export function tradeVolume24hFormat(tradeVolume24h: number) {
+  return Number(tradeVolume24h.toFixed(3)).toLocaleString();
+}
+
 export function createSocket(): WebSocket {
   const ws = new WebSocket('wss://api.upbit.com/websocket/v1');
   ws.binaryType = 'arraybuffer';
