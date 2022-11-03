@@ -29,6 +29,17 @@ export interface CoinState {
     };
   };
 
+  selectedCoin: {
+    marketName: string;
+    code: string;
+    tradePrice: number;
+    highPrice: number;
+    lowPrice: number;
+    signedChangePrice: number;
+    accTradeVolume: number;
+    accTradePrice24h: number;
+  };
+
   loadMarketListLoading: boolean;
   loadMarketListDone: boolean;
   loadMarketListError: Error | null;
