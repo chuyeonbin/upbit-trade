@@ -36,7 +36,7 @@ export interface CoinState {
     highPrice: number;
     lowPrice: number;
     signedChangePrice: number;
-    accTradeVolume: number;
+    accTradeVolume24h: number;
     accTradePrice24h: number;
   };
 
