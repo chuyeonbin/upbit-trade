@@ -4,10 +4,11 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { buffers, END, EventChannel, eventChannel } from 'redux-saga';
-import { all, call, delay, fork, put, takeEvery, flush } from 'redux-saga/effects';
+import { all, call, delay, fork, put, takeEvery, flush, select } from 'redux-saga/effects';
 import { RealTimeTickers } from '../../types/realTime';
+import RootState from '../../types/state';
 import { createSocket } from '../../utils';
-import { updateTickerList } from '../modules/coin';
+import { updateSelectedCoin, updateTickerList } from '../modules/coin';
 import {
   presentPriceSocketSuccess,
   presentPriceSocketFailure,
@@ -72,11 +73,20 @@ export function* socketConnection(
   try {
     channel = yield call(channelConnection, field);
     yield put(action.success());
+
+    const {
+      coin: { selectedCoin },
+    }: RootState = yield select();
+
     while (true) {
       const msg: RealTimeTickers = yield flush(channel);
 
       if (msg.length) {
         yield put(updateTickerList(msg));
+      }
+
+      if (msg.find((value) => value.code === selectedCoin.code)) {
+        yield put(updateSelectedCoin(msg));
       }
 
       yield delay(500); // 0.5초마다 업데이트
