@@ -8,6 +8,17 @@ const initialState: CoinState = {
 
   tickerList: {},
 
+  selectedCoin: {
+    marketName: '비트코인',
+    code: 'KRW-BTC',
+    tradePrice: 0,
+    highPrice: 0,
+    lowPrice: 0,
+    signedChangePrice: 0,
+    accTradeVolume24h: 0,
+    accTradePrice24h: 0,
+  },
+
   loadMarketListLoading: false,
   loadMarketListDone: false,
   loadMarketListError: null,
@@ -68,8 +79,6 @@ const coinSlice = createSlice({
         );
       });
 
-      console.log(payload);
-
       // 코인별 현재가 state 업데이트
       tickerList.forEach((ticker, index) => {
         state.tickerList[tickerList[index].code] = {
@@ -80,6 +89,21 @@ const coinSlice = createSlice({
           prevClosingPrice: ticker.prev_closing_price,
         };
       });
+    },
+    updateSelectedCoin: (state, { payload }: PayloadAction<RealTimeTickers>) => {
+      // code에 맞는거만 필터링
+      const coinList = payload.filter((value) => value.code === state.selectedCoin.code);
+
+      // 마지막 코인 데이터로 업데이트
+      const coin = coinList[coinList.length - 1];
+      console.log(coin);
+
+      state.selectedCoin.tradePrice = coin.trade_price;
+      state.selectedCoin.highPrice = coin.high_price;
+      state.selectedCoin.lowPrice = coin.low_price;
+      state.selectedCoin.signedChangePrice = coin.signed_change_price;
+      state.selectedCoin.accTradeVolume24h = coin.acc_trade_volume_24h;
+      state.selectedCoin.accTradePrice24h = coin.acc_trade_price_24h;
     },
   },
 });
@@ -92,6 +116,7 @@ export const {
   loadTickerListSuccess,
   loadTickerListFailure,
   updateTickerList,
+  updateSelectedCoin,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
