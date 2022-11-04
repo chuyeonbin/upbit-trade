@@ -48,6 +48,10 @@ export interface CoinState {
   loadTickerListLoading: boolean;
   loadTickerListDone: boolean;
   loadTickerListError: Error | null;
+
+  loadSelectedCoinDataLoading: boolean;
+  loadSelectedCoinDataDone: boolean;
+  loadSelectedCoinDataError: Error | null;
 }
 
 export default interface RootState {
