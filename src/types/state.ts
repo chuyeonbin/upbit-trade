@@ -38,6 +38,7 @@ export interface CoinState {
     signedChangePrice: number;
     accTradeVolume24h: number;
     accTradePrice24h: number;
+    prevClosingPrice: number;
   };
 
   loadMarketListLoading: boolean;

@@ -17,6 +17,7 @@ const initialState: CoinState = {
     signedChangePrice: 0,
     accTradeVolume24h: 0,
     accTradePrice24h: 0,
+    prevClosingPrice: 0,
   },
 
   loadMarketListLoading: false,
@@ -104,6 +105,7 @@ const coinSlice = createSlice({
       state.selectedCoin.signedChangePrice = coin.signed_change_price;
       state.selectedCoin.accTradeVolume24h = coin.acc_trade_volume_24h;
       state.selectedCoin.accTradePrice24h = coin.acc_trade_price_24h;
+      state.selectedCoin.prevClosingPrice = coin.prev_closing_price;
     },
   },
 });
