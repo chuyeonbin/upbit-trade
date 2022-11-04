@@ -1,47 +1,53 @@
 import styled from 'styled-components';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { useAppSelector } from '../../store/store';
+import { dayToDayFormat, signedChangePriceFormat, tradeVolume24hFormat } from '../../utils';
 
 export default function CoinHeader() {
+  const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
   return (
     <HeaderWrapper>
       <TitleWrapper>
         <Logo src='https://static.upbit.com/logos/BTC.png' />
-        <KoreanName>비트코인</KoreanName>
-        <EnglishName>BTC/KRW</EnglishName>
+        <KoreanName>{selectedCoin.marketName}</KoreanName>
+        <EnglishName>{selectedCoin.code.substring(4)}/KRW</EnglishName>
       </TitleWrapper>
       <HeaderBody>
         <TradePriceWrapper>
           <TradePrice>
-            28,300,000<span>KRW</span>
+            {selectedCoin.tradePrice.toLocaleString()}
+            <span>KRW</span>
           </TradePrice>
           <ChangeWrapper>
             <span>전일대비</span>
-            <span>+1.54%</span>
+            <span>
+              {dayToDayFormat(selectedCoin.signedChangePrice, selectedCoin.prevClosingPrice)}%
+            </span>
             <ArrowDropUpIcon />
-            <span>430,000</span>
+            <span>{signedChangePriceFormat(selectedCoin.signedChangePrice)}</span>
           </ChangeWrapper>
         </TradePriceWrapper>
         <PriceWrapper>
           <PriceA>
             <HP>
-              고가 <span>28,690,000</span>
+              고가 <span>{selectedCoin.highPrice.toLocaleString()}</span>
             </HP>
             <LP>
-              저가 <span>27,700,000</span>
+              저가 <span>{selectedCoin.lowPrice.toLocaleString()}</span>
             </LP>
           </PriceA>
           <PriceB>
             <ATV24H>
-              거래량(24H){' '}
+              거래량(24H)
               <span>
-                9,323.920 <i>BTC</i>
+                {tradeVolume24hFormat(selectedCoin.accTradeVolume24h)} <i>BTC</i>
               </span>
             </ATV24H>
             <ATP24H>
-              거래대금(24H){' '}
+              거래대금(24H)
               <span>
-                255,007,507,144 <i>KRW</i>
+                {Math.round(selectedCoin.accTradePrice24h).toLocaleString()} <i>KRW</i>
               </span>
             </ATP24H>
           </PriceB>
