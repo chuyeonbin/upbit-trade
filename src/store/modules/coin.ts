@@ -27,6 +27,10 @@ const initialState: CoinState = {
   loadTickerListLoading: false,
   loadTickerListDone: false,
   loadTickerListError: null,
+
+  loadSelectedCoinDataLoading: false,
+  loadSelectedCoinDataDone: false,
+  loadSelectedCoinDataError: null,
 };
 
 const coinSlice = createSlice({
@@ -65,10 +69,41 @@ const coinSlice = createSlice({
     loadTickerListSuccess: (state, { payload }: PayloadAction<PresentPrices>) => {
       state.loadTickerListLoading = false;
       state.loadTickerListDone = true;
+
+      payload.forEach((item) => {
+        state.tickerList[item.market] = {
+          tradePrice: item.trade_price,
+          changePrice: item.change_price,
+          accTradePrice24h: item.acc_trade_price_24h,
+          signedChangePrice: item.signed_change_price,
+          prevClosingPrice: item.prev_closing_price,
+        };
+      });
     },
     loadTickerListFailure: (state, { payload }) => {
       state.loadTickerListLoading = false;
       state.loadTickerListError = payload.error;
+    },
+    loadSelectedCoinDataRequest: (state) => {
+      state.loadSelectedCoinDataLoading = true;
+      state.loadSelectedCoinDataDone = false;
+      state.loadSelectedCoinDataError = null;
+    },
+    loadSelectedCoinDataSuccess: (state, { payload }: PayloadAction<PresentPrices>) => {
+      state.loadSelectedCoinDataLoading = false;
+      state.loadSelectedCoinDataDone = true;
+
+      state.selectedCoin.tradePrice = payload[0].trade_price;
+      state.selectedCoin.highPrice = payload[0].high_price;
+      state.selectedCoin.lowPrice = payload[0].low_price;
+      state.selectedCoin.signedChangePrice = payload[0].signed_change_price;
+      state.selectedCoin.accTradeVolume24h = payload[0].acc_trade_volume_24h;
+      state.selectedCoin.accTradePrice24h = payload[0].acc_trade_price_24h;
+      state.selectedCoin.prevClosingPrice = payload[0].prev_closing_price;
+    },
+    loadSelectedCoinDataFailure: (state, { payload }) => {
+      state.loadSelectedCoinDataLoading = false;
+      state.loadSelectedCoinDataError = payload.error;
     },
     updateTickerList: (state, { payload }: PayloadAction<RealTimeTickers>) => {
       // 중복으로 들어온 코인 제거
@@ -97,7 +132,6 @@ const coinSlice = createSlice({
 
       // 마지막 코인 데이터로 업데이트
       const coin = coinList[coinList.length - 1];
-      console.log(coin);
 
       state.selectedCoin.tradePrice = coin.trade_price;
       state.selectedCoin.highPrice = coin.high_price;
@@ -117,6 +151,9 @@ export const {
   loadTickerListRequest,
   loadTickerListSuccess,
   loadTickerListFailure,
+  loadSelectedCoinDataRequest,
+  loadSelectedCoinDataSuccess,
+  loadSelectedCoinDataFailure,
   updateTickerList,
   updateSelectedCoin,
 } = coinSlice.actions;
