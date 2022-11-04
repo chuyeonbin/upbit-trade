@@ -1,10 +1,14 @@
-import { call, put } from 'redux-saga/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { call, fork, put, all, takeEvery } from 'redux-saga/effects';
 import { getMarketCodes, getPresentPrice } from '../../api';
 import { MarketCodes, PresentPrices } from '../../types';
 import {
   loadMarketListFailure,
   loadMarketListRequest,
   loadMarketListSuccess,
+  loadSelectedCoinDataFailure,
+  loadSelectedCoinDataRequest,
+  loadSelectedCoinDataSuccess,
   loadTickerListFailure,
   loadTickerListRequest,
   loadTickerListSuccess,
@@ -17,6 +21,19 @@ export function* loadMarketList() {
     yield put(loadMarketListSuccess(marketList));
   } catch (error) {
     yield put(loadMarketListFailure({ error }));
+    console.error(error);
+  }
+}
+
+export function* loadSelectedCoinDataSaga(code: string) {
+  yield put(loadSelectedCoinDataRequest());
+  try {
+    const coin: PresentPrices = yield call(getPresentPrice, [code]);
+
+    console.log(coin);
+    yield put(loadSelectedCoinDataSuccess(coin));
+  } catch (error) {
+    yield put(loadSelectedCoinDataFailure({ error }));
     console.error(error);
   }
 }
