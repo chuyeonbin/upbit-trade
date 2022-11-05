@@ -6,17 +6,29 @@ import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { useAppSelector } from '../../store/store';
 import { dayToDayFormat, signedChangePriceFormat, tradingValueFormat } from '../../utils';
 import Price from './Price';
+import { useDispatch } from 'react-redux';
+import { changeSelectedCoin } from '../../store/modules/coin';
 
 export default function CoinList() {
+  const dispatch = useDispatch();
+
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const marketList = useAppSelector((state) => state.coin.marketList);
 
   const tickerList = useAppSelector((state) => state.coin.tickerList);
 
+  const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
+
   const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
   const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
 
   const handleTabClick = (index: number) => setSelectedTab(index);
+
+  const handleCoinItemClick = (marketName: string, code: string) => {
+    if (selectedCoin.marketName !== marketName) {
+      dispatch(changeSelectedCoin({ marketName, code }));
+    }
+  };
 
   return (
     <Wrapper>
@@ -45,7 +57,11 @@ export default function CoinList() {
         {Object.keys(tickerList).length > 0 ? (
           <CoinBody>
             {marketList.map((value) => (
-              <CoinRow change={tickerList[value.code].signedChangePrice} key={value.englishName}>
+              <CoinRow
+                onClick={() => handleCoinItemClick(value.koreanName, value.code)}
+                change={tickerList[value.code].signedChangePrice}
+                key={value.englishName}
+              >
                 <CoinCell sx={{ '&&': { p: '0 14px' } }}>
                   <Star style={{ fontSize: '16px' }} />
                 </CoinCell>
