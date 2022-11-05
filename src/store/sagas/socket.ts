@@ -74,12 +74,11 @@ export function* socketConnection(
     channel = yield call(channelConnection, field);
     yield put(action.success());
 
-    const {
-      coin: { selectedCoin },
-    }: RootState = yield select();
-
     while (true) {
       const msg: RealTimeTickers = yield flush(channel);
+      const {
+        coin: { selectedCoin },
+      }: RootState = yield select();
 
       if (msg.length) {
         yield put(updateTickerList(msg));
