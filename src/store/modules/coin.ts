@@ -93,6 +93,7 @@ const coinSlice = createSlice({
       state.loadSelectedCoinDataLoading = false;
       state.loadSelectedCoinDataDone = true;
 
+      state.selectedCoin.code = payload[0].market;
       state.selectedCoin.tradePrice = payload[0].trade_price;
       state.selectedCoin.highPrice = payload[0].high_price;
       state.selectedCoin.lowPrice = payload[0].low_price;
@@ -141,6 +142,15 @@ const coinSlice = createSlice({
       state.selectedCoin.accTradePrice24h = coin.acc_trade_price_24h;
       state.selectedCoin.prevClosingPrice = coin.prev_closing_price;
     },
+    changeSelectedCoin: (
+      state,
+      { payload }: PayloadAction<{ marketName: string; code: string }>,
+    ) => {
+      undefined;
+    },
+    changeSelectedMarketName: (state, { payload }: PayloadAction<{ marketName: string }>) => {
+      state.selectedCoin.marketName = payload.marketName;
+    },
   },
 });
 
@@ -156,6 +166,8 @@ export const {
   loadSelectedCoinDataFailure,
   updateTickerList,
   updateSelectedCoin,
+  changeSelectedCoin,
+  changeSelectedMarketName,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
