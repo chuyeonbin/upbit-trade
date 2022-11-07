@@ -14,7 +14,7 @@ export default function CoinHeader() {
         <EnglishName>{selectedCoin.code.substring(4)}/KRW</EnglishName>
       </TitleWrapper>
       <HeaderBody>
-        <TradePriceWrapper>
+        <TradePriceWrapper change={selectedCoin.signedChangePrice}>
           <TradePrice>
             {selectedCoin.tradePrice.toLocaleString()}
             <span>KRW</span>
@@ -91,11 +91,12 @@ const EnglishName = styled.p`
   color: #666;
 `;
 
-const TradePriceWrapper = styled.div`
+const TradePriceWrapper = styled.div<{ change: number }>`
   display: flex;
   flex-direction: column;
 
-  color: ${({ theme }) => theme.colors.lightRed};
+  color: ${({ theme, change }) =>
+    change > 0 ? theme.colors.lightRed : change < 0 ? theme.colors.lightBlue : 'black'};
 `;
 
 const TradePrice = styled.h2`
