@@ -19,7 +19,7 @@ const socketSlice = createSlice({
   initialState,
   name: 'socket',
   reducers: {
-    presentPriceSocketRequest: (state, { payload }: PayloadAction<string[]>) => {
+    presentPriceSocketRequest: (state, { payload }: PayloadAction<{ codes: string[] }>) => {
       state.presentPriceSocketLoading = true;
       state.presentPriceSocketDone = false;
       state.presentPriceSocketError = null;
@@ -32,7 +32,7 @@ const socketSlice = createSlice({
       state.presentPriceSocketLoading = false;
       state.presentPriceSocketError = payload.error;
     },
-    tradeSocketRequest: (state, { payload }: PayloadAction<string[]>) => {
+    tradeSocketRequest: (state, { payload }: PayloadAction<{ codes: string[] }>) => {
       state.tradeSocketLoading = true;
       state.tradeSocketDone = false;
       state.tradeSocketError = null;
@@ -45,7 +45,7 @@ const socketSlice = createSlice({
       state.tradeSocketLoading = false;
       state.tradeSocketError = payload.error;
     },
-    orderbookSocketRequest: (state, { payload }: PayloadAction<string[]>) => {
+    orderbookSocketRequest: (state, { payload }: PayloadAction<{ codes: string[] }>) => {
       state.orderbookSocketLoading = true;
       state.orderbookSocketDone = false;
       state.orderbookSocketError = null;

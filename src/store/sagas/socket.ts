@@ -1,11 +1,7 @@
-import {
-  ActionCreatorWithoutPayload,
-  ActionCreatorWithPayload,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { buffers, END, EventChannel, eventChannel } from 'redux-saga';
 import { all, call, delay, fork, put, takeEvery, flush, select } from 'redux-saga/effects';
-import { RealTimeTickers } from '../../types/realTime';
+import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import RootState from '../../types/state';
 import { createSocket } from '../../utils';
 import { updateSelectedCoin, updateTickerList } from '../modules/coin';
@@ -53,26 +49,19 @@ function channelConnection(field: {
   }, buffers.expanding(200) || buffers.none());
 }
 
-function closeChannel(channel: EventChannel<string> | null) {
+function closeChannel(
+  channel: EventChannel<RealTimeTickers | RealTimeTrades | RealTimeOrderbooks> | null,
+) {
   if (channel) {
     channel.close();
   }
 }
 
-export function* socketConnection(
-  field: {
-    type: 'ticker' | 'trade' | 'orderbook';
-    codes: string[];
-  },
-  action: {
-    success: ActionCreatorWithoutPayload<string>;
-    failure: ActionCreatorWithPayload<any, string>;
-  },
-) {
-  let channel: EventChannel<string>;
+export function* presentPriceSocketSaga({ payload }: PayloadAction<{ codes: string[] }>) {
+  let channel: EventChannel<RealTimeTickers>;
   try {
-    channel = yield call(channelConnection, field);
-    yield put(action.success());
+    channel = yield call(channelConnection, { type: 'ticker', codes: payload.codes });
+    yield put(presentPriceSocketSuccess());
 
     while (true) {
       const msg: RealTimeTickers = yield flush(channel);
@@ -81,6 +70,7 @@ export function* socketConnection(
       }: RootState = yield select();
 
       if (msg.length) {
+        console.log(msg);
         yield put(updateTickerList(msg));
       }
 
@@ -92,40 +82,54 @@ export function* socketConnection(
     }
   } catch (error) {
     console.error(error);
-    yield put(action.failure(error));
+    yield put(presentPriceSocketFailure(error));
   } finally {
     closeChannel(channel!);
   }
 }
 
-export function* presentPriceSocketSaga({ payload }: PayloadAction<string[]>) {
-  yield socketConnection(
-    { type: 'ticker', codes: payload },
-    {
-      success: presentPriceSocketSuccess,
-      failure: presentPriceSocketFailure,
-    },
-  );
+export function* tradeSocketSaga({ payload }: PayloadAction<{ codes: string[] }>) {
+  let channel: EventChannel<RealTimeTrades>;
+  try {
+    channel = yield call(channelConnection, { type: 'trade', codes: payload.codes });
+    yield put(tradeSocketSuccess());
+
+    while (true) {
+      const msg: RealTimeTrades = yield flush(channel);
+
+      if (msg.length) {
+        console.log(msg);
+      }
+      yield delay(500); // 0.5초마다 업데이트
+    }
+  } catch (error) {
+    console.error(error);
+    yield put(tradeSocketFailure(error));
+  } finally {
+    closeChannel(channel!);
+  }
 }
 
-export function* tradeSocketSaga({ payload }: PayloadAction<string[]>) {
-  yield socketConnection(
-    { type: 'trade', codes: payload },
-    {
-      success: tradeSocketSuccess,
-      failure: tradeSocketFailure,
-    },
-  );
-}
+export function* orderbookSocketSaga({ payload }: PayloadAction<{ codes: string[] }>) {
+  let channel: EventChannel<RealTimeOrderbooks>;
+  try {
+    channel = yield call(channelConnection, { type: 'orderbook', codes: payload.codes });
+    yield put(orderbookSocketSuccess());
 
-function* orderbookSocketSaga({ payload }: PayloadAction<string[]>) {
-  yield socketConnection(
-    { type: 'orderbook', codes: payload },
-    {
-      success: orderbookSocketSuccess,
-      failure: orderbookSocketFailure,
-    },
-  );
+    while (true) {
+      const msg: RealTimeOrderbooks = yield flush(channel);
+
+      if (msg.length) {
+        console.log(msg);
+      }
+      yield delay(500); // 0.5초마다 업데이트
+    }
+  } catch (error) {
+    console.error(error);
+    yield put(orderbookSocketFailure(error));
+  } finally {
+    closeChannel(channel!);
+  }
 }
 
 function* watchPresentPriceSocketSaga() {
