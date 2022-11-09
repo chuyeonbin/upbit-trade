@@ -29,6 +29,18 @@ export interface CoinState {
     };
   };
 
+  orderbook: {
+    code: string;
+    units: {
+      askPrice: number;
+      askSize: number;
+      bidPrice: number;
+      bidSize: number;
+    }[];
+    totalAskSize: number;
+    totalBidSize: number;
+  };
+
   selectedCoin: {
     marketName: string;
     code: string;
