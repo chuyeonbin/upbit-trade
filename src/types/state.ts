@@ -1,3 +1,5 @@
+import { Orderbooks } from '.';
+
 export interface SocketState {
   presentPriceSocketLoading: boolean;
   presentPriceSocketDone: boolean;
@@ -29,17 +31,7 @@ export interface CoinState {
     };
   };
 
-  orderbook: {
-    code: string;
-    units: {
-      askPrice: number;
-      askSize: number;
-      bidPrice: number;
-      bidSize: number;
-    }[];
-    totalAskSize: number;
-    totalBidSize: number;
-  };
+  orderbookList: Orderbooks;
 
   selectedCoin: {
     marketName: string;
@@ -60,6 +52,10 @@ export interface CoinState {
   loadTickerListLoading: boolean;
   loadTickerListDone: boolean;
   loadTickerListError: Error | null;
+
+  loadOrderbookListLoading: boolean;
+  loadOrderbookListDone: boolean;
+  loadOrderbookListError: Error | null;
 
   loadSelectedCoinDataLoading: boolean;
   loadSelectedCoinDataDone: boolean;

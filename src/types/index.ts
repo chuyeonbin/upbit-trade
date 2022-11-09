@@ -53,7 +53,7 @@ export interface PresentPrice {
 
 export type PresentPrices = PresentPrice[];
 
-export interface OrderBook {
+export interface Orderbook {
   market: string;
   timestamp: number;
   total_ask_size: number;
@@ -61,4 +61,4 @@ export interface OrderBook {
   orderbook_units: { ask_price: number; bid_price: number; ask_size: number; bid_size: number }[];
 }
 
-export type OrderBooks = OrderBook[];
+export type Orderbooks = Orderbook[];
