@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { DayCandles, MinuteCandles, MonthCandles, Unit, WeekCandles } from '../types/candle';
-import { MarketCodes, OrderBooks, PresentPrices, RecentContracts } from '../types';
+import { MarketCodes, Orderbooks, PresentPrices, RecentContracts } from '../types';
 
 const BASE_URL = 'https://api.upbit.com/v1';
 
@@ -50,8 +50,8 @@ export async function getPresentPrice(markets: string[]): Promise<PresentPrices>
   return response.data;
 }
 
-export async function getOrderBook(market: string): Promise<OrderBooks> {
-  const query = `/orderbook?markets=${market}`;
+export async function getOrderBooks(codes: string[]): Promise<Orderbooks> {
+  const query = `/orderbook?markets=${codes.join('&market=')}`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
