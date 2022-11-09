@@ -17,12 +17,12 @@ function* initSaga() {
   const markets = coin.marketList.map((value) => value.code);
 
   yield loadTickerList(markets);
-  yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
+  // yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
 
   yield put(presentPriceSocketRequest({ codes: markets })); // 현재가 소켓 연결 요청
 
-  yield put(tradeSocketRequest({ codes: ['KRW-BTC'] })); // 체결가 소켓 연결 요청
-  // yield put(orderbookSocketRequest({ codes: ['KRW-BTC.15'] })); // 호가 소켓 연결 요청
+  // yield put(tradeSocketRequest({ codes: ['KRW-BTC'] })); // 체결가 소켓 연결 요청
+  yield put(orderbookSocketRequest({ codes: ['KRW-BTC.15'] })); // 호가 소켓 연결 요청
 }
 
 function* watchStart() {

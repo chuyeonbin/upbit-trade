@@ -70,7 +70,6 @@ export function* presentPriceSocketSaga({ payload }: PayloadAction<{ codes: stri
       }: RootState = yield select();
 
       if (msg.length) {
-        console.log(msg);
         yield put(updateTickerList(msg));
       }
 
