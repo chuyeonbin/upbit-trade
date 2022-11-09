@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarketCodes, PresentPrices } from '../../types';
+import { MarketCodes, Orderbooks, PresentPrices } from '../../types';
 import { RealTimeTickers } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
@@ -7,6 +7,8 @@ const initialState: CoinState = {
   marketList: [],
 
   tickerList: {},
+
+  orderbookList: [],
 
   selectedCoin: {
     marketName: '비트코인',
@@ -27,6 +29,10 @@ const initialState: CoinState = {
   loadTickerListLoading: false,
   loadTickerListDone: false,
   loadTickerListError: null,
+
+  loadOrderbookListLoading: false,
+  loadOrderbookListDone: false,
+  loadOrderbookListError: null,
 
   loadSelectedCoinDataLoading: false,
   loadSelectedCoinDataDone: false,
@@ -83,6 +89,21 @@ const coinSlice = createSlice({
     loadTickerListFailure: (state, { payload }) => {
       state.loadTickerListLoading = false;
       state.loadTickerListError = payload.error;
+    },
+    loadOrderbookListRequest: (state) => {
+      state.loadOrderbookListLoading = true;
+      state.loadOrderbookListDone = false;
+      state.loadOrderbookListError = null;
+    },
+    loadOrderbookListSuccess: (state, { payload }: PayloadAction<Orderbooks>) => {
+      state.loadOrderbookListLoading = false;
+      state.loadOrderbookListDone = true;
+
+      state.orderbookList = payload;
+    },
+    loadOrderbookListFailure: (state, { payload }) => {
+      state.loadOrderbookListLoading = false;
+      state.loadOrderbookListError = payload.error;
     },
     loadSelectedCoinDataRequest: (state) => {
       state.loadSelectedCoinDataLoading = true;
@@ -161,6 +182,9 @@ export const {
   loadTickerListRequest,
   loadTickerListSuccess,
   loadTickerListFailure,
+  loadOrderbookListRequest,
+  loadOrderbookListSuccess,
+  loadOrderbookListFailure,
   loadSelectedCoinDataRequest,
   loadSelectedCoinDataSuccess,
   loadSelectedCoinDataFailure,
