@@ -6,7 +6,12 @@ import {
 } from '../modules/socket';
 import { startInit } from '../modules/start';
 import { RootState } from '../store';
-import coinSaga, { loadMarketList, loadSelectedCoinDataSaga, loadTickerList } from './coin';
+import coinSaga, {
+  loadMarketList,
+  loadOrderbookListSaga,
+  loadSelectedCoinDataSaga,
+  loadTickerList,
+} from './coin';
 import socketSaga from './socket';
 
 function* initSaga() {
@@ -17,7 +22,8 @@ function* initSaga() {
   const markets = coin.marketList.map((value) => value.code);
 
   yield loadTickerList(markets);
-  // yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
+  yield loadOrderbookListSaga([coin.selectedCoin.code]);
+  yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
 
   yield put(presentPriceSocketRequest({ codes: markets })); // 현재가 소켓 연결 요청
 
