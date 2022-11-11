@@ -4,7 +4,7 @@ import { all, call, delay, fork, put, takeEvery, flush, select } from 'redux-sag
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import RootState from '../../types/state';
 import { createSocket } from '../../utils';
-import { updateSelectedCoin, updateTickerList } from '../modules/coin';
+import { updateOrderbook, updateSelectedCoin, updateTickerList } from '../modules/coin';
 import {
   presentPriceSocketSuccess,
   presentPriceSocketFailure,
@@ -119,7 +119,7 @@ export function* orderbookSocketSaga({ payload }: PayloadAction<{ codes: string[
       const msg: RealTimeOrderbooks = yield flush(channel);
 
       if (msg.length) {
-        console.log(msg);
+        yield put(updateOrderbook(msg));
       }
       yield delay(500); // 0.5초마다 업데이트
     }
