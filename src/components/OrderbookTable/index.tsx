@@ -3,17 +3,36 @@ import styled from 'styled-components';
 import OrderbookAsk from './OrderbookAsk';
 import OrderbookBid from './OrderbookBid';
 
-export default function OrderbookTable() {
-  const test = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+interface OrderbookTableProps {
+  orderbook: {
+    timestamp: number;
+    totalAskSize: number;
+    totalBidSize: number;
+    orderbookUnits: { askPrice: number; bidPrice: number; askSize: number; bidSize: number }[];
+  };
+}
+
+export default function OrderbookTable({ orderbook }: OrderbookTableProps) {
+  const units = orderbook.orderbookUnits;
   return (
     <Wrapper>
       <Table>
         <TableBody>
-          {test.map((value, index) => (
-            <OrderbookAsk key={index} index={index} />
+          {units.map((unit, index) => (
+            <OrderbookAsk
+              key={index}
+              index={index}
+              askPrice={unit.askPrice}
+              askSize={unit.askSize}
+            />
           ))}
-          {test.map((value, index) => (
-            <OrderbookBid key={index} index={index} />
+          {units.map((unit, index) => (
+            <OrderbookBid
+              key={index}
+              index={index}
+              bidPrice={unit.bidPrice}
+              bidSize={unit.bidSize}
+            />
           ))}
         </TableBody>
       </Table>
