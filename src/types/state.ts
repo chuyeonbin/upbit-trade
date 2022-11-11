@@ -31,7 +31,17 @@ export interface CoinState {
     };
   };
 
-  orderbookList: Orderbooks;
+  orderbook: {
+    timestamp: number;
+    totalAskSize: number;
+    totalBidSize: number;
+    orderbookUnits: {
+      askPrice: number;
+      bidPrice: number;
+      askSize: number;
+      bidSize: number;
+    }[];
+  };
 
   selectedCoin: {
     marketName: string;
@@ -53,9 +63,9 @@ export interface CoinState {
   loadTickerListDone: boolean;
   loadTickerListError: Error | null;
 
-  loadOrderbookListLoading: boolean;
-  loadOrderbookListDone: boolean;
-  loadOrderbookListError: Error | null;
+  loadOrderbookLoading: boolean;
+  loadOrderbookDone: boolean;
+  loadOrderbookError: Error | null;
 
   loadSelectedCoinDataLoading: boolean;
   loadSelectedCoinDataDone: boolean;

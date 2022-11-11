@@ -9,9 +9,9 @@ import {
   loadMarketListFailure,
   loadMarketListRequest,
   loadMarketListSuccess,
-  loadOrderbookListFailure,
-  loadOrderbookListRequest,
-  loadOrderbookListSuccess,
+  loadOrderbookFailure,
+  loadOrderbookRequest,
+  loadOrderbookSuccess,
   loadSelectedCoinDataFailure,
   loadSelectedCoinDataRequest,
   loadSelectedCoinDataSuccess,
@@ -56,12 +56,12 @@ export function* loadTickerList(markets: string[]) {
 }
 
 export function* loadOrderbookListSaga(codes: string[]) {
-  yield put(loadOrderbookListRequest());
+  yield put(loadOrderbookRequest());
   try {
-    const orderbookList: Orderbooks = yield call(getOrderBooks, codes);
-    yield put(loadOrderbookListSuccess(orderbookList));
+    const orderbooks: Orderbooks = yield call(getOrderBooks, codes);
+    yield put(loadOrderbookSuccess(orderbooks));
   } catch (error) {
-    yield put(loadOrderbookListFailure({ error }));
+    yield put(loadOrderbookFailure({ error }));
     console.error(error);
   }
 }

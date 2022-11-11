@@ -8,7 +8,12 @@ const initialState: CoinState = {
 
   tickerList: {},
 
-  orderbookList: [],
+  orderbook: {
+    timestamp: 0,
+    totalAskSize: 0,
+    totalBidSize: 0,
+    orderbookUnits: [],
+  },
 
   selectedCoin: {
     marketName: '비트코인',
@@ -30,9 +35,9 @@ const initialState: CoinState = {
   loadTickerListDone: false,
   loadTickerListError: null,
 
-  loadOrderbookListLoading: false,
-  loadOrderbookListDone: false,
-  loadOrderbookListError: null,
+  loadOrderbookLoading: false,
+  loadOrderbookDone: false,
+  loadOrderbookError: null,
 
   loadSelectedCoinDataLoading: false,
   loadSelectedCoinDataDone: false,
@@ -90,20 +95,30 @@ const coinSlice = createSlice({
       state.loadTickerListLoading = false;
       state.loadTickerListError = payload.error;
     },
-    loadOrderbookListRequest: (state) => {
-      state.loadOrderbookListLoading = true;
-      state.loadOrderbookListDone = false;
-      state.loadOrderbookListError = null;
+    loadOrderbookRequest: (state) => {
+      state.loadOrderbookLoading = true;
+      state.loadOrderbookDone = false;
+      state.loadOrderbookError = null;
     },
-    loadOrderbookListSuccess: (state, { payload }: PayloadAction<Orderbooks>) => {
-      state.loadOrderbookListLoading = false;
-      state.loadOrderbookListDone = true;
+    loadOrderbookSuccess: (state, { payload }: PayloadAction<Orderbooks>) => {
+      state.loadOrderbookLoading = false;
+      state.loadOrderbookDone = true;
 
-      state.orderbookList = payload;
+      state.orderbook.timestamp = payload[0].timestamp;
+      state.orderbook.totalAskSize = payload[0].total_ask_size;
+      state.orderbook.totalBidSize = payload[0].total_bid_size;
+      payload[0].orderbook_units.forEach((unit, index) => {
+        state.orderbook.orderbookUnits[index] = {
+          askPrice: unit.ask_price,
+          askSize: unit.ask_size,
+          bidPrice: unit.bid_price,
+          bidSize: unit.bid_size,
+        };
+      });
     },
-    loadOrderbookListFailure: (state, { payload }) => {
-      state.loadOrderbookListLoading = false;
-      state.loadOrderbookListError = payload.error;
+    loadOrderbookFailure: (state, { payload }) => {
+      state.loadOrderbookLoading = false;
+      state.loadOrderbookError = payload.error;
     },
     loadSelectedCoinDataRequest: (state) => {
       state.loadSelectedCoinDataLoading = true;
@@ -182,9 +197,9 @@ export const {
   loadTickerListRequest,
   loadTickerListSuccess,
   loadTickerListFailure,
-  loadOrderbookListRequest,
-  loadOrderbookListSuccess,
-  loadOrderbookListFailure,
+  loadOrderbookRequest,
+  loadOrderbookSuccess,
+  loadOrderbookFailure,
   loadSelectedCoinDataRequest,
   loadSelectedCoinDataSuccess,
   loadSelectedCoinDataFailure,
