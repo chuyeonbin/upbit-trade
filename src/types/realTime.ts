@@ -61,7 +61,7 @@ export interface RealTimeOrderbook {
   code: string; // 마켓 코드(ex. KRW-BTC)
   total_ask_size: number; // 호가 매도 총 잔량
   total_bid_size: number; // 호가 매수 총 잔량
-  orderbook_units: { ask_price: number; bid_price: number; ask_size: number; bid_size: number };
+  orderbook_units: { ask_price: number; bid_price: number; ask_size: number; bid_size: number }[];
   timestamp: number; // 타임스탬프 (millisecond)
   stream_type: 'SNAPSHOT' | 'REALTIME'; // SNAPSHOT: 스냅샷, REALTIME: 실시간
 }
