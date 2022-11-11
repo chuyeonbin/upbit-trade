@@ -55,7 +55,7 @@ export function* loadTickerList(markets: string[]) {
   }
 }
 
-export function* loadOrderbookListSaga(codes: string[]) {
+export function* loadOrderbookSaga(codes: string[]) {
   yield put(loadOrderbookRequest());
   try {
     const orderbooks: Orderbooks = yield call(getOrderBooks, codes);
