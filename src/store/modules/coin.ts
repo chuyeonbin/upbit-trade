@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MarketCodes, Orderbooks, PresentPrices } from '../../types';
-import { RealTimeTickers } from '../../types/realTime';
+import { RealTimeOrderbooks, RealTimeTickers } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
 const initialState: CoinState = {
@@ -163,6 +163,22 @@ const coinSlice = createSlice({
         };
       });
     },
+    updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
+      // 마지막 호가 데이터로 업데이트
+      const orderbook = payload[payload.length - 1];
+
+      state.orderbook.timestamp = orderbook.timestamp;
+      state.orderbook.totalAskSize = orderbook.total_ask_size;
+      state.orderbook.totalBidSize = orderbook.total_bid_size;
+      orderbook.orderbook_units.forEach((unit, index) => {
+        state.orderbook.orderbookUnits[index] = {
+          askPrice: unit.ask_price,
+          askSize: unit.ask_size,
+          bidPrice: unit.bid_price,
+          bidSize: unit.bid_size,
+        };
+      });
+    },
     updateSelectedCoin: (state, { payload }: PayloadAction<RealTimeTickers>) => {
       // code에 맞는거만 필터링
       const coinList = payload.filter((value) => value.code === state.selectedCoin.code);
@@ -204,6 +220,7 @@ export const {
   loadSelectedCoinDataSuccess,
   loadSelectedCoinDataFailure,
   updateTickerList,
+  updateOrderbook,
   updateSelectedCoin,
   changeSelectedCoin,
   changeSelectedMarketName,
