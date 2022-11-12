@@ -3,9 +3,11 @@ import { TableCell, TableRow } from '@mui/material';
 
 interface OrderbookBidProps {
   index: number;
+  bidPrice: number;
+  bidSize: number;
 }
 
-export default function OrderbookBid({ index }: OrderbookBidProps) {
+export default function OrderbookBid({ index, bidPrice, bidSize }: OrderbookBidProps) {
   return (
     <TableRow>
       {index === 0 ? (
