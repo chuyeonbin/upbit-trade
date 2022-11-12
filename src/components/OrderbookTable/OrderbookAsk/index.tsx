@@ -3,9 +3,11 @@ import { TableCell, TableRow } from '@mui/material';
 
 interface OrderbookAskProps {
   index: number;
+  askPrice: number;
+  askSize: number;
 }
 
-export default function OrderbookAsk({ index }: OrderbookAskProps) {
+export default function OrderbookAsk({ index, askPrice, askSize }: OrderbookAskProps) {
   return (
     <TableRow>
       <OrderbookAskCell sx={{ width: '42px' }} />
