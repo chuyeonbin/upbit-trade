@@ -18,7 +18,7 @@ export default function OrderbookTable({ orderbook }: OrderbookTableProps) {
     <Wrapper>
       <Table>
         <TableBody>
-          {units.map((unit, index) => (
+          {[...units].reverse().map((unit, index) => (
             <OrderbookAsk
               key={index}
               index={index}
