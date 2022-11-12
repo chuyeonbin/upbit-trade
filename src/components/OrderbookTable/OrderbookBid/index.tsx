@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { TableCell, TableRow } from '@mui/material';
+import { useAppSelector } from '../../../store/store';
+import { dayToDayFormat } from '../../../utils';
 
 interface OrderbookBidProps {
   index: number;
@@ -8,6 +10,7 @@ interface OrderbookBidProps {
 }
 
 export default function OrderbookBid({ index, bidPrice, bidSize }: OrderbookBidProps) {
+  const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
   return (
     <TableRow>
       {index === 0 ? (
@@ -17,14 +20,16 @@ export default function OrderbookBid({ index, bidPrice, bidSize }: OrderbookBidP
       ) : null}
       <OrderbookBidCell2 sx={{ width: '0px' }} align='center'>
         <a href='#'>
-          <p>23,920,000</p>
-          <p style={{ marginLeft: '14px' }}>-4.24%</p>
+          <p>{bidPrice.toLocaleString()}</p>
+          <p style={{ marginLeft: '14px' }}>
+            {dayToDayFormat(bidPrice - prevClosingPrice, prevClosingPrice)}%
+          </p>
         </a>
       </OrderbookBidCell2>
       <OrderbookBidCell3 sx={{ width: '120px' }} align='right'>
         <a href='#'>
           <div />
-          <p>1.092</p>
+          <p>{bidSize}</p>
         </a>
       </OrderbookBidCell3>
       <OrderbookBidCell3 sx={{ width: '42px' }} />
