@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { TableCell, TableRow } from '@mui/material';
+import { useAppSelector } from '../../../store/store';
+import { dayToDayFormat } from '../../../utils';
 
 interface OrderbookAskProps {
   index: number;
@@ -8,19 +10,22 @@ interface OrderbookAskProps {
 }
 
 export default function OrderbookAsk({ index, askPrice, askSize }: OrderbookAskProps) {
+  const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
   return (
     <TableRow>
       <OrderbookAskCell sx={{ width: '42px' }} />
       <OrderbookAskCell2 sx={{ width: '120px' }} align='right'>
         <a href='#'>
           <div />
-          <p>1.092</p>
+          <p>{askSize}</p>
         </a>
       </OrderbookAskCell2>
       <OrderbookAskCell3 sx={{ width: '0px' }} align='center'>
         <a href='#'>
-          <p>23,920,000</p>
-          <p style={{ marginLeft: '14px' }}>-4.24%</p>
+          <p>{askPrice.toLocaleString()}</p>
+          <p style={{ marginLeft: '14px' }}>
+            {dayToDayFormat(askPrice - prevClosingPrice, prevClosingPrice)}%
+          </p>
         </a>
       </OrderbookAskCell3>
       {index === 0 ? (
