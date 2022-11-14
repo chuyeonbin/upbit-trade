@@ -14,6 +14,12 @@ interface OrderbookTableProps {
 
 export default function OrderbookTable({ orderbook }: OrderbookTableProps) {
   const units = orderbook.orderbookUnits;
+  const totalAskSize = orderbook.totalAskSize;
+  const totalBidSize = orderbook.totalBidSize;
+  const maxSize = Math.max(
+    ...units.map((unit) => (unit.askSize > unit.bidSize ? unit.askSize : unit.bidSize)),
+  );
+
   return (
     <Wrapper>
       <Table>
@@ -24,6 +30,7 @@ export default function OrderbookTable({ orderbook }: OrderbookTableProps) {
               index={index}
               askPrice={unit.askPrice}
               askSize={unit.askSize}
+              maxSize={maxSize}
             />
           ))}
           {units.map((unit, index) => (
@@ -32,6 +39,7 @@ export default function OrderbookTable({ orderbook }: OrderbookTableProps) {
               index={index}
               bidPrice={unit.bidPrice}
               bidSize={unit.bidSize}
+              maxSize={maxSize}
             />
           ))}
         </TableBody>

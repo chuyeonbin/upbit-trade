@@ -7,9 +7,10 @@ interface OrderbookBidProps {
   index: number;
   bidPrice: number;
   bidSize: number;
+  maxSize: number;
 }
 
-export default function OrderbookBid({ index, bidPrice, bidSize }: OrderbookBidProps) {
+export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: OrderbookBidProps) {
   const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
   return (
     <TableRow>
@@ -28,7 +29,7 @@ export default function OrderbookBid({ index, bidPrice, bidSize }: OrderbookBidP
       </OrderbookBidCell2>
       <OrderbookBidCell3 sx={{ width: '120px' }} align='right'>
         <a href='#'>
-          <div />
+          <Bar style={{ width: `${(bidSize / maxSize) * 100}%` }} />
           <p>{bidSize}</p>
         </a>
       </OrderbookBidCell3>
@@ -69,13 +70,13 @@ const OrderbookBidCell3 = styled(OrderbookBidCell)`
     line-height: 26px;
     z-index: 1;
   }
+`;
 
-  & > a > div {
-    position: absolute;
-    width: 9%;
-    height: 26px;
-    background-color: rgba(200, 74, 49, 0.14901960784313725);
-  }
+const Bar = styled.div`
+  position: absolute;
+  height: 26px;
+  background-color: rgba(200, 74, 49, 0.14901960784313725);
+  max-width: 100%;
 `;
 
 const Inner2 = styled(TableCell)`

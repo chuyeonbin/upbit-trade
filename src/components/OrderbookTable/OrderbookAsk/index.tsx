@@ -7,16 +7,17 @@ interface OrderbookAskProps {
   index: number;
   askPrice: number;
   askSize: number;
+  maxSize: number;
 }
 
-export default function OrderbookAsk({ index, askPrice, askSize }: OrderbookAskProps) {
+export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: OrderbookAskProps) {
   const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
   return (
     <TableRow>
       <OrderbookAskCell sx={{ width: '42px' }} />
       <OrderbookAskCell2 sx={{ width: '120px' }} align='right'>
         <a href='#'>
-          <div />
+          <Bar style={{ width: `${(askSize / maxSize) * 100}%` }} />
           <p>{askSize}</p>
         </a>
       </OrderbookAskCell2>
@@ -61,13 +62,6 @@ const OrderbookAskCell2 = styled(OrderbookAskCell)`
     line-height: 26px;
     z-index: 1;
   }
-
-  & > a > div {
-    position: absolute;
-    width: 9%;
-    height: 26px;
-    background-color: rgba(18, 97, 196, 0.14901960784313725);
-  }
 `;
 
 const OrderbookAskCell3 = styled(OrderbookAskCell)`
@@ -76,6 +70,13 @@ const OrderbookAskCell3 = styled(OrderbookAskCell)`
     display: flex;
     justify-content: flex-end;
   }
+`;
+
+const Bar = styled.div`
+  position: absolute;
+  height: 26px;
+  background-color: rgba(18, 97, 196, 0.14901960784313725);
+  max-width: 100%;
 `;
 
 const Inner1 = styled(TableCell)`
