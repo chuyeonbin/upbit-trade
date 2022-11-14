@@ -11,17 +11,19 @@ interface OrderbookAskProps {
 }
 
 export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: OrderbookAskProps) {
-  const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
+  const { prevClosingPrice, signedChangePrice } = useAppSelector(
+    (state) => state.coin.selectedCoin,
+  );
   return (
     <TableRow>
       <OrderbookAskCell sx={{ width: '42px' }} />
       <OrderbookAskCell2 sx={{ width: '120px' }} align='right'>
         <a href='#'>
           <Bar style={{ width: `${(askSize / maxSize) * 100}%` }} />
-          <p>{askSize}</p>
+          <p>{askSize.toFixed(3)}</p>
         </a>
       </OrderbookAskCell2>
-      <OrderbookAskCell3 sx={{ width: '0px' }} align='center'>
+      <OrderbookAskCell3 sx={{ width: '0px' }} align='center' change={signedChangePrice}>
         <a href='#'>
           <p>{askPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>
@@ -64,11 +66,14 @@ const OrderbookAskCell2 = styled(OrderbookAskCell)`
   }
 `;
 
-const OrderbookAskCell3 = styled(OrderbookAskCell)`
+const OrderbookAskCell3 = styled(OrderbookAskCell)<{ change: number }>`
   & > a {
     width: 150px;
     display: flex;
     justify-content: flex-end;
+    color: ${({ change, theme }) =>
+      change > 0 ? theme.colors.lightRed : change < 0 ? theme.colors.lightBlue : 'black'};
+    font-weight: 600;
   }
 `;
 

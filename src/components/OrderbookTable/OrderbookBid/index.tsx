@@ -11,7 +11,10 @@ interface OrderbookBidProps {
 }
 
 export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: OrderbookBidProps) {
-  const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
+  const { prevClosingPrice, signedChangePrice } = useAppSelector(
+    (state) => state.coin.selectedCoin,
+  );
+
   return (
     <TableRow>
       {index === 0 ? (
@@ -19,7 +22,7 @@ export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: Orde
           <div>inner2</div>
         </Inner2>
       ) : null}
-      <OrderbookBidCell2 sx={{ width: '0px' }} align='center'>
+      <OrderbookBidCell2 sx={{ width: '0px' }} align='center' change={signedChangePrice}>
         <a href='#'>
           <p>{bidPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>
@@ -30,7 +33,7 @@ export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: Orde
       <OrderbookBidCell3 sx={{ width: '120px' }} align='right'>
         <a href='#'>
           <Bar style={{ width: `${(bidSize / maxSize) * 100}%` }} />
-          <p>{bidSize}</p>
+          <p>{bidSize.toFixed(3)}</p>
         </a>
       </OrderbookBidCell3>
       <OrderbookBidCell3 sx={{ width: '42px' }} />
@@ -49,11 +52,14 @@ const OrderbookBidCell = styled(TableCell)`
   }
 `;
 
-const OrderbookBidCell2 = styled(OrderbookBidCell)`
+const OrderbookBidCell2 = styled(OrderbookBidCell)<{ change: number }>`
   & > a {
     width: 150px;
     display: flex;
     justify-content: flex-end;
+    color: ${({ change, theme }) =>
+      change > 0 ? theme.colors.lightRed : change < 0 ? theme.colors.lightBlue : 'black'};
+    font-weight: 600;
   }
 `;
 
