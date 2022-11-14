@@ -11,9 +11,7 @@ interface OrderbookAskProps {
 }
 
 export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: OrderbookAskProps) {
-  const { prevClosingPrice, signedChangePrice } = useAppSelector(
-    (state) => state.coin.selectedCoin,
-  );
+  const { prevClosingPrice } = useAppSelector((state) => state.coin.selectedCoin);
   return (
     <TableRow>
       <OrderbookAskCell sx={{ width: '42px' }} />
@@ -23,7 +21,7 @@ export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: Orde
           <p>{askSize.toFixed(3)}</p>
         </a>
       </OrderbookAskCell2>
-      <OrderbookAskCell3 sx={{ width: '0px' }} align='center' change={signedChangePrice}>
+      <OrderbookAskCell3 sx={{ width: '0px' }} align='center' change={askPrice - prevClosingPrice}>
         <a href='#'>
           <p>{askPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>

@@ -11,9 +11,7 @@ interface OrderbookBidProps {
 }
 
 export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: OrderbookBidProps) {
-  const { prevClosingPrice, signedChangePrice } = useAppSelector(
-    (state) => state.coin.selectedCoin,
-  );
+  const { prevClosingPrice } = useAppSelector((state) => state.coin.selectedCoin);
 
   return (
     <TableRow>
@@ -22,7 +20,7 @@ export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: Orde
           <div>inner2</div>
         </Inner2>
       ) : null}
-      <OrderbookBidCell2 sx={{ width: '0px' }} align='center' change={signedChangePrice}>
+      <OrderbookBidCell2 sx={{ width: '0px' }} align='center' change={bidPrice - prevClosingPrice}>
         <a href='#'>
           <p>{bidPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>
