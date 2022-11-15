@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { TableCell, TableRow } from '@mui/material';
 import { useAppSelector } from '../../../store/store';
 import { dayToDayFormat } from '../../../utils';
+import Inner1 from './Inner1';
 
 interface OrderbookAskProps {
   index: number;
@@ -34,11 +35,7 @@ export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: Orde
         </a>
         {tradePrice === askPrice ? <Seleceted /> : null}
       </OrderbookAskCell3>
-      {index === 0 ? (
-        <Inner1 rowSpan={15} colSpan={2}>
-          <div>inner1</div>
-        </Inner1>
-      ) : null}
+      {index === 0 ? <Inner1 /> : null}
     </TableRow>
   );
 }
@@ -110,12 +107,5 @@ const Seleceted = styled.span`
     border-style: solid;
     border-width: 6px 0 6px 6px;
     content: '';
-  }
-`;
-
-const Inner1 = styled(TableCell)`
-  && {
-    padding: 0;
-    vertical-align: bottom;
   }
 `;
