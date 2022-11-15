@@ -49,6 +49,10 @@ export interface CoinState {
     tradePrice: number;
     highPrice: number;
     lowPrice: number;
+    high52WeekPrice: number;
+    high52WeekDate: string;
+    low52WeekPrice: number;
+    low52WeekDate: string;
     signedChangePrice: number;
     accTradeVolume24h: number;
     accTradePrice24h: number;
