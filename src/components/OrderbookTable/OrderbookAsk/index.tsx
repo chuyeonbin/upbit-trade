@@ -12,20 +12,24 @@ interface OrderbookAskProps {
 
 export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: OrderbookAskProps) {
   const { prevClosingPrice, tradePrice } = useAppSelector((state) => state.coin.selectedCoin);
+
+  const loadOrderbookLoading = useAppSelector((state) => state.coin.loadOrderbookLoading);
+
   return (
     <TableRow>
       <OrderbookAskCell sx={{ width: '42px' }} />
       <OrderbookAskCell2 sx={{ width: '120px' }} align='right'>
         <a href='#'>
           <Bar style={{ width: `${(askSize / maxSize) * 100}%` }} />
-          <p>{askSize.toFixed(3)}</p>
+          <p>{!loadOrderbookLoading && askSize.toFixed(3)}</p>
         </a>
       </OrderbookAskCell2>
       <OrderbookAskCell3 sx={{ width: '0px' }} align='center' change={askPrice - prevClosingPrice}>
         <a href='#'>
-          <p>{askPrice.toLocaleString()}</p>
+          <p>{!loadOrderbookLoading && askPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>
-            {dayToDayFormat(askPrice - prevClosingPrice, prevClosingPrice)}%
+            {!loadOrderbookLoading &&
+              `${dayToDayFormat(askPrice - prevClosingPrice, prevClosingPrice)}%`}
           </p>
         </a>
         {tradePrice === askPrice ? <Seleceted /> : null}

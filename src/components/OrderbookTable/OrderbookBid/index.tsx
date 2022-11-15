@@ -13,6 +13,8 @@ interface OrderbookBidProps {
 export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: OrderbookBidProps) {
   const { prevClosingPrice, tradePrice } = useAppSelector((state) => state.coin.selectedCoin);
 
+  const loadOrderbookLoading = useAppSelector((state) => state.coin.loadOrderbookLoading);
+
   return (
     <TableRow>
       {index === 0 ? (
@@ -24,7 +26,8 @@ export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: Orde
         <a href='#'>
           <p>{bidPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>
-            {dayToDayFormat(bidPrice - prevClosingPrice, prevClosingPrice)}%
+            {!loadOrderbookLoading &&
+              `${dayToDayFormat(bidPrice - prevClosingPrice, prevClosingPrice)}%`}
           </p>
         </a>
         {tradePrice === bidPrice ? <Seleceted /> : null}
@@ -32,7 +35,7 @@ export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: Orde
       <OrderbookBidCell3 sx={{ width: '120px' }} align='right'>
         <a href='#'>
           <Bar style={{ width: `${(bidSize / maxSize) * 100}%` }} />
-          <p>{bidSize.toFixed(3)}</p>
+          <p>{!loadOrderbookLoading && bidSize.toFixed(3)}</p>
         </a>
       </OrderbookBidCell3>
       <OrderbookBidCell3 sx={{ width: '42px' }} />
