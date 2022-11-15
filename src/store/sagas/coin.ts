@@ -36,7 +36,6 @@ export function* loadSelectedCoinDataSaga(code: string) {
   try {
     const coin: PresentPrices = yield call(getPresentPrice, [code]);
 
-    console.log(coin);
     yield put(loadSelectedCoinDataSuccess(coin));
   } catch (error) {
     yield put(loadSelectedCoinDataFailure({ error }));
@@ -69,6 +68,7 @@ export function* loadOrderbookSaga(codes: string[]) {
 function* changeSelectedCoinSaga({ payload }: PayloadAction<{ marketName: string; code: string }>) {
   yield loadSelectedCoinDataSaga(payload.code);
   yield put(changeSelectedMarketName({ marketName: payload.marketName }));
+  yield loadOrderbookSaga([payload.code]);
 }
 
 function* watchChangeSelectedCoinSaga() {

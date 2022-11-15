@@ -165,19 +165,22 @@ const coinSlice = createSlice({
     },
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
       // 마지막 호가 데이터로 업데이트
-      const orderbook = payload[payload.length - 1];
+      const codes = payload.map((orderbook) => orderbook.code);
+      const lastIndex = codes.lastIndexOf(state.selectedCoin.code);
 
-      state.orderbook.timestamp = orderbook.timestamp;
-      state.orderbook.totalAskSize = orderbook.total_ask_size;
-      state.orderbook.totalBidSize = orderbook.total_bid_size;
-      orderbook.orderbook_units.forEach((unit, index) => {
-        state.orderbook.orderbookUnits[index] = {
-          askPrice: unit.ask_price,
-          askSize: unit.ask_size,
-          bidPrice: unit.bid_price,
-          bidSize: unit.bid_size,
-        };
-      });
+      if (lastIndex !== -1) {
+        state.orderbook.timestamp = payload[lastIndex].timestamp;
+        state.orderbook.totalAskSize = payload[lastIndex].total_ask_size;
+        state.orderbook.totalBidSize = payload[lastIndex].total_bid_size;
+        payload[lastIndex].orderbook_units.forEach((unit, index) => {
+          state.orderbook.orderbookUnits[index] = {
+            askPrice: unit.ask_price,
+            askSize: unit.ask_size,
+            bidPrice: unit.bid_price,
+            bidSize: unit.bid_size,
+          };
+        });
+      }
     },
     updateSelectedCoin: (state, { payload }: PayloadAction<RealTimeTickers>) => {
       // code에 맞는거만 필터링
