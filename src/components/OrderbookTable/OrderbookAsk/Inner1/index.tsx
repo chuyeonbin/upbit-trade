@@ -34,15 +34,15 @@ export default function Inner1() {
       </Dl>
       <Dl>
         <Dt>전일 종가</Dt>
-        <Dd>22,701,000</Dd>
+        <Dd>{selectedCoin.prevClosingPrice.toLocaleString()}</Dd>
         <Dt>당일 고가</Dt>
         <Up>
-          23,078,000
+          {selectedCoin.highPrice.toLocaleString()}
           <Em>+1.66%</Em>
         </Up>
         <Dt>당일 저가</Dt>
         <Down>
-          22,530,000
+          {selectedCoin.lowPrice.toLocaleString()}
           <Em>-0.75%</Em>
         </Down>
       </Dl>
