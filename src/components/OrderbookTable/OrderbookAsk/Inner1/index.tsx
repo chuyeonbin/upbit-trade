@@ -1,17 +1,22 @@
 import styled from 'styled-components';
 import { TableCell } from '@mui/material';
+import { useAppSelector } from '../../../../store/store';
 
 export default function Inner1() {
+  const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
+
   return (
     <Inner rowSpan={15} colSpan={2}>
       <Dl>
         <Dt>거래량</Dt>
         <Dd>
-          8,615<I>BTC</I>
+          {Number(selectedCoin.accTradeVolume24h.toFixed()).toLocaleString()}
+          <I>{selectedCoin.code.substring(4)}</I>
         </Dd>
         <Dt>거래 대금</Dt>
         <Dd>
-          195,525<I>백만원</I>
+          {Number((selectedCoin.accTradePrice24h / 1000000).toFixed()).toLocaleString()}
+          <I>백만원</I>
           <Em>(최근24시간)</Em>
         </Dd>
       </Dl>
