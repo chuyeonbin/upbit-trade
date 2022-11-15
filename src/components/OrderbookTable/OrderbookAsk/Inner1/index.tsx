@@ -91,6 +91,7 @@ const Dt = styled.dt`
 
 const Dd = styled.dd`
   float: right;
+  text-align: right;
 `;
 
 const Up = styled(Dd)`
