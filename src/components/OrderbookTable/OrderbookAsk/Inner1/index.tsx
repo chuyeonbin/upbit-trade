@@ -23,11 +23,12 @@ export default function Inner1() {
       <Dl>
         <Dt>52주 최고</Dt>
         <Up>
-          80,250,000<Date>(2021.11.15)</Date>
+          {selectedCoin.high52WeekPrice.toLocaleString()}
+          <Date>(2021.11.15)</Date>
         </Up>
         <Dt>52주 최저</Dt>
         <Down>
-          21,509,000
+          {selectedCoin.low52WeekPrice.toLocaleString()}
           <Date>(2022.11.14)</Date>
         </Down>
       </Dl>
