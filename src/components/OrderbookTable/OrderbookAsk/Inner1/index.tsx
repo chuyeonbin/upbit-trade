@@ -15,7 +15,8 @@ export default function Inner1() {
         </Dd>
         <Dt>거래 대금</Dt>
         <Dd>
-          195,525<I>백만원</I>
+          {Number((selectedCoin.accTradePrice24h / 1000000).toFixed()).toLocaleString()}
+          <I>백만원</I>
           <Em>(최근24시간)</Em>
         </Dd>
       </Dl>
