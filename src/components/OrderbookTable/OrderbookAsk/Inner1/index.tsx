@@ -23,13 +23,13 @@ export default function Inner1() {
       <Dl>
         <Dt>52주 최고</Dt>
         <Up>
-          {selectedCoin.high52WeekPrice.toLocaleString()}
-          <Date>(2021.11.15)</Date>
+          {selectedCoin.high52WeekPrice}
+          <Date>({selectedCoin.high52WeekDate.replaceAll('-', '.')})</Date>
         </Up>
         <Dt>52주 최저</Dt>
         <Down>
           {selectedCoin.low52WeekPrice.toLocaleString()}
-          <Date>(2022.11.14)</Date>
+          <Date>({selectedCoin.low52WeekDate.replaceAll('-', '.')})</Date>
         </Down>
       </Dl>
       <Dl>
