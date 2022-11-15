@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { TableCell } from '@mui/material';
 import { useAppSelector } from '../../../../store/store';
+import { dayToDayFormat } from '../../../../utils';
 
 export default function Inner1() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
@@ -23,7 +24,7 @@ export default function Inner1() {
       <Dl>
         <Dt>52주 최고</Dt>
         <Up>
-          {selectedCoin.high52WeekPrice}
+          {selectedCoin.high52WeekPrice.toLocaleString()}
           <Date>({selectedCoin.high52WeekDate.replaceAll('-', '.')})</Date>
         </Up>
         <Dt>52주 최저</Dt>
@@ -38,12 +39,24 @@ export default function Inner1() {
         <Dt>당일 고가</Dt>
         <Up>
           {selectedCoin.highPrice.toLocaleString()}
-          <Em>+1.66%</Em>
+          <Em>
+            {dayToDayFormat(
+              selectedCoin.highPrice - selectedCoin.prevClosingPrice,
+              selectedCoin.prevClosingPrice,
+            )}
+            %
+          </Em>
         </Up>
         <Dt>당일 저가</Dt>
         <Down>
           {selectedCoin.lowPrice.toLocaleString()}
-          <Em>-0.75%</Em>
+          <Em>
+            {dayToDayFormat(
+              selectedCoin.lowPrice - selectedCoin.prevClosingPrice,
+              selectedCoin.prevClosingPrice,
+            )}
+            %
+          </Em>
         </Down>
       </Dl>
     </Inner>
