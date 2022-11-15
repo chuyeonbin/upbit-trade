@@ -21,6 +21,10 @@ const initialState: CoinState = {
     tradePrice: 0,
     highPrice: 0,
     lowPrice: 0,
+    high52WeekPrice: 0,
+    high52WeekDate: '0000-00-00',
+    low52WeekPrice: 0,
+    low52WeekDate: '0000-00-00',
     signedChangePrice: 0,
     accTradeVolume24h: 0,
     accTradePrice24h: 0,
@@ -133,6 +137,10 @@ const coinSlice = createSlice({
       state.selectedCoin.tradePrice = payload[0].trade_price;
       state.selectedCoin.highPrice = payload[0].high_price;
       state.selectedCoin.lowPrice = payload[0].low_price;
+      state.selectedCoin.high52WeekPrice = payload[0].highest_52_week_price;
+      state.selectedCoin.high52WeekDate = payload[0].highest_52_week_date;
+      state.selectedCoin.low52WeekPrice = payload[0].lowest_52_week_price;
+      state.selectedCoin.low52WeekDate = payload[0].lowest_52_week_date;
       state.selectedCoin.signedChangePrice = payload[0].signed_change_price;
       state.selectedCoin.accTradeVolume24h = payload[0].acc_trade_volume_24h;
       state.selectedCoin.accTradePrice24h = payload[0].acc_trade_price_24h;
