@@ -39,9 +39,9 @@ const OrderbookFooterCell = styled(TableCell)`
     padding: 0 8px;
     width: 33.33333%;
     border-top: 1px solid #f1f1f4;
-    border-bottom: 0;
+    border-bottom: 1px solid #f1f1f4;
     height: 45px;
-    background-color: #fff;
+    background-color: #f9fafc;
     font-size: 12px;
   }
 
