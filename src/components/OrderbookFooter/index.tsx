@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { useAppSelector } from '../../store/store';
 
 interface OrderbookFooterProps {
   totalAskSize: number;
@@ -7,6 +8,8 @@ interface OrderbookFooterProps {
 }
 
 export default function OrderbookFooter({ totalAskSize, totalBidSize }: OrderbookFooterProps) {
+  const code = useAppSelector((state) => state.coin.selectedCoin.code);
+
   return (
     <Wrapper>
       <Table>
@@ -15,7 +18,7 @@ export default function OrderbookFooter({ totalAskSize, totalBidSize }: Orderboo
             <OrderbookFooterCell align='right'>{totalAskSize.toFixed(3)}</OrderbookFooterCell>
             <OrderbookFooterCell align='center'>
               <strong>수량</strong>
-              <i>(BTC)</i>
+              <i>({code.substring(4)})</i>
             </OrderbookFooterCell>
             <OrderbookFooterCell align='left'>{totalBidSize.toFixed(3)}</OrderbookFooterCell>
           </OrderbookFooterRow>
