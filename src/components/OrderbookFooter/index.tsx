@@ -12,12 +12,12 @@ export default function OrderbookFooter({ totalAskSize, totalBidSize }: Orderboo
       <Table>
         <TableBody>
           <OrderbookFooterRow>
-            <OrderbookFooterCell align='right'>7.812</OrderbookFooterCell>
+            <OrderbookFooterCell align='right'>{totalAskSize.toFixed(3)}</OrderbookFooterCell>
             <OrderbookFooterCell align='center'>
               <strong>수량</strong>
               <i>(BTC)</i>
             </OrderbookFooterCell>
-            <OrderbookFooterCell align='left'>16.182</OrderbookFooterCell>
+            <OrderbookFooterCell align='left'>{totalBidSize.toFixed(3)}</OrderbookFooterCell>
           </OrderbookFooterRow>
         </TableBody>
       </Table>
