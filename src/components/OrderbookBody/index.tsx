@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import OrderbookAsk from './OrderbookAsk';
 import OrderbookBid from './OrderbookBid';
 
-interface OrderbookTableProps {
+interface OrderbookBodyProps {
   orderbook: {
     timestamp: number;
     totalAskSize: number;
@@ -12,7 +12,7 @@ interface OrderbookTableProps {
   };
 }
 
-export default function OrderbookTable({ orderbook }: OrderbookTableProps) {
+export default function OrderbookBody({ orderbook }: OrderbookBodyProps) {
   const units = orderbook.orderbookUnits;
   const totalAskSize = orderbook.totalAskSize;
   const totalBidSize = orderbook.totalBidSize;

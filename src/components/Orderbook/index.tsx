@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { useAppSelector } from '../../store/store';
 import OrderbookHeader from '../OrderbookHeader';
-import OrderbookTable from '../OrderbookTable';
+import OrderbookBody from '../OrderbookBody';
 
 export default function Orderbook() {
   const orderbook = useAppSelector((state) => state.coin.orderbook);
   return (
     <Wrapper>
       <OrderbookHeader />
-      <OrderbookTable orderbook={orderbook} />
+      <OrderbookBody orderbook={orderbook} />
     </Wrapper>
   );
 }
