@@ -6,10 +6,13 @@ import { dayToDayFormat, signedChangePriceFormat, tradeVolume24hFormat } from '.
 
 export default function CoinHeader() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
+
+  const logoUrl = `https://static.upbit.com/logos/${selectedCoin.code.substring(4)}.png`;
+
   return (
     <HeaderWrapper>
       <TitleWrapper>
-        <Logo src='https://static.upbit.com/logos/BTC.png' />
+        <Logo src={logoUrl} />
         <KoreanName>{selectedCoin.marketName}</KoreanName>
         <EnglishName>{selectedCoin.code.substring(4)}/KRW</EnglishName>
       </TitleWrapper>
@@ -24,7 +27,11 @@ export default function CoinHeader() {
             <span>
               {dayToDayFormat(selectedCoin.signedChangePrice, selectedCoin.prevClosingPrice)}%
             </span>
-            <ArrowDropUpIcon />
+            {selectedCoin.signedChangePrice > 0 ? (
+              <ArrowDropUpIcon />
+            ) : selectedCoin.signedChangePrice < 0 ? (
+              <ArrowDropDownIcon />
+            ) : null}
             <span>{signedChangePriceFormat(selectedCoin.signedChangePrice)}</span>
           </ChangeWrapper>
         </TradePriceWrapper>
@@ -41,7 +48,8 @@ export default function CoinHeader() {
             <ATV24H>
               거래량(24H)
               <span>
-                {tradeVolume24hFormat(selectedCoin.accTradeVolume24h)} <i>BTC</i>
+                {tradeVolume24hFormat(selectedCoin.accTradeVolume24h)}{' '}
+                <i>{selectedCoin.code.substring(4)}</i>
               </span>
             </ATV24H>
             <ATP24H>
