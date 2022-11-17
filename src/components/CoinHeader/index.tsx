@@ -27,7 +27,11 @@ export default function CoinHeader() {
             <span>
               {dayToDayFormat(selectedCoin.signedChangePrice, selectedCoin.prevClosingPrice)}%
             </span>
-            <ArrowDropUpIcon />
+            {selectedCoin.signedChangePrice > 0 ? (
+              <ArrowDropUpIcon />
+            ) : selectedCoin.signedChangePrice < 0 ? (
+              <ArrowDropDownIcon />
+            ) : null}
             <span>{signedChangePriceFormat(selectedCoin.signedChangePrice)}</span>
           </ChangeWrapper>
         </TradePriceWrapper>
