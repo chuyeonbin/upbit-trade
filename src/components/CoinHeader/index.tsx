@@ -6,10 +6,12 @@ import { dayToDayFormat, signedChangePriceFormat, tradeVolume24hFormat } from '.
 
 export default function CoinHeader() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
+
+  const logoUrl = `https://static.upbit.com/logos/${selectedCoin.code.substring(4)}.png`;
   return (
     <HeaderWrapper>
       <TitleWrapper>
-        <Logo src='https://static.upbit.com/logos/BTC.png' />
+        <Logo src={logoUrl} />
         <KoreanName>{selectedCoin.marketName}</KoreanName>
         <EnglishName>{selectedCoin.code.substring(4)}/KRW</EnglishName>
       </TitleWrapper>
