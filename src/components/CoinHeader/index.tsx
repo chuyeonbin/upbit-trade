@@ -8,6 +8,7 @@ export default function CoinHeader() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
 
   const logoUrl = `https://static.upbit.com/logos/${selectedCoin.code.substring(4)}.png`;
+
   return (
     <HeaderWrapper>
       <TitleWrapper>
@@ -43,7 +44,8 @@ export default function CoinHeader() {
             <ATV24H>
               거래량(24H)
               <span>
-                {tradeVolume24hFormat(selectedCoin.accTradeVolume24h)} <i>BTC</i>
+                {tradeVolume24hFormat(selectedCoin.accTradeVolume24h)}{' '}
+                <i>{selectedCoin.code.substring(4)}</i>
               </span>
             </ATV24H>
             <ATP24H>
