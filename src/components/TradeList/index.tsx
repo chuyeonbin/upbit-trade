@@ -1,6 +1,7 @@
 import { Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { useState } from 'react';
 import styled from 'styled-components';
+import TradeItem from '../TradeItem';
 
 const tabList = ['체결', '일별'];
 
@@ -28,14 +29,12 @@ export default function TradeList() {
           </TradeListRow>
         </TableHead>
         <TableBody>
-          <TradeListRow>
-            <TradeListCell>
-              11.17<i>16:22</i>
-            </TradeListCell>
-            <TradeListCell>22,260,000</TradeListCell>
-            <TradeListCell>0.0000731</TradeListCell>
-            <TradeListCell>1,133,122</TradeListCell>
-          </TradeListRow>
+          <TradeItem />
+          <TradeItem />
+          <TradeItem />
+          <TradeItem />
+          <TradeItem />
+          <TradeItem />
         </TableBody>
       </Table>
     </Wrapper>
@@ -67,21 +66,14 @@ const TradeListRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: '#f9fafc',
     color: theme.colors.darkGray,
   },
-  '& > td': {
-    borderBottom: 0,
-  },
-  '& > th:nth-child(1), & > td:nth-child(1)': {
+  '& > th:nth-child(1)': {
     width: '10%',
   },
-  '& > td:nth-child(2)': {
-    fontWeight: '600',
+  '& > th:nth-child(2), & > th:nth-child(3), & > th:nth-child(4)': {
+    textAlign: 'right',
+    width: '30%',
   },
-  '& > th:nth-child(2), & > td:nth-child(2), & > th:nth-child(3), & > td:nth-child(3), & > th:nth-child(4), & > td:nth-child(4)':
-    {
-      textAlign: 'right',
-      width: '30%',
-    },
-  '& > th:nth-child(4), & > td:nth-child(4)': {
+  '& > th:nth-child(4)': {
     paddingRight: '12px',
   },
 }));
@@ -93,10 +85,5 @@ const TradeListCell = styled(TableCell)`
     padding: 0;
     text-align: center;
     font-size: 11px;
-  }
-
-  & > i {
-    padding-left: 8px;
-    color: ${({ theme }) => theme.colors.darkGray};
   }
 `;
