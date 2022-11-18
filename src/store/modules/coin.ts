@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MarketCodes, Orderbooks, PresentPrices } from '../../types';
-import { RealTimeOrderbooks, RealTimeTickers } from '../../types/realTime';
+import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
 const initialState: CoinState = {
   marketList: [],
 
   tickerList: {},
+
+  tradeList: [],
 
   orderbook: {
     timestamp: 0,
@@ -171,6 +173,15 @@ const coinSlice = createSlice({
         };
       });
     },
+    updateTradeList: (state, { payload }: PayloadAction<RealTimeTrades>) => {
+      const tradeList = [
+        ...state.tradeList,
+        ...payload.filter((trade) => trade.code === state.selectedCoin.code),
+      ];
+
+      state.tradeList = state.tradeList.slice(-tradeList.length);
+    },
+
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
       // 마지막 호가 데이터로 업데이트
       const codes = payload.map((orderbook) => orderbook.code);
@@ -231,6 +242,7 @@ export const {
   loadSelectedCoinDataSuccess,
   loadSelectedCoinDataFailure,
   updateTickerList,
+  updateTradeList,
   updateOrderbook,
   updateSelectedCoin,
   changeSelectedCoin,
