@@ -1,4 +1,5 @@
 import { Orderbooks } from '.';
+import { RealTimeTrades } from './realTime';
 
 export interface SocketState {
   presentPriceSocketLoading: boolean;
@@ -30,6 +31,8 @@ export interface CoinState {
       signedChangePrice: number;
     };
   };
+
+  tradeList: RealTimeTrades;
 
   orderbook: {
     timestamp: number;
