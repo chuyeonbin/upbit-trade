@@ -17,7 +17,7 @@ export interface Trade {
   prev_closing_price: number;
   change_price: number;
   ask_bid: string;
-  sequential_id?: number;
+  sequential_id: number;
 }
 
 export type Trades = Trade[];
