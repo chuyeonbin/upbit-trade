@@ -11,6 +11,7 @@ import coinSaga, {
   loadOrderbookSaga,
   loadSelectedCoinDataSaga,
   loadTickerList,
+  loadTradeListSaga,
 } from './coin';
 import socketSaga from './socket';
 
@@ -22,6 +23,7 @@ function* initSaga() {
   const markets = coin.marketList.map((value) => value.code);
 
   yield loadTickerList(markets);
+  yield loadTradeListSaga(coin.selectedCoin.code);
   yield loadOrderbookSaga([coin.selectedCoin.code]);
   yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
 
