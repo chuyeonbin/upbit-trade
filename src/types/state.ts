@@ -70,6 +70,10 @@ export interface CoinState {
   loadTickerListDone: boolean;
   loadTickerListError: Error | null;
 
+  loadTradeListLoading: boolean;
+  loadTradeListDone: boolean;
+  loadTradeListError: Error | null;
+
   loadOrderbookLoading: boolean;
   loadOrderbookDone: boolean;
   loadOrderbookError: Error | null;
