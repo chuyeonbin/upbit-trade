@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarketCodes, Orderbooks, PresentPrices } from '../../types';
+import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
@@ -40,6 +40,10 @@ const initialState: CoinState = {
   loadTickerListLoading: false,
   loadTickerListDone: false,
   loadTickerListError: null,
+
+  loadTradeListLoading: false,
+  loadTradeListDone: false,
+  loadTradeListError: null,
 
   loadOrderbookLoading: false,
   loadOrderbookDone: false,
@@ -100,6 +104,21 @@ const coinSlice = createSlice({
     loadTickerListFailure: (state, { payload }) => {
       state.loadTickerListLoading = false;
       state.loadTickerListError = payload.error;
+    },
+    loadTradeListRequest: (state) => {
+      state.loadTradeListLoading = true;
+      state.loadTradeListDone = false;
+      state.loadTradeListError = null;
+    },
+    loadTradeListSuccess: (state, { payload }: PayloadAction<Trades>) => {
+      state.loadTradeListLoading = false;
+      state.loadTradeListDone = true;
+
+      state.tradeList = payload.reverse();
+    },
+    loadTradeListFailure: (state, { payload }) => {
+      state.loadTradeListLoading = false;
+      state.loadTradeListError = payload.error;
     },
     loadOrderbookRequest: (state) => {
       state.loadOrderbookLoading = true;
@@ -235,6 +254,9 @@ export const {
   loadTickerListRequest,
   loadTickerListSuccess,
   loadTickerListFailure,
+  loadTradeListRequest,
+  loadTradeListSuccess,
+  loadTradeListFailure,
   loadOrderbookRequest,
   loadOrderbookSuccess,
   loadOrderbookFailure,
