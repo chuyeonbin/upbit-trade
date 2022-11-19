@@ -38,8 +38,8 @@ export async function getCandleByMonths(market: string, count: number): Promise<
   return response.data;
 }
 
-export async function getTrades(market: string, count: number): Promise<Trades> {
-  const query = `/trades/ticks?market=${market}&count=${count}`;
+export async function getTrades(market: string): Promise<Trades> {
+  const query = `/trades/ticks?market=${market}&count=30`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
