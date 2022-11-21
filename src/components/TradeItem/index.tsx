@@ -20,7 +20,7 @@ export default function TradeItem({ trade }: TradeItemProps) {
   const date = getDate(trade.timestamp);
   const hour = getHours(trade.timestamp);
   const minute = getMinutes(trade.timestamp);
-
+  console.log(trade.tradeVolume);
   return (
     <TradeItemRow>
       <TradeItemCell>
@@ -32,7 +32,9 @@ export default function TradeItem({ trade }: TradeItemProps) {
       <TradePrice price={trade.tradePrice - prevClosingPrice}>
         {trade.tradePrice.toLocaleString()}
       </TradePrice>
-      <TradeVolume askbid={trade.askBid}>{trade.tradeVolume.toFixed(8)}</TradeVolume>
+      <TradeVolume askbid={trade.askBid}>
+        {Number(trade.tradeVolume.toFixed(8)).toLocaleString()}
+      </TradeVolume>
       <TradeItemCell>{tradePriceFormat(trade.tradePrice, trade.tradeVolume)}</TradeItemCell>
     </TradeItemRow>
   );
