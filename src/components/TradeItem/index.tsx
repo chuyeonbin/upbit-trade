@@ -1,11 +1,11 @@
 import { TableRow, TableCell } from '@mui/material';
 import styled from 'styled-components';
 import { tradePriceFormat } from '../../utils';
+import { getMonth, getDate, getHours, getMinutes } from 'date-fns';
 
 interface TradeItemProps {
   trade: {
-    tradeDate: string;
-    tradeTime: string;
+    timestamp: number;
     tradePrice: number;
     tradeVolume: number;
     askBid: 'ASK' | 'BID';
@@ -13,11 +13,18 @@ interface TradeItemProps {
 }
 
 export default function TradeItem({ trade }: TradeItemProps) {
+  const month = getMonth(trade.timestamp) + 1;
+  const date = getDate(trade.timestamp);
+  const hour = getHours(trade.timestamp);
+  const minute = getMinutes(trade.timestamp);
+
   return (
     <TradeItemRow>
       <TradeItemCell>
-        {trade.tradeDate}
-        <i>{trade.tradeTime}</i>
+        {month}.{date}
+        <i>
+          {hour}:{minute}
+        </i>
       </TradeItemCell>
       <TradeItemCell>{trade.tradePrice.toLocaleString()}</TradeItemCell>
       <TradeItemCell>{trade.tradeVolume.toFixed(8)}</TradeItemCell>
