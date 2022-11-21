@@ -1,15 +1,27 @@
 import { TableRow, TableCell } from '@mui/material';
 import styled from 'styled-components';
+import { tradePriceFormat } from '../../utils';
 
-export default function TradeItem() {
+interface TradeItemProps {
+  trade: {
+    tradeDate: string;
+    tradeTime: string;
+    tradePrice: number;
+    tradeVolume: number;
+    askBid: 'ASK' | 'BID';
+  };
+}
+
+export default function TradeItem({ trade }: TradeItemProps) {
   return (
     <TradeItemRow>
       <TradeItemCell>
-        11.17<i>16:22</i>
+        {trade.tradeDate}
+        <i>{trade.tradeTime}</i>
       </TradeItemCell>
-      <TradeItemCell>22,260,000</TradeItemCell>
-      <TradeItemCell>0.0000731</TradeItemCell>
-      <TradeItemCell>1,133,122</TradeItemCell>
+      <TradeItemCell>{trade.tradePrice.toLocaleString()}</TradeItemCell>
+      <TradeItemCell>{trade.tradeVolume.toFixed(8)}</TradeItemCell>
+      <TradeItemCell>{tradePriceFormat(trade.tradePrice, trade.tradeVolume)}</TradeItemCell>
     </TradeItemRow>
   );
 }
