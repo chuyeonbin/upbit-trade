@@ -20,7 +20,7 @@ export default function TradeItem({ trade }: TradeItemProps) {
   const date = getDate(trade.timestamp);
   const hour = getHours(trade.timestamp);
   const minute = getMinutes(trade.timestamp);
-  console.log(trade.tradeVolume);
+
   return (
     <TradeItemRow>
       <TradeItemCell>
