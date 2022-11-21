@@ -114,7 +114,7 @@ const coinSlice = createSlice({
       state.loadTradeListLoading = false;
       state.loadTradeListDone = true;
 
-      state.tradeList = payload.reverse();
+      state.tradeList = payload;
     },
     loadTradeListFailure: (state, { payload }) => {
       state.loadTradeListLoading = false;
