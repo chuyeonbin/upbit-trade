@@ -45,12 +45,12 @@ export default function TradeList() {
               {trades.length > 0
                 ? trades.map((trade) => (
                     <TradeItem
-                      key={trade.sequential_id}
+                      key={trade.sequentialId}
                       trade={{
                         timestamp: trade.timestamp,
-                        tradePrice: trade.trade_price,
-                        tradeVolume: trade.trade_volume,
-                        askBid: trade.ask_bid,
+                        tradePrice: trade.tradePrice,
+                        tradeVolume: trade.tradeVolume,
+                        askBid: trade.askBid,
                       }}
                     />
                   ))

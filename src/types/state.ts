@@ -31,7 +31,18 @@ export interface CoinState {
     };
   };
 
-  tradeList: Trades;
+  tradeList: {
+    market: string;
+    tradeDateUtc: string;
+    tradeTimeUtc: string;
+    timestamp: number;
+    tradePrice: number;
+    tradeVolume: number;
+    prevClosingPrice: number;
+    changePrice: number;
+    askBid: 'ASK' | 'BID';
+    sequentialId: number;
+  }[];
 
   orderbook: {
     timestamp: number;

@@ -114,7 +114,20 @@ const coinSlice = createSlice({
       state.loadTradeListLoading = false;
       state.loadTradeListDone = true;
 
-      state.tradeList = payload;
+      payload.forEach((trade) => {
+        state.tradeList.push({
+          market: trade.market,
+          tradeDateUtc: trade.trade_date_utc,
+          tradeTimeUtc: trade.trade_time_utc,
+          timestamp: trade.timestamp,
+          tradePrice: trade.trade_price,
+          tradeVolume: trade.trade_volume,
+          prevClosingPrice: trade.prev_closing_price,
+          changePrice: trade.change_price,
+          askBid: trade.ask_bid,
+          sequentialId: trade.sequential_id,
+        });
+      });
     },
     loadTradeListFailure: (state, { payload }) => {
       state.loadTradeListLoading = false;
@@ -193,12 +206,31 @@ const coinSlice = createSlice({
       });
     },
     updateTradeList: (state, { payload }: PayloadAction<RealTimeTrades>) => {
-      const tradeList = [
-        ...state.tradeList,
-        ...payload.filter((trade) => trade.code === state.selectedCoin.code),
-      ];
+      // const tradeList = [
+      //   ...state.tradeList,
+      //   ...payload.filter((trade) => trade.code === state.selectedCoin.code),
+      // ];
 
-      state.tradeList = state.tradeList.slice(-tradeList.length);
+      const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.code);
+
+      tradeList.forEach((trade) => {
+        state.tradeList.unshift({
+          market: trade.code,
+          tradeDateUtc: trade.trade_date,
+          tradeTimeUtc: trade.trade_time,
+          timestamp: trade.timestamp,
+          tradePrice: trade.trade_price,
+          tradeVolume: trade.trade_volume,
+          prevClosingPrice: trade.prev_closing_price,
+          changePrice: trade.change_price,
+          askBid: trade.ask_bid,
+          sequentialId: trade.sequential_id,
+        });
+      });
+
+      console.log(tradeList);
+
+      // state.tradeList = state.tradeList.slice(-tradeList.length);
     },
 
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
