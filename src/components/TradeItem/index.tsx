@@ -2,6 +2,7 @@ import { TableRow, TableCell } from '@mui/material';
 import styled from 'styled-components';
 import { tradePriceFormat } from '../../utils';
 import { getMonth, getDate, getHours, getMinutes } from 'date-fns';
+import { useAppSelector } from '../../store/store';
 
 interface TradeItemProps {
   trade: {
@@ -13,6 +14,8 @@ interface TradeItemProps {
 }
 
 export default function TradeItem({ trade }: TradeItemProps) {
+  const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
+
   const month = getMonth(trade.timestamp) + 1;
   const date = getDate(trade.timestamp);
   const hour = getHours(trade.timestamp);
@@ -26,7 +29,9 @@ export default function TradeItem({ trade }: TradeItemProps) {
           {hour}:{minute}
         </i>
       </TradeItemCell>
-      <TradeItemCell>{trade.tradePrice.toLocaleString()}</TradeItemCell>
+      <TradePrice price={trade.tradePrice - prevClosingPrice}>
+        {trade.tradePrice.toLocaleString()}
+      </TradePrice>
       <TradeVolume askbid={trade.askBid}>{trade.tradeVolume.toFixed(8)}</TradeVolume>
       <TradeItemCell>{tradePriceFormat(trade.tradePrice, trade.tradeVolume)}</TradeItemCell>
     </TradeItemRow>
@@ -68,6 +73,13 @@ const TradeItemCell = styled(TableCell)`
   & > i {
     padding-left: 8px;
     color: ${({ theme }) => theme.colors.darkGray};
+  }
+`;
+
+const TradePrice = styled(TradeItemCell)<{ price: number }>`
+  && {
+    color: ${({ theme, price }) =>
+      price > 0 ? theme.colors.lightRed : price < 0 ? theme.colors.lightBlue : 'black'};
   }
 `;
 
