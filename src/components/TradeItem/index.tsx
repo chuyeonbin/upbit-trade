@@ -27,7 +27,7 @@ export default function TradeItem({ trade }: TradeItemProps) {
         </i>
       </TradeItemCell>
       <TradeItemCell>{trade.tradePrice.toLocaleString()}</TradeItemCell>
-      <TradeItemCell>{trade.tradeVolume.toFixed(8)}</TradeItemCell>
+      <TradeVolume askbid={trade.askBid}>{trade.tradeVolume.toFixed(8)}</TradeVolume>
       <TradeItemCell>{tradePriceFormat(trade.tradePrice, trade.tradeVolume)}</TradeItemCell>
     </TradeItemRow>
   );
@@ -68,5 +68,12 @@ const TradeItemCell = styled(TableCell)`
   & > i {
     padding-left: 8px;
     color: ${({ theme }) => theme.colors.darkGray};
+  }
+`;
+
+const TradeVolume = styled(TradeItemCell)<{ askbid: 'ASK' | 'BID' }>`
+  && {
+    color: ${({ theme, askbid }) =>
+      askbid === 'BID' ? theme.colors.lightRed : theme.colors.lightBlue};
   }
 `;
