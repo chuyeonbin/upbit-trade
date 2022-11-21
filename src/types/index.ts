@@ -16,7 +16,7 @@ export interface Trade {
   trade_volume: number;
   prev_closing_price: number;
   change_price: number;
-  ask_bid: string;
+  ask_bid: 'ASK' | 'BID';
   sequential_id: number;
 }
 
