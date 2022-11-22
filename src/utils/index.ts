@@ -27,6 +27,10 @@ export function tradeVolume24hFormat(tradeVolume24h: number) {
   return Number(tradeVolume24h.toFixed(3)).toLocaleString();
 }
 
+export function tradePriceFormat(tradePrice: number, tradeVolume: number) {
+  return Math.round(tradePrice / (10 / (tradeVolume * 10))).toLocaleString();
+}
+
 export function createSocket(): WebSocket {
   const ws = new WebSocket('wss://api.upbit.com/websocket/v1');
   ws.binaryType = 'arraybuffer';

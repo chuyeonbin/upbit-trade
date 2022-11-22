@@ -1,15 +1,43 @@
 import { TableRow, TableCell } from '@mui/material';
 import styled from 'styled-components';
+import { tradePriceFormat } from '../../utils';
+import { getMonth, getDate, getHours, getMinutes } from 'date-fns';
+import { useAppSelector } from '../../store/store';
 
-export default function TradeItem() {
+interface TradeItemProps {
+  trade: {
+    timestamp: number;
+    tradePrice: number;
+    tradeVolume: number;
+    askBid: 'ASK' | 'BID';
+  };
+}
+
+export default function TradeItem({ trade }: TradeItemProps) {
+  const prevClosingPrice = useAppSelector((state) => state.coin.selectedCoin.prevClosingPrice);
+
+  const month = getMonth(trade.timestamp) + 1;
+  const date = getDate(trade.timestamp);
+  const hour = getHours(trade.timestamp);
+  const minute = getMinutes(trade.timestamp);
+
   return (
     <TradeItemRow>
       <TradeItemCell>
-        11.17<i>16:22</i>
+        {month}.{date}
+        <i>
+          {hour}:{minute}
+        </i>
       </TradeItemCell>
-      <TradeItemCell>22,260,000</TradeItemCell>
-      <TradeItemCell>0.0000731</TradeItemCell>
-      <TradeItemCell>1,133,122</TradeItemCell>
+      <TradePrice price={trade.tradePrice - prevClosingPrice}>
+        {trade.tradePrice.toLocaleString()}
+      </TradePrice>
+      <TradeVolume askbid={trade.askBid}>
+        {Number(trade.tradeVolume.toFixed(8)).toLocaleString(undefined, {
+          minimumFractionDigits: 8,
+        })}
+      </TradeVolume>
+      <TradeItemCell>{tradePriceFormat(trade.tradePrice, trade.tradeVolume)}</TradeItemCell>
     </TradeItemRow>
   );
 }
@@ -49,5 +77,19 @@ const TradeItemCell = styled(TableCell)`
   & > i {
     padding-left: 8px;
     color: ${({ theme }) => theme.colors.darkGray};
+  }
+`;
+
+const TradePrice = styled(TradeItemCell)<{ price: number }>`
+  && {
+    color: ${({ theme, price }) =>
+      price > 0 ? theme.colors.lightRed : price < 0 ? theme.colors.lightBlue : 'black'};
+  }
+`;
+
+const TradeVolume = styled(TradeItemCell)<{ askbid: 'ASK' | 'BID' }>`
+  && {
+    color: ${({ theme, askbid }) =>
+      askbid === 'BID' ? theme.colors.lightRed : theme.colors.lightBlue};
   }
 `;

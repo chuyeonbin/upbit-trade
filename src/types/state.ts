@@ -1,4 +1,4 @@
-import { Orderbooks } from '.';
+import { Trades } from '.';
 
 export interface SocketState {
   presentPriceSocketLoading: boolean;
@@ -30,6 +30,19 @@ export interface CoinState {
       signedChangePrice: number;
     };
   };
+
+  tradeList: {
+    market: string;
+    tradeDateUtc: string;
+    tradeTimeUtc: string;
+    timestamp: number;
+    tradePrice: number;
+    tradeVolume: number;
+    prevClosingPrice: number;
+    changePrice: number;
+    askBid: 'ASK' | 'BID';
+    sequentialId: number;
+  }[];
 
   orderbook: {
     timestamp: number;
@@ -66,6 +79,10 @@ export interface CoinState {
   loadTickerListLoading: boolean;
   loadTickerListDone: boolean;
   loadTickerListError: Error | null;
+
+  loadTradeListLoading: boolean;
+  loadTradeListDone: boolean;
+  loadTradeListError: Error | null;
 
   loadOrderbookLoading: boolean;
   loadOrderbookDone: boolean;

@@ -1,12 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarketCodes, Orderbooks, PresentPrices } from '../../types';
-import { RealTimeOrderbooks, RealTimeTickers } from '../../types/realTime';
+import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
 const initialState: CoinState = {
   marketList: [],
 
   tickerList: {},
+
+  tradeList: [],
 
   orderbook: {
     timestamp: 0,
@@ -38,6 +40,10 @@ const initialState: CoinState = {
   loadTickerListLoading: false,
   loadTickerListDone: false,
   loadTickerListError: null,
+
+  loadTradeListLoading: false,
+  loadTradeListDone: false,
+  loadTradeListError: null,
 
   loadOrderbookLoading: false,
   loadOrderbookDone: false,
@@ -99,6 +105,36 @@ const coinSlice = createSlice({
       state.loadTickerListLoading = false;
       state.loadTickerListError = payload.error;
     },
+    loadTradeListRequest: (state) => {
+      state.loadTradeListLoading = true;
+      state.loadTradeListDone = false;
+      state.loadTradeListError = null;
+    },
+    loadTradeListSuccess: (state, { payload }: PayloadAction<Trades>) => {
+      state.loadTradeListLoading = false;
+      state.loadTradeListDone = true;
+
+      state.tradeList = [];
+
+      payload.forEach((trade) => {
+        state.tradeList.push({
+          market: trade.market,
+          tradeDateUtc: trade.trade_date_utc,
+          tradeTimeUtc: trade.trade_time_utc,
+          timestamp: trade.timestamp,
+          tradePrice: trade.trade_price,
+          tradeVolume: trade.trade_volume,
+          prevClosingPrice: trade.prev_closing_price,
+          changePrice: trade.change_price,
+          askBid: trade.ask_bid,
+          sequentialId: trade.sequential_id,
+        });
+      });
+    },
+    loadTradeListFailure: (state, { payload }) => {
+      state.loadTradeListLoading = false;
+      state.loadTradeListError = payload.error;
+    },
     loadOrderbookRequest: (state) => {
       state.loadOrderbookLoading = true;
       state.loadOrderbookDone = false;
@@ -159,7 +195,6 @@ const coinSlice = createSlice({
           }) === i
         );
       });
-
       // 코인별 현재가 state 업데이트
       tickerList.forEach((ticker, index) => {
         state.tickerList[tickerList[index].code] = {
@@ -169,6 +204,29 @@ const coinSlice = createSlice({
           signedChangePrice: ticker.signed_change_price,
           prevClosingPrice: ticker.prev_closing_price,
         };
+      });
+    },
+    updateTradeList: (state, { payload }: PayloadAction<RealTimeTrades>) => {
+      // 중복으로 들어온 코드 제거
+      const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.code);
+
+      // 들어온 데이터가 기존데이터에 존재할 경우 업데이트 안함
+      tradeList.forEach((trade) => {
+        if (!state.tradeList.find((value) => value.sequentialId === trade.sequential_id)) {
+          state.tradeList.unshift({
+            market: trade.code,
+            tradeDateUtc: trade.trade_date,
+            tradeTimeUtc: trade.trade_time,
+            timestamp: trade.timestamp,
+            tradePrice: trade.trade_price,
+            tradeVolume: trade.trade_volume,
+            prevClosingPrice: trade.prev_closing_price,
+            changePrice: trade.change_price,
+            askBid: trade.ask_bid,
+            sequentialId: trade.sequential_id,
+          });
+          state.tradeList.pop();
+        }
       });
     },
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
@@ -224,6 +282,9 @@ export const {
   loadTickerListRequest,
   loadTickerListSuccess,
   loadTickerListFailure,
+  loadTradeListRequest,
+  loadTradeListSuccess,
+  loadTradeListFailure,
   loadOrderbookRequest,
   loadOrderbookSuccess,
   loadOrderbookFailure,
@@ -231,6 +292,7 @@ export const {
   loadSelectedCoinDataSuccess,
   loadSelectedCoinDataFailure,
   updateTickerList,
+  updateTradeList,
   updateOrderbook,
   updateSelectedCoin,
   changeSelectedCoin,

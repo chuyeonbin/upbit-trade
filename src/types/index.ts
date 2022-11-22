@@ -7,7 +7,7 @@ export interface MarketCode {
 
 export type MarketCodes = MarketCode[];
 
-export interface RecentContract {
+export interface Trade {
   market: string;
   trade_date_utc: string;
   trade_time_utc: string;
@@ -16,11 +16,11 @@ export interface RecentContract {
   trade_volume: number;
   prev_closing_price: number;
   change_price: number;
-  ask_bid: string;
-  sequential_id?: number;
+  ask_bid: 'ASK' | 'BID';
+  sequential_id: number;
 }
 
-export type RecentContracts = RecentContract[];
+export type Trades = Trade[];
 
 export interface PresentPrice {
   market: string;

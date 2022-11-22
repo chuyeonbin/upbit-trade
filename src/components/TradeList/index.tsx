@@ -9,12 +9,15 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useAppSelector } from '../../store/store';
 import TradeItem from '../TradeItem';
 
 const tabList = ['체결', '일별'];
 
 export default function TradeList() {
   const [selectedTab, setSelectedTab] = useState<number>(0);
+  const code = useAppSelector((state) => state.coin.selectedCoin.code);
+  const trades = useAppSelector((state) => state.coin.tradeList);
 
   const handleTabClick = (index: number) => setSelectedTab(index);
 
@@ -34,15 +37,24 @@ export default function TradeList() {
               <TradeListRow>
                 <TradeListCell>체결시간</TradeListCell>
                 <TradeListCell>체결가격(KRW)</TradeListCell>
-                <TradeListCell>체결량(BTC)</TradeListCell>
+                <TradeListCell>체결량({code.substring(4)})</TradeListCell>
                 <TradeListCell>체결금액(KRW)</TradeListCell>
               </TradeListRow>
             </TableHead>
             <TableBody>
-              <TradeItem />
-              <TradeItem />
-
-              <TradeItem />
+              {trades.length > 0
+                ? trades.map((trade) => (
+                    <TradeItem
+                      key={trade.sequentialId}
+                      trade={{
+                        timestamp: trade.timestamp,
+                        tradePrice: trade.tradePrice,
+                        tradeVolume: trade.tradeVolume,
+                        askBid: trade.askBid,
+                      }}
+                    />
+                  ))
+                : null}
             </TableBody>
           </Table>
         </TableContainer>

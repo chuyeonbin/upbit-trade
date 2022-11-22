@@ -11,6 +11,7 @@ import coinSaga, {
   loadOrderbookSaga,
   loadSelectedCoinDataSaga,
   loadTickerList,
+  loadTradeListSaga,
 } from './coin';
 import socketSaga from './socket';
 
@@ -22,12 +23,13 @@ function* initSaga() {
   const markets = coin.marketList.map((value) => value.code);
 
   yield loadTickerList(markets);
+  yield loadTradeListSaga(coin.selectedCoin.code);
   yield loadOrderbookSaga([coin.selectedCoin.code]);
   yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
 
   yield put(presentPriceSocketRequest({ codes: markets })); // 현재가 소켓 연결 요청
 
-  // yield put(tradeSocketRequest({ codes: ['KRW-BTC'] })); // 체결가 소켓 연결 요청
+  yield put(tradeSocketRequest({ codes: markets })); // 체결가 소켓 연결 요청
   yield put(orderbookSocketRequest({ codes: markets })); // 호가 소켓 연결 요청
 }
 
