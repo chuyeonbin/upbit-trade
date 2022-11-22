@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { TableCell, TableRow } from '@mui/material';
 import { useAppSelector } from '../../../store/store';
 import { dayToDayFormat } from '../../../utils';
+import Inner2 from './inner2';
 
 interface OrderbookBidProps {
   index: number;
@@ -17,11 +18,7 @@ export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: Orde
 
   return (
     <TableRow>
-      {index === 0 ? (
-        <Inner2 rowSpan={15} colSpan={2}>
-          <div>inner2</div>
-        </Inner2>
-      ) : null}
+      {index === 0 ? <Inner2 /> : null}
       <OrderbookBidCell2 sx={{ width: '0px' }} align='center' change={bidPrice - prevClosingPrice}>
         <a href='#'>
           <p>{bidPrice.toLocaleString()}</p>
@@ -109,12 +106,5 @@ const Seleceted = styled.span`
     border-style: solid;
     border-width: 6px 0 6px 6px;
     content: '';
-  }
-`;
-
-const Inner2 = styled(TableCell)`
-  && {
-    padding: 0;
-    vertical-align: top;
   }
 `;
