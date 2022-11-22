@@ -193,7 +193,6 @@ const coinSlice = createSlice({
           }) === i
         );
       });
-
       // 코인별 현재가 state 업데이트
       tickerList.forEach((ticker, index) => {
         state.tickerList[tickerList[index].code] = {
@@ -206,33 +205,28 @@ const coinSlice = createSlice({
       });
     },
     updateTradeList: (state, { payload }: PayloadAction<RealTimeTrades>) => {
-      // const tradeList = [
-      //   ...state.tradeList,
-      //   ...payload.filter((trade) => trade.code === state.selectedCoin.code),
-      // ];
-
+      // 중복으로 들어온 코드 제거
       const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.code);
 
+      // 들어온 데이터가 기존데이터에 존재할 경우 업데이트 안함
       tradeList.forEach((trade) => {
-        state.tradeList.unshift({
-          market: trade.code,
-          tradeDateUtc: trade.trade_date,
-          tradeTimeUtc: trade.trade_time,
-          timestamp: trade.timestamp,
-          tradePrice: trade.trade_price,
-          tradeVolume: trade.trade_volume,
-          prevClosingPrice: trade.prev_closing_price,
-          changePrice: trade.change_price,
-          askBid: trade.ask_bid,
-          sequentialId: trade.sequential_id,
-        });
+        if (!state.tradeList.find((value) => value.sequentialId === trade.sequential_id)) {
+          state.tradeList.unshift({
+            market: trade.code,
+            tradeDateUtc: trade.trade_date,
+            tradeTimeUtc: trade.trade_time,
+            timestamp: trade.timestamp,
+            tradePrice: trade.trade_price,
+            tradeVolume: trade.trade_volume,
+            prevClosingPrice: trade.prev_closing_price,
+            changePrice: trade.change_price,
+            askBid: trade.ask_bid,
+            sequentialId: trade.sequential_id,
+          });
+          state.tradeList.pop();
+        }
       });
-
-      console.log(tradeList);
-
-      // state.tradeList = state.tradeList.slice(-tradeList.length);
     },
-
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
       // 마지막 호가 데이터로 업데이트
       const codes = payload.map((orderbook) => orderbook.code);
