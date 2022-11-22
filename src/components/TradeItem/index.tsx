@@ -33,7 +33,9 @@ export default function TradeItem({ trade }: TradeItemProps) {
         {trade.tradePrice.toLocaleString()}
       </TradePrice>
       <TradeVolume askbid={trade.askBid}>
-        {Number(trade.tradeVolume.toFixed(8)).toLocaleString()}
+        {Number(trade.tradeVolume.toFixed(8)).toLocaleString(undefined, {
+          minimumFractionDigits: 8,
+        })}
       </TradeVolume>
       <TradeItemCell>{tradePriceFormat(trade.tradePrice, trade.tradeVolume)}</TradeItemCell>
     </TradeItemRow>
