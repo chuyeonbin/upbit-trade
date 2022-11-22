@@ -114,6 +114,8 @@ const coinSlice = createSlice({
       state.loadTradeListLoading = false;
       state.loadTradeListDone = true;
 
+      state.tradeList = [];
+
       payload.forEach((trade) => {
         state.tradeList.push({
           market: trade.market,
