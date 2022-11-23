@@ -1,7 +1,10 @@
 import { TableCell } from '@mui/material';
 import styled from 'styled-components';
+import { useAppSelector } from '../../../../store/store';
 
 export default function inner2() {
+  const trades = useAppSelector((state) => state.coin.tradeList);
+
   return (
     <Inner2 rowSpan={15} colSpan={2}>
       <Wrapper>
@@ -13,18 +16,12 @@ export default function inner2() {
             </Tr>
           </TableHead>
           <tbody>
-            <Tr>
-              <Td>22,000,000,000</Td>
-              <Td>1.243</Td>
-            </Tr>
-            <Tr>
-              <Td>22,000,000,000</Td>
-              <Td>1.243</Td>
-            </Tr>
-            <Tr>
-              <Td>22,000,000,000</Td>
-              <Td>1.243</Td>
-            </Tr>
+            {trades.slice(0, 30).map((trade) => (
+              <Tr key={trade.sequentialId}>
+                <Td>{trade.tradePrice.toLocaleString()}</Td>
+                <Td>{Number(trade.tradeVolume.toFixed(3)).toLocaleString()}</Td>
+              </Tr>
+            ))}
           </tbody>
         </Table>
       </Wrapper>
