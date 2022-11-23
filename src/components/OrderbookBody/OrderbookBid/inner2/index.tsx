@@ -18,8 +18,10 @@ export default function inner2() {
           <tbody>
             {trades.slice(0, 30).map((trade) => (
               <Tr key={trade.sequentialId}>
-                <Td>{trade.tradePrice.toLocaleString()}</Td>
-                <Td>{Number(trade.tradeVolume.toFixed(3)).toLocaleString()}</Td>
+                <TradePrice>{trade.tradePrice.toLocaleString()}</TradePrice>
+                <TradeVolume askbid={trade.askBid}>
+                  {Number(trade.tradeVolume.toFixed(3)).toLocaleString()}
+                </TradeVolume>
               </Tr>
             ))}
           </tbody>
@@ -82,4 +84,11 @@ const Td = styled.td`
   padding: 4px;
   width: 50%;
   text-align: right;
+`;
+
+const TradePrice = styled(Td)``;
+
+const TradeVolume = styled(Td)<{ askbid: 'ASK' | 'BID' }>`
+  color: ${({ theme, askbid }) =>
+    askbid === 'BID' ? theme.colors.lightRed : theme.colors.lightBlue};
 `;
