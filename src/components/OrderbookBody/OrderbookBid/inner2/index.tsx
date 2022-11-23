@@ -5,10 +5,6 @@ export default function inner2() {
   return (
     <Inner2 rowSpan={15} colSpan={2}>
       <Wrapper>
-        <Dl>
-          <dt>체결강도</dt>
-          <dd>51.25%</dd>
-        </Dl>
         <Table>
           <TableHead>
             <Tr>
