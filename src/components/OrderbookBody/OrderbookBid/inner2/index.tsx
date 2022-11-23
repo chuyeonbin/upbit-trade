@@ -38,7 +38,7 @@ const Inner2 = styled(TableCell)`
 `;
 
 const Wrapper = styled.div`
-  height: 405px;
+  height: 420px;
   overflow: hidden;
 `;
 
