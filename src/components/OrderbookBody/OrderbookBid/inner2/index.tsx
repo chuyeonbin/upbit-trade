@@ -20,7 +20,9 @@ export default function inner2() {
               <Tr key={trade.sequentialId}>
                 <TradePrice>{trade.tradePrice.toLocaleString()}</TradePrice>
                 <TradeVolume askbid={trade.askBid}>
-                  {Number(trade.tradeVolume.toFixed(3)).toLocaleString()}
+                  {trade.tradeVolume.toLocaleString(undefined, {
+                    minimumFractionDigits: 3,
+                  })}
                 </TradeVolume>
               </Tr>
             ))}
