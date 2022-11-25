@@ -1,8 +1,11 @@
+// import React from 'react';
 import styled from 'styled-components';
 import { TableCell, TableRow } from '@mui/material';
 import { useAppSelector } from '../../../store/store';
 import { dayToDayFormat } from '../../../utils';
 import Inner2 from './inner2';
+import { useDispatch } from 'react-redux';
+import { changeOrderPrice } from '../../../store/modules/coin';
 
 interface OrderbookBidProps {
   index: number;
@@ -12,14 +15,25 @@ interface OrderbookBidProps {
 }
 
 export default function OrderbookBid({ index, bidPrice, bidSize, maxSize }: OrderbookBidProps) {
+  const dispatch = useDispatch();
   const { prevClosingPrice, tradePrice } = useAppSelector((state) => state.coin.selectedCoin);
 
   const loadOrderbookLoading = useAppSelector((state) => state.coin.loadOrderbookLoading);
 
+  const handleClick = (e: React.MouseEvent<HTMLTableCellElement>) => {
+    e.preventDefault();
+    dispatch(changeOrderPrice({ orderPrice: bidPrice }));
+  };
+
   return (
     <TableRow>
       {index === 0 ? <Inner2 /> : null}
-      <OrderbookBidCell2 sx={{ width: '0px' }} align='center' change={bidPrice - prevClosingPrice}>
+      <OrderbookBidCell2
+        sx={{ width: '0px' }}
+        align='center'
+        change={bidPrice - prevClosingPrice}
+        onClick={handleClick}
+      >
         <a href='#'>
           <p>{bidPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>

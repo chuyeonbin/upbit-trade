@@ -1,18 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { changeOrderPrice } from '../../store/modules/coin';
+import { useAppSelector } from '../../store/store';
 import theme from '../../styles/theme';
 
 const tabList = ['매수', '매도', '거래내역'];
 
 export default function Order() {
-  const [selectedTab, setSelectedTab] = useState<number>(0);
+  const dispatch = useDispatch();
+  const orderPrice = useAppSelector((state) => state.coin.orderPrice);
 
+  const [selectedTab, setSelectedTab] = useState<number>(0);
   const [askBid, setAskBid] = useState('매수');
+
+  const orderPriceRef = useRef<HTMLInputElement>(null);
 
   const handleTabClick = (index: number, title: string) => {
     setSelectedTab(index);
     setAskBid(title);
   };
+
+  const handleChangeOrderPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (orderPriceRef.current) {
+      dispatch(
+        changeOrderPrice({ orderPrice: Number(orderPriceRef.current.value.split(',').join('')) }),
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (orderPriceRef.current) {
+      orderPriceRef.current.value = orderPrice.toLocaleString();
+    }
+  }, [orderPrice]);
 
   return (
     <Wrapper>
@@ -43,7 +64,7 @@ export default function Order() {
         </Dt>
         <Dd>
           <InputWrapper>
-            <Input type='text' />
+            <Input type='text' ref={orderPriceRef} onChange={handleChangeOrderPrice} />
             <ButtonWrapper>
               <Button>-</Button>
               <Button>+</Button>
