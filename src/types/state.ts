@@ -72,6 +72,8 @@ export interface CoinState {
     prevClosingPrice: number;
   };
 
+  orderPrice: number;
+
   loadMarketListLoading: boolean;
   loadMarketListDone: boolean;
   loadMarketListError: Error | null;
