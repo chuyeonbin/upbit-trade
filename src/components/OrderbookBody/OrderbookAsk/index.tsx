@@ -3,6 +3,8 @@ import { TableCell, TableRow } from '@mui/material';
 import { useAppSelector } from '../../../store/store';
 import { dayToDayFormat } from '../../../utils';
 import Inner1 from './Inner1';
+import { useDispatch } from 'react-redux';
+import { changeOrderPrice } from '../../../store/modules/coin';
 
 interface OrderbookAskProps {
   index: number;
@@ -12,9 +14,15 @@ interface OrderbookAskProps {
 }
 
 export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: OrderbookAskProps) {
+  const dispatch = useDispatch();
   const { prevClosingPrice, tradePrice } = useAppSelector((state) => state.coin.selectedCoin);
 
   const loadOrderbookLoading = useAppSelector((state) => state.coin.loadOrderbookLoading);
+
+  const handleClick = (e: React.MouseEvent<HTMLTableCellElement>) => {
+    e.preventDefault();
+    dispatch(changeOrderPrice({ orderPrice: askPrice }));
+  };
 
   return (
     <TableRow>
@@ -25,7 +33,12 @@ export default function OrderbookAsk({ index, askPrice, askSize, maxSize }: Orde
           <p>{!loadOrderbookLoading && askSize.toFixed(3)}</p>
         </a>
       </OrderbookAskCell2>
-      <OrderbookAskCell3 sx={{ width: '0px' }} align='center' change={askPrice - prevClosingPrice}>
+      <OrderbookAskCell3
+        sx={{ width: '0px' }}
+        align='center'
+        change={askPrice - prevClosingPrice}
+        onClick={handleClick}
+      >
         <a href='#'>
           <p>{!loadOrderbookLoading && askPrice.toLocaleString()}</p>
           <p style={{ marginLeft: '14px' }}>

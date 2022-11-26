@@ -33,6 +33,8 @@ const initialState: CoinState = {
     prevClosingPrice: 0,
   },
 
+  orderPrice: 0,
+
   loadMarketListLoading: false,
   loadMarketListDone: false,
   loadMarketListError: null,
@@ -272,6 +274,9 @@ const coinSlice = createSlice({
     changeSelectedMarketName: (state, { payload }: PayloadAction<{ marketName: string }>) => {
       state.selectedCoin.marketName = payload.marketName;
     },
+    changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
+      state.orderPrice = payload.orderPrice;
+    },
   },
 });
 
@@ -297,6 +302,7 @@ export const {
   updateSelectedCoin,
   changeSelectedCoin,
   changeSelectedMarketName,
+  changeOrderPrice,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
