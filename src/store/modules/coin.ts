@@ -275,7 +275,6 @@ const coinSlice = createSlice({
       state.selectedCoin.marketName = payload.marketName;
     },
     changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
-      state.orderPrice = 0;
       state.orderPrice = payload.orderPrice;
     },
   },

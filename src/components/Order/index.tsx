@@ -14,26 +14,15 @@ export default function Order() {
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [askBid, setAskBid] = useState('매수');
 
-  const orderPriceRef = useRef<HTMLInputElement>(null);
-
   const handleTabClick = (index: number, title: string) => {
     setSelectedTab(index);
     setAskBid(title);
   };
 
   const handleChangeOrderPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (orderPriceRef.current) {
-      dispatch(
-        changeOrderPrice({ orderPrice: Number(orderPriceRef.current.value.split(',').join('')) }),
-      );
-    }
+    const orderPrice = Number(e.target.value.replace(/[^0-9]/g, ''));
+    dispatch(changeOrderPrice({ orderPrice }));
   };
-
-  useEffect(() => {
-    if (orderPriceRef.current) {
-      orderPriceRef.current.value = orderPrice.toLocaleString();
-    }
-  }, [orderPrice]);
 
   return (
     <Wrapper>
@@ -64,7 +53,11 @@ export default function Order() {
         </Dt>
         <Dd>
           <InputWrapper>
-            <Input type='text' ref={orderPriceRef} onChange={handleChangeOrderPrice} />
+            <Input
+              type='text'
+              value={orderPrice.toLocaleString()}
+              onChange={handleChangeOrderPrice}
+            />
             <ButtonWrapper>
               <Button>-</Button>
               <Button>+</Button>
