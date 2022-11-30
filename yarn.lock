@@ -7788,6 +7788,20 @@ react-is@^18.0.0, react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
+react-jsx-highcharts@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-jsx-highcharts/-/react-jsx-highcharts-5.0.0.tgz#48d24965cdcca061c050f16557add583762cf8ec"
+  integrity sha512-a2TQof/F5+lpSsaFvx1uSXGww/Z+jhKKAlZu/1+YuNH1LChOtefH6yVX7EjcywC82P/MXaoc1CQZd+qTpU/AzQ==
+  dependencies:
+    uuid "^8.3.2"
+
+react-jsx-highstock@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-jsx-highstock/-/react-jsx-highstock-5.0.0.tgz#7d48f11717150ad0218d94735b18113de7fada72"
+  integrity sha512-WlBzPd2FmDk2jqCLBoFZcFKuqwVP/5i3T5GjF1T8gdKok888IGH84/NrKcWFf/aWIYBb/L+BFpRz5Boh0pq2ig==
+  dependencies:
+    react-jsx-highcharts "5.0.0"
+
 react-redux@^8.0.2:
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-8.0.2.tgz#bc2a304bb21e79c6808e3e47c50fe1caf62f7aad"
