@@ -24,7 +24,10 @@ const initialOptions: Highcharts.Options = {
     enabled: false,
   },
   navigator: {
-    height: 20,
+    enabled: false,
+  },
+  scrollbar: {
+    enabled: false,
   },
   rangeSelector: {
     selected: 1,
