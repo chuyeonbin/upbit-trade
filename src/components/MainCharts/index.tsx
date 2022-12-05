@@ -30,16 +30,39 @@ const initialOptions: Highcharts.Options = {
     enabled: false,
   },
   rangeSelector: {
-    selected: 1,
     inputEnabled: false,
+    selected: 1,
     buttons: [
-      { type: 'day', count: 1, text: '일봉' },
-      { type: 'week', count: 1, text: '주봉' },
-      { type: 'month', count: 1, text: '월봉' },
-      { type: 'minute', count: 1, text: '1분봉' },
-      { type: 'minute', count: 1, text: '5분봉' },
-      { type: 'minute', count: 1, text: '10분봉' },
+      {
+        text: '일봉',
+      },
+      { text: '주봉' },
+      {
+        text: '월봉',
+      },
+      { text: '1분봉' },
+      { text: '5분봉' },
+      { text: '10분봉' },
+      {
+        text: '+',
+      },
+      {
+        text: '-',
+        events: {
+          click: function (e) {
+            console.log(Highcharts.charts[0]?.xAxis[0].setExtremes(0, 0));
+            return false;
+          },
+        },
+      },
     ],
+  },
+  xAxis: {
+    events: {
+      setExtremes: function (e) {
+        console.log(e);
+      },
+    },
   },
   yAxis: [
     {
@@ -82,7 +105,6 @@ const initialOptions: Highcharts.Options = {
       enableMouseTracking: false,
     },
   },
-  series: [],
   tooltip: {
     style: {
       fontSize: '10px',
