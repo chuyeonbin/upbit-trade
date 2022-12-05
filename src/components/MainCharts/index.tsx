@@ -7,6 +7,7 @@ indicators(Highcharts);
 Highcharts.setOptions({
   lang: {
     thousandsSep: ',',
+    rangeSelectorZoom: '',
   },
 });
 const initialOptions: Highcharts.Options = {
