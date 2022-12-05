@@ -1,6 +1,8 @@
-import Highcharts from 'highcharts/highstock';
+import Highcharts, { SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import indicators from 'highcharts/indicators/indicators';
+import { useEffect, useRef, useState } from 'react';
+import { getCandleByDays } from '../../api';
 
 indicators(Highcharts);
 
@@ -117,12 +119,76 @@ const initialOptions: Highcharts.Options = {
 };
 
 export default function MainCharts() {
+  const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
+  const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
+
+  useEffect(() => {
+    getCandleByDays('KRW-BTC', 200).then((candles) => {
+      const ohlc: SeriesOhlcOptions['data'] = [];
+      const volume: SeriesColumnOptions['data'] = [];
+
+      candles.forEach((candle, index) => {
+        if (chartComponentRef.current && index === 100) {
+          chartComponentRef.current.chart.xAxis[0].setExtremes(
+            Date.parse(candle.candle_date_time_kst),
+            Date.parse(candles[0].candle_date_time_kst),
+          );
+        }
+        ohlc.push([
+          Date.parse(candle.candle_date_time_kst),
+          candle.opening_price,
+          candle.high_price,
+          candle.low_price,
+          candle.trade_price,
+        ]);
+
+        volume.push({
+          x: Date.parse(candle.candle_date_time_kst),
+          y: Math.round(candle.candle_acc_trade_volume),
+          color: candle.opening_price < candle.trade_price ? '#c84a31' : '#1976d2',
+        });
+      });
+
+      setOptions({
+        series: [
+          {
+            type: 'candlestick',
+            name: '비트코인',
+            id: 'aapl',
+            data: ohlc.reverse(),
+          },
+          {
+            type: 'sma',
+            params: {
+              period: 15,
+            },
+            color: 'red',
+          },
+          {
+            type: 'sma',
+            params: {
+              period: 50,
+            },
+            color: 'lightGreen',
+          },
+          {
+            type: 'column',
+            name: 'Volume',
+            data: volume.reverse(),
+            yAxis: 1,
+          },
+        ],
+      });
+    });
+  }, []);
+
   return (
     <div>
       <HighchartsReact
+        ref={chartComponentRef}
         highcharts={Highcharts}
         constructorType={'stockChart'}
-        options={initialOptions}
+        options={options}
       />
     </div>
   );
