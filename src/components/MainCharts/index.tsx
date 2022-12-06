@@ -2,7 +2,7 @@ import Highcharts, { SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/h
 import HighchartsReact from 'highcharts-react-official';
 import indicators from 'highcharts/indicators/indicators';
 import { useEffect, useRef, useState } from 'react';
-import { getCandleByDays } from '../../api';
+import { getCandleByDays, getCandleByMinutes } from '../../api';
 import { useAppSelector } from '../../store/store';
 
 indicators(Highcharts);
@@ -93,7 +93,7 @@ export default function MainCharts() {
   const code = useAppSelector((state) => state.coin.selectedCoin.code);
 
   useEffect(() => {
-    getCandleByDays(code, 200).then((candles) => {
+    getCandleByMinutes(code, 1, 200).then((candles) => {
       const ohlc: SeriesOhlcOptions['data'] = [];
       const volume: SeriesColumnOptions['data'] = [];
 
@@ -116,7 +116,7 @@ export default function MainCharts() {
         volume.push({
           x: Date.parse(candle.candle_date_time_kst),
           y: Math.round(candle.candle_acc_trade_volume),
-          color: candle.opening_price < candle.trade_price ? '#c84a31' : '#1976d2',
+          color: candle.opening_price <= candle.trade_price ? '#c84a31' : '#1976d2',
         });
       });
 
