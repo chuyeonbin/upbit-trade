@@ -12,6 +12,9 @@ Highcharts.setOptions({
     thousandsSep: ',',
     rangeSelectorZoom: '',
   },
+  time: {
+    useUTC: false,
+  },
 });
 const initialOptions: Highcharts.Options = {
   chart: {
