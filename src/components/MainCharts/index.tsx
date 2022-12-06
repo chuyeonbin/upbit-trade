@@ -118,7 +118,7 @@ export default function MainCharts() {
 
         volume.push({
           x: Date.parse(candle.candle_date_time_kst),
-          y: Math.round(candle.candle_acc_trade_volume),
+          y: candle.candle_acc_trade_volume,
           color: candle.opening_price <= candle.trade_price ? '#c84a31' : '#1976d2',
         });
       });
