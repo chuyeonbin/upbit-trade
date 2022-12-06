@@ -3,6 +3,7 @@ import HighchartsReact from 'highcharts-react-official';
 import indicators from 'highcharts/indicators/indicators';
 import { useEffect, useRef, useState } from 'react';
 import { getCandleByDays } from '../../api';
+import { useAppSelector } from '../../store/store';
 
 indicators(Highcharts);
 
@@ -34,38 +35,6 @@ const initialOptions: Highcharts.Options = {
   },
   rangeSelector: {
     inputEnabled: false,
-    selected: 1,
-    buttons: [
-      {
-        text: '일봉',
-      },
-      { text: '주봉' },
-      {
-        text: '월봉',
-      },
-      { text: '1분봉' },
-      { text: '5분봉' },
-      { text: '10분봉' },
-      {
-        text: '+',
-      },
-      {
-        text: '-',
-        events: {
-          click: function (e) {
-            console.log(Highcharts.charts[0]?.xAxis[0].setExtremes(0, 0));
-            return false;
-          },
-        },
-      },
-    ],
-  },
-  xAxis: {
-    events: {
-      setExtremes: function (e) {
-        console.log(e);
-      },
-    },
   },
   yAxis: [
     {
@@ -121,19 +90,21 @@ const initialOptions: Highcharts.Options = {
 export default function MainCharts() {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
+  const code = useAppSelector((state) => state.coin.selectedCoin.code);
 
   useEffect(() => {
-    getCandleByDays('KRW-BTC', 200).then((candles) => {
+    getCandleByDays(code, 200).then((candles) => {
       const ohlc: SeriesOhlcOptions['data'] = [];
       const volume: SeriesColumnOptions['data'] = [];
 
-      candles.forEach((candle, index) => {
-        if (chartComponentRef.current && index === 100) {
-          chartComponentRef.current.chart.xAxis[0].setExtremes(
-            Date.parse(candle.candle_date_time_kst),
-            Date.parse(candles[0].candle_date_time_kst),
-          );
-        }
+      if (chartComponentRef.current) {
+        chartComponentRef.current.chart.xAxis[0].setExtremes(
+          Date.parse(candles[80].candle_date_time_kst),
+          Date.parse(candles[0].candle_date_time_kst),
+        );
+      }
+
+      candles.forEach((candle) => {
         ohlc.push([
           Date.parse(candle.candle_date_time_kst),
           candle.opening_price,
@@ -150,10 +121,20 @@ export default function MainCharts() {
       });
 
       setOptions({
+        rangeSelector: {
+          buttons: [
+            { text: '일봉' },
+            { text: '주봉' },
+            { text: '월봉' },
+            { text: '1분봉' },
+            { text: '5분봉' },
+            { text: '10분봉' },
+          ],
+        },
         series: [
           {
             type: 'candlestick',
-            name: '비트코인',
+            name: code,
             id: 'aapl',
             data: ohlc.reverse(),
           },
@@ -180,7 +161,7 @@ export default function MainCharts() {
         ],
       });
     });
-  }, []);
+  }, [code]);
 
   return (
     <div>
