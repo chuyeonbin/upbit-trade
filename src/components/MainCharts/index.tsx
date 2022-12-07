@@ -2,8 +2,9 @@ import Highcharts, { SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/h
 import HighchartsReact from 'highcharts-react-official';
 import indicators from 'highcharts/indicators/indicators';
 import { useEffect, useRef, useState } from 'react';
-import { getCandleByDays, getCandleByMinutes } from '../../api';
 import { useAppSelector } from '../../store/store';
+import { useDispatch } from 'react-redux';
+import { changeCandleData } from '../../store/modules/coin';
 
 indicators(Highcharts);
 
@@ -37,6 +38,7 @@ const initialOptions: Highcharts.Options = {
     enabled: false,
   },
   rangeSelector: {
+    allButtonsEnabled: true,
     inputEnabled: false,
   },
   yAxis: [
@@ -91,80 +93,121 @@ const initialOptions: Highcharts.Options = {
 };
 
 export default function MainCharts() {
+  const dispatch = useDispatch();
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
   const code = useAppSelector((state) => state.coin.selectedCoin.code);
+  const candles = useAppSelector((state) => state.coin.candles);
+
+  const handleClick =
+    (type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉') => (e: Event) => {
+      dispatch(changeCandleData({ type }));
+      return false;
+    };
 
   useEffect(() => {
-    getCandleByMinutes(code, 1, 200).then((candles) => {
-      const ohlc: SeriesOhlcOptions['data'] = [];
-      const volume: SeriesColumnOptions['data'] = [];
-
-      if (chartComponentRef.current) {
-        chartComponentRef.current.chart.xAxis[0].setExtremes(
-          Date.parse(candles[80].candle_date_time_kst),
-          Date.parse(candles[0].candle_date_time_kst),
-        );
-      }
-
-      candles.forEach((candle) => {
-        ohlc.push([
-          Date.parse(candle.candle_date_time_kst),
-          candle.opening_price,
-          candle.high_price,
-          candle.low_price,
-          candle.trade_price,
-        ]);
-
-        volume.push({
-          x: Date.parse(candle.candle_date_time_kst),
-          y: candle.candle_acc_trade_volume,
-          color: candle.opening_price <= candle.trade_price ? '#c84a31' : '#1976d2',
-        });
-      });
-
-      setOptions({
-        rangeSelector: {
-          buttons: [
-            { text: '일봉' },
-            { text: '주봉' },
-            { text: '월봉' },
-            { text: '1분봉' },
-            { text: '5분봉' },
-            { text: '10분봉' },
-          ],
-        },
-        series: [
+    setOptions({
+      rangeSelector: {
+        buttons: [
           {
-            type: 'candlestick',
-            name: code,
-            id: 'aapl',
-            data: ohlc.reverse(),
-          },
-          {
-            type: 'sma',
-            params: {
-              period: 15,
+            text: '일봉',
+            events: {
+              click: handleClick('일봉'),
             },
-            color: 'red',
           },
           {
-            type: 'sma',
-            params: {
-              period: 50,
+            text: '주봉',
+            events: {
+              click: handleClick('주봉'),
             },
-            color: 'lightGreen',
           },
           {
-            type: 'column',
-            name: 'Volume',
-            data: volume.reverse(),
-            yAxis: 1,
+            text: '월봉',
+            events: {
+              click: handleClick('월봉'),
+            },
+          },
+          {
+            text: '1분봉',
+            events: {
+              click: handleClick('1분봉'),
+            },
+          },
+          {
+            text: '5분봉',
+            events: {
+              click: handleClick('5분봉'),
+            },
+          },
+          {
+            text: '10분봉',
+            events: {
+              click: handleClick('10분봉'),
+            },
           },
         ],
-      });
+      },
     });
-  }, [code]);
+  }, []);
+
+  useEffect(() => {
+    if (candles.length > 0) {
+      const ohlc: SeriesOhlcOptions['data'] = [];
+      const volume: SeriesColumnOptions['data'] = [];
+      if (chartComponentRef.current) {
+        chartComponentRef.current.chart.xAxis[0].setExtremes(
+          Date.parse(candles[candles.length - 50].dateTimeKst),
+          Date.parse(candles[candles.length - 1].dateTimeKst),
+        );
+        candles.forEach((candle) => {
+          ohlc.push([
+            Date.parse(candle.dateTimeKst),
+            candle.openingPrice,
+            candle.highPrice,
+            candle.lowPrice,
+            candle.tradePrice,
+          ]);
+
+          volume.push({
+            x: Date.parse(candle.dateTimeKst),
+            y: candle.accTradeVolume,
+            color: candle.openingPrice <= candle.tradePrice ? '#c84a31' : '#1976d2',
+          });
+        });
+
+        setOptions({
+          series: [
+            {
+              type: 'candlestick',
+              name: code,
+              id: 'aapl',
+              data: ohlc,
+            },
+            {
+              type: 'sma',
+              params: {
+                period: 15,
+              },
+              color: 'red',
+            },
+            {
+              type: 'sma',
+              params: {
+                period: 50,
+              },
+              color: 'lightGreen',
+            },
+            {
+              type: 'column',
+              name: 'Volume',
+              data: volume,
+              yAxis: 1,
+            },
+          ],
+        });
+      }
+    }
+  }, [candles]);
 
   return (
     <div>
