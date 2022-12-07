@@ -93,6 +93,10 @@ export interface CoinState {
   loadSelectedCoinDataLoading: boolean;
   loadSelectedCoinDataDone: boolean;
   loadSelectedCoinDataError: Error | null;
+
+  loadCandleDataLoading: boolean;
+  loadCandleDataDone: boolean;
+  loadCandleDataError: Error | null;
 }
 
 export default interface RootState {
