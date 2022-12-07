@@ -34,6 +34,8 @@ const initialState: CoinState = {
     prevClosingPrice: 0,
   },
 
+  candles: [],
+
   orderPrice: 0,
 
   loadMarketListLoading: false,
@@ -204,6 +206,25 @@ const coinSlice = createSlice({
     ) => {
       state.loadCandleDataLoading = false;
       state.loadCandleDataDone = true;
+
+      const candles: {
+        dateTimeKst: string;
+        openingPrice: number;
+        highPrice: number;
+        lowPrice: number;
+        tradePrice: number;
+      }[] = [];
+
+      payload.forEach((candle) => {
+        candles.push({
+          dateTimeKst: candle.candle_date_time_kst,
+          openingPrice: candle.opening_price,
+          highPrice: candle.high_price,
+          lowPrice: candle.low_price,
+          tradePrice: candle.trade_price,
+        });
+      });
+      state.candles = [...candles.reverse(), ...state.candles];
     },
     loadCandleDataFailure: (state, { payload }) => {
       state.loadCandleDataLoading = false;
