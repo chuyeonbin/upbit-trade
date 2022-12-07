@@ -72,6 +72,14 @@ export interface CoinState {
     prevClosingPrice: number;
   };
 
+  candles: {
+    dateTimeKst: string;
+    openingPrice: number;
+    highPrice: number;
+    lowPrice: number;
+    tradePrice: number;
+  }[];
+
   orderPrice: number;
 
   loadMarketListLoading: boolean;
