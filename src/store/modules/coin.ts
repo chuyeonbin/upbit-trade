@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { DayCandles, WeekCandles, MonthCandles, MinuteCandles } from '../../types/candle';
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
@@ -197,7 +198,10 @@ const coinSlice = createSlice({
       state.loadCandleDataDone = false;
       state.loadCandleDataError = null;
     },
-    loadCandleDataSuccess: (state, { payload }: PayloadAction<any>) => {
+    loadCandleDataSuccess: (
+      state,
+      { payload }: PayloadAction<DayCandles | WeekCandles | MonthCandles | MinuteCandles>,
+    ) => {
       state.loadCandleDataLoading = false;
       state.loadCandleDataDone = true;
     },
