@@ -298,6 +298,12 @@ const coinSlice = createSlice({
     changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
       state.orderPrice = payload.orderPrice;
     },
+    changeCandleData: (
+      state,
+      { payload }: PayloadAction<{ type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉' }>,
+    ) => {
+      return;
+    },
   },
 });
 
@@ -327,6 +333,7 @@ export const {
   changeSelectedCoin,
   changeSelectedMarketName,
   changeOrderPrice,
+  changeCandleData,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
