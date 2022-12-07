@@ -323,7 +323,7 @@ const coinSlice = createSlice({
       state,
       { payload }: PayloadAction<{ type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉' }>,
     ) => {
-      return;
+      state.candles = [];
     },
   },
 });
