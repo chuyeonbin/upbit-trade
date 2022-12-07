@@ -143,6 +143,7 @@ function* changeSelectedCoinSaga({ payload }: PayloadAction<{ marketName: string
   yield loadSelectedCoinDataSaga(payload.code);
   yield loadTradeListSaga(payload.code);
   yield loadOrderbookSaga([payload.code]);
+  yield loadCandleDataSaga(payload.code);
   yield put(changeSelectedMarketName({ marketName: payload.marketName }));
 }
 

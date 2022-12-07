@@ -226,7 +226,7 @@ const coinSlice = createSlice({
           accTradeVolume: candle.candle_acc_trade_volume,
         });
       });
-      state.candles = [...candles.reverse(), ...state.candles];
+      state.candles = candles.reverse();
     },
     loadCandleDataFailure: (state, { payload }) => {
       state.loadCandleDataLoading = false;
