@@ -78,6 +78,7 @@ export interface CoinState {
     highPrice: number;
     lowPrice: number;
     tradePrice: number;
+    accTradeVolume: number;
   }[];
 
   orderPrice: number;

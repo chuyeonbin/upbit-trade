@@ -213,6 +213,7 @@ const coinSlice = createSlice({
         highPrice: number;
         lowPrice: number;
         tradePrice: number;
+        accTradeVolume: number;
       }[] = [];
 
       payload.forEach((candle) => {
@@ -222,6 +223,7 @@ const coinSlice = createSlice({
           highPrice: candle.high_price,
           lowPrice: candle.low_price,
           tradePrice: candle.trade_price,
+          accTradeVolume: candle.candle_acc_trade_volume,
         });
       });
       state.candles = [...candles.reverse(), ...state.candles];
