@@ -10,30 +10,26 @@ export async function getMarketCodes(): Promise<MarketCodes> {
   return response.data;
 }
 
-export async function getCandleByMinutes(
-  market: string,
-  unit: Unit,
-  count: number,
-): Promise<MinuteCandles> {
-  const query = `/candles/minutes/${unit}?market=KRW-BTC&count=${count}`;
+export async function getCandleByMinutes(market: string, unit: Unit): Promise<MinuteCandles> {
+  const query = `/candles/minutes/${unit}?market=${market}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
 
-export async function getCandleByDays(market: string, count: number): Promise<DayCandles> {
-  const query = `/candles/days?market=${market}&count=${count}`;
+export async function getCandleByDays(market: string): Promise<DayCandles> {
+  const query = `/candles/days?market=${market}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
 
-export async function getCandleByWeeks(market: string, count: number): Promise<WeekCandles> {
-  const query = `/candles/weeks?market=${market}&count=${count}`;
+export async function getCandleByWeeks(market: string): Promise<WeekCandles> {
+  const query = `/candles/weeks?market=${market}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
 
-export async function getCandleByMonths(market: string, count: number): Promise<MonthCandles> {
-  const query = `/candles/months?market=${market}&count=${count}`;
+export async function getCandleByMonths(market: string): Promise<MonthCandles> {
+  const query = `/candles/months?market=${market}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
