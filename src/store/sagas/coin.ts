@@ -94,6 +94,16 @@ export function* loadOrderbookSaga(codes: string[]) {
   }
 }
 
+export function* loadCandleDataSaga(code: string) {
+  yield put(loadCandleDataRequest());
+  try {
+    const candles: DayCandles = yield call(getCandleByDays, code);
+    yield put(loadCandleDataSuccess(candles));
+  } catch (error) {
+    yield put(loadCandleDataFailure({ error }));
+  }
+}
+
 export function* changeCandleDataSaga({
   payload,
 }: PayloadAction<{ type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉' }>) {
