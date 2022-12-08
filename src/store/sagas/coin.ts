@@ -1,10 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { call, fork, put, all, takeEvery, select } from 'redux-saga/effects';
 import {
-  getCandleByDays,
   getCandleByMinutes,
-  getCandleByMonths,
-  getCandleByWeeks,
+  getCandleByData,
   getMarketCodes,
   getOrderBooks,
   getPresentPrice,
@@ -97,7 +95,7 @@ export function* loadOrderbookSaga(codes: string[]) {
 export function* loadCandleDataSaga(code: string) {
   yield put(loadCandleDataRequest());
   try {
-    const candles: DayCandles = yield call(getCandleByDays, code);
+    const candles: DayCandles = yield call(getCandleByData, code, 'days');
     yield put(loadCandleDataSuccess(candles));
   } catch (error) {
     yield put(loadCandleDataFailure({ error }));
@@ -113,13 +111,13 @@ export function* changeCandleDataSaga({
     let candles: DayCandles | WeekCandles | MonthCandles | MinuteCandles;
     switch (payload.type) {
       case '일봉':
-        candles = yield call(getCandleByDays, coin.selectedCoin.code);
+        candles = yield call(getCandleByData<DayCandles>, coin.selectedCoin.code, 'days');
         break;
       case '주봉':
-        candles = yield call(getCandleByWeeks, coin.selectedCoin.code);
+        candles = yield call(getCandleByData<WeekCandles>, coin.selectedCoin.code, 'weeks');
         break;
       case '월봉':
-        candles = yield call(getCandleByMonths, coin.selectedCoin.code);
+        candles = yield call(getCandleByData<MonthCandles>, coin.selectedCoin.code, 'months');
         break;
       case '1분봉':
         candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 1);

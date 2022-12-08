@@ -16,20 +16,11 @@ export async function getCandleByMinutes(market: string, unit: Unit): Promise<Mi
   return response.data;
 }
 
-export async function getCandleByDays(market: string): Promise<DayCandles> {
-  const query = `/candles/days?market=${market}&count=200`;
-  const response = await axios.get(BASE_URL + query);
-  return response.data;
-}
-
-export async function getCandleByWeeks(market: string): Promise<WeekCandles> {
-  const query = `/candles/weeks?market=${market}&count=200`;
-  const response = await axios.get(BASE_URL + query);
-  return response.data;
-}
-
-export async function getCandleByMonths(market: string): Promise<MonthCandles> {
-  const query = `/candles/months?market=${market}&count=200`;
+export async function getCandleByData<T>(
+  market: string,
+  type: 'days' | 'weeks' | 'months',
+): Promise<T> {
+  const query = `/candles/${type}?market=${market}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
