@@ -8,7 +8,7 @@ import {
   getPresentPrice,
   getTrades,
 } from '../../api';
-import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
 import { DayCandles, MinuteCandles, MonthCandles, WeekCandles } from '../../types/candle';
 
 import {
@@ -102,30 +102,28 @@ export function* loadCandleDataSaga(code: string) {
   }
 }
 
-export function* changeCandleDataSaga({
-  payload,
-}: PayloadAction<{ type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉' }>) {
+export function* changeCandleDataSaga({ payload }: PayloadAction<{ type: CandleType }>) {
   yield put(loadCandleDataRequest());
   const { coin }: RootState = yield select();
   try {
     let candles: DayCandles | WeekCandles | MonthCandles | MinuteCandles;
     switch (payload.type) {
-      case '일봉':
+      case 'days':
         candles = yield call(getCandleByData<DayCandles>, coin.selectedCoin.code, 'days');
         break;
-      case '주봉':
+      case 'weeks':
         candles = yield call(getCandleByData<WeekCandles>, coin.selectedCoin.code, 'weeks');
         break;
-      case '월봉':
+      case 'months':
         candles = yield call(getCandleByData<MonthCandles>, coin.selectedCoin.code, 'months');
         break;
-      case '1분봉':
+      case '1minutes':
         candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 1);
         break;
-      case '5분봉':
+      case '5minutes':
         candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 5);
         break;
-      case '10분봉':
+      case '10minutes':
         candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 10);
         break;
       default:

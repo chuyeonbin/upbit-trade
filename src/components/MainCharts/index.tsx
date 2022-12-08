@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { changeCandleData } from '../../store/modules/coin';
+import { CandleType } from '../../types';
 
 indicators(Highcharts);
 
@@ -96,11 +97,10 @@ export default function MainCharts() {
   const code = useAppSelector((state) => state.coin.selectedCoin.code);
   const candles = useAppSelector((state) => state.coin.candles);
 
-  const handleClick =
-    (type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉') => (e: Event) => {
-      dispatch(changeCandleData({ type }));
-      return false;
-    };
+  const handleClick = (type: CandleType) => (e: Event) => {
+    dispatch(changeCandleData({ type }));
+    return false;
+  };
 
   useEffect(() => {
     setOptions({
@@ -109,37 +109,37 @@ export default function MainCharts() {
           {
             text: '일봉',
             events: {
-              click: handleClick('일봉'),
+              click: handleClick('days'),
             },
           },
           {
             text: '주봉',
             events: {
-              click: handleClick('주봉'),
+              click: handleClick('weeks'),
             },
           },
           {
             text: '월봉',
             events: {
-              click: handleClick('월봉'),
+              click: handleClick('months'),
             },
           },
           {
             text: '1분봉',
             events: {
-              click: handleClick('1분봉'),
+              click: handleClick('1minutes'),
             },
           },
           {
             text: '5분봉',
             events: {
-              click: handleClick('5분봉'),
+              click: handleClick('5minutes'),
             },
           },
           {
             text: '10분봉',
             events: {
-              click: handleClick('10분봉'),
+              click: handleClick('10minutes'),
             },
           },
         ],

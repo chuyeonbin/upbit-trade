@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
 import { DayCandles, WeekCandles, MonthCandles, MinuteCandles } from '../../types/candle';
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
@@ -326,7 +326,11 @@ const coinSlice = createSlice({
     },
     changeCandleData: (
       state,
-      { payload }: PayloadAction<{ type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉' }>,
+      {
+        payload,
+      }: PayloadAction<{
+        type: CandleType;
+      }>,
     ) => {
       state.candles.datas = [];
     },

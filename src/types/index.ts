@@ -61,4 +61,6 @@ export interface Orderbook {
   orderbook_units: { ask_price: number; bid_price: number; ask_size: number; bid_size: number }[];
 }
 
+export type CandleType = 'days' | 'weeks' | 'months' | '1minutes' | '5minutes' | '10minutes';
+
 export type Orderbooks = Orderbook[];

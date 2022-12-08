@@ -1,4 +1,4 @@
-import { Trades } from '.';
+import { CandleType, Trades } from '.';
 
 export interface SocketState {
   presentPriceSocketLoading: boolean;
@@ -73,7 +73,7 @@ export interface CoinState {
   };
 
   candles: {
-    candleType: 'days' | 'weeks' | 'months' | '1minutes' | '5minutes' | '10minutes';
+    candleType: CandleType;
     datas: {
       dateTimeKst: string;
       openingPrice: number;
