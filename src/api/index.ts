@@ -10,8 +10,12 @@ export async function getMarketCodes(): Promise<MarketCodes> {
   return response.data;
 }
 
-export async function getCandleByMinutes(market: string, unit: Unit): Promise<MinuteCandles> {
-  const query = `/candles/minutes/${unit}?market=${market}&count=200`;
+export async function getCandleByMinutes(
+  market: string,
+  unit: Unit,
+  date: string,
+): Promise<MinuteCandles> {
+  const query = `/candles/minutes/${unit}?market=${market}&to=${date}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
@@ -19,8 +23,10 @@ export async function getCandleByMinutes(market: string, unit: Unit): Promise<Mi
 export async function getCandleByData<T>(
   market: string,
   type: 'days' | 'weeks' | 'months',
+  date: string,
 ): Promise<T> {
-  const query = `/candles/${type}?market=${market}&count=200`;
+  console.log(date);
+  const query = `/candles/${type}?market=${market}&to=${date}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }
