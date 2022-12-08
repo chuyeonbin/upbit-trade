@@ -109,6 +109,10 @@ export interface CoinState {
   loadCandleDataLoading: boolean;
   loadCandleDataDone: boolean;
   loadCandleDataError: Error | null;
+
+  loadPrevCandleDataLoading: boolean;
+  loadPrevCandleDataDone: boolean;
+  loadPrevCandleDataError: Error | null;
 }
 
 export default interface RootState {
