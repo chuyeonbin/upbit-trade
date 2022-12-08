@@ -34,9 +34,6 @@ const initialOptions: Highcharts.Options = {
   navigator: {
     enabled: false,
   },
-  scrollbar: {
-    enabled: false,
-  },
   rangeSelector: {
     allButtonsEnabled: true,
     inputEnabled: false,
