@@ -64,6 +64,10 @@ const initialState: CoinState = {
   loadCandleDataLoading: false,
   loadCandleDataDone: false,
   loadCandleDataError: null,
+
+  loadPrevCandleDataLoading: false,
+  loadPrevCandleDataDone: false,
+  loadPrevCandleDataError: null,
 };
 
 const coinSlice = createSlice({
@@ -235,6 +239,26 @@ const coinSlice = createSlice({
       state.loadCandleDataLoading = false;
       state.loadCandleDataError = payload.error;
     },
+    loadPrevCandleDataRequest: (state) => {
+      state.loadPrevCandleDataLoading = true;
+      state.loadPrevCandleDataDone = false;
+      state.loadPrevCandleDataError = null;
+    },
+    loadPrevCandleDataSuccess: (
+      state,
+      { payload }: PayloadAction<DayCandles | WeekCandles | MonthCandles | MinuteCandles>,
+    ) => {
+      state.loadPrevCandleDataLoading = false;
+      state.loadPrevCandleDataDone = true;
+    },
+
+    loadPrevCandleDataFailure: (state, { payload }) => {
+      state.loadPrevCandleDataLoading = false;
+      state.loadPrevCandleDataError = payload.error;
+    },
+    loadPrevCandleData: () => {
+      return;
+    },
     updateTickerList: (state, { payload }: PayloadAction<RealTimeTickers>) => {
       // 중복으로 들어온 코인 제거
       const tickerList = payload.filter((item, i) => {
@@ -350,6 +374,10 @@ export const {
   loadCandleDataRequest,
   loadCandleDataSuccess,
   loadCandleDataFailure,
+  loadPrevCandleDataRequest,
+  loadPrevCandleDataSuccess,
+  loadPrevCandleDataFailure,
+  loadPrevCandleData,
   updateTickerList,
   updateTradeList,
   updateOrderbook,
