@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DayCandles, MinuteCandles, MonthCandles, Unit, WeekCandles } from '../types/candle';
+import { MinuteCandles, Unit } from '../types/candle';
 import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../types';
 
 const BASE_URL = 'https://api.upbit.com/v1';
