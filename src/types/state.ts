@@ -73,13 +73,16 @@ export interface CoinState {
   };
 
   candles: {
-    dateTimeKst: string;
-    openingPrice: number;
-    highPrice: number;
-    lowPrice: number;
-    tradePrice: number;
-    accTradeVolume: number;
-  }[];
+    candleType: 'days' | 'weeks' | 'months' | '1minutes' | '5minutes' | '10minutes';
+    datas: {
+      dateTimeKst: string;
+      openingPrice: number;
+      highPrice: number;
+      lowPrice: number;
+      tradePrice: number;
+      accTradeVolume: number;
+    }[];
+  };
 
   orderPrice: number;
 

@@ -34,7 +34,10 @@ const initialState: CoinState = {
     prevClosingPrice: 0,
   },
 
-  candles: [],
+  candles: {
+    candleType: 'days',
+    datas: [],
+  },
 
   orderPrice: 0,
 
@@ -226,7 +229,7 @@ const coinSlice = createSlice({
           accTradeVolume: candle.candle_acc_trade_volume,
         });
       });
-      state.candles = candles.reverse();
+      state.candles.datas = candles.reverse();
     },
     loadCandleDataFailure: (state, { payload }) => {
       state.loadCandleDataLoading = false;
@@ -325,7 +328,7 @@ const coinSlice = createSlice({
       state,
       { payload }: PayloadAction<{ type: '일봉' | '주봉' | '월봉' | '1분봉' | '5분봉' | '10분봉' }>,
     ) => {
-      state.candles = [];
+      state.candles.datas = [];
     },
   },
 });

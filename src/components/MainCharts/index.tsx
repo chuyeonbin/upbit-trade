@@ -148,15 +148,15 @@ export default function MainCharts() {
   }, []);
 
   useEffect(() => {
-    if (candles.length > 0) {
+    if (candles.datas.length > 0) {
       const ohlc: SeriesOhlcOptions['data'] = [];
       const volume: SeriesColumnOptions['data'] = [];
       if (chartComponentRef.current) {
         chartComponentRef.current.chart.xAxis[0].setExtremes(
-          Date.parse(candles[candles.length - 50].dateTimeKst),
-          Date.parse(candles[candles.length - 1].dateTimeKst),
+          Date.parse(candles.datas[candles.datas.length - 50].dateTimeKst),
+          Date.parse(candles.datas[candles.datas.length - 1].dateTimeKst),
         );
-        candles.forEach((candle) => {
+        candles.datas.forEach((candle) => {
           ohlc.push([
             Date.parse(candle.dateTimeKst),
             candle.openingPrice,
