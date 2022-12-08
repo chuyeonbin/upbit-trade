@@ -324,14 +324,8 @@ const coinSlice = createSlice({
     changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
       state.orderPrice = payload.orderPrice;
     },
-    changeCandleData: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        type: CandleType;
-      }>,
-    ) => {
+    changeCandleData: (state, { payload }: PayloadAction<{ type: CandleType }>) => {
+      state.candles.candleType = payload.type;
       state.candles.datas = [];
     },
   },
