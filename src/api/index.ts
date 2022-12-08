@@ -25,7 +25,6 @@ export async function getCandleByData<T>(
   type: 'days' | 'weeks' | 'months',
   date: string,
 ): Promise<T> {
-  console.log(date);
   const query = `/candles/${type}?market=${market}&to=${date}&count=200`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
