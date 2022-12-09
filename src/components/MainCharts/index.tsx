@@ -1,10 +1,10 @@
-import Highcharts, { chart, SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/highstock';
+import Highcharts, { SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import indicators from 'highcharts/indicators/indicators';
 import { useEffect, useRef, useState } from 'react';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
-import { changeCandleData } from '../../store/modules/coin';
+import { changeCandleData, loadPrevCandleData } from '../../store/modules/coin';
 import { CandleType } from '../../types';
 
 indicators(Highcharts);
@@ -178,6 +178,15 @@ export default function MainCharts() {
         });
 
         setOptions({
+          xAxis: {
+            events: {
+              setExtremes: function (e) {
+                if (e.min === Date.parse(candles.datas[0].dateTimeKst)) {
+                  dispatch(loadPrevCandleData());
+                }
+              },
+            },
+          },
           series: [
             {
               type: 'candlestick',
