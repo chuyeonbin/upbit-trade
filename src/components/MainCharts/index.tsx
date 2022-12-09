@@ -1,4 +1,4 @@
-import Highcharts, { SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/highstock';
+import Highcharts, { chart, SeriesColumnOptions, SeriesOhlcOptions } from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import indicators from 'highcharts/indicators/indicators';
 import { useEffect, useRef, useState } from 'react';
@@ -148,14 +148,19 @@ export default function MainCharts() {
   }, []);
 
   useEffect(() => {
+    if (chartComponentRef.current && candles.datas.length > 0) {
+      chartComponentRef.current.chart.xAxis[0].setExtremes(
+        Date.parse(candles.datas[candles.datas.length - 50].dateTimeKst),
+        undefined,
+      );
+    }
+  }, [candles]);
+
+  useEffect(() => {
     if (candles.datas.length > 0) {
       const ohlc: SeriesOhlcOptions['data'] = [];
       const volume: SeriesColumnOptions['data'] = [];
       if (chartComponentRef.current) {
-        chartComponentRef.current.chart.xAxis[0].setExtremes(
-          Date.parse(candles.datas[candles.datas.length - 50].dateTimeKst),
-          Date.parse(candles.datas[candles.datas.length - 1].dateTimeKst),
-        );
         candles.datas.forEach((candle) => {
           ohlc.push([
             Date.parse(candle.dateTimeKst),
