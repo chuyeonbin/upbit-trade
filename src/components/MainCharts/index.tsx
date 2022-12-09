@@ -162,7 +162,6 @@ export default function MainCharts() {
 
   useEffect(() => {
     if (chartComponentRef.current && candles.datas.length > 0) {
-      console.log(candles.datas);
       if (candles.datas.length < 50) {
         chartComponentRef.current.chart.xAxis[0].setExtremes(undefined, undefined);
         return;
