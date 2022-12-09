@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { parseISO } from 'date-fns';
-import { call, fork, put, all, takeEvery, select, takeLatest } from 'redux-saga/effects';
+import { call, fork, put, all, takeEvery, select, throttle } from 'redux-saga/effects';
 import {
   getCandleByMinutes,
   getCandleByData,
@@ -185,7 +185,7 @@ function* changeSelectedCoinSaga({ payload }: PayloadAction<{ marketName: string
 }
 
 function* watchPrevCandleDataSaga() {
-  yield takeLatest(loadPrevCandleData, loadPrevCandleDataSaga);
+  yield throttle(500, loadPrevCandleData, loadPrevCandleDataSaga);
 }
 
 function* watchChangeCandleDataSaga() {
