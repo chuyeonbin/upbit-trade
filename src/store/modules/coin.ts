@@ -250,6 +250,28 @@ const coinSlice = createSlice({
     ) => {
       state.loadPrevCandleDataLoading = false;
       state.loadPrevCandleDataDone = true;
+
+      const candles: {
+        dateTimeKst: string;
+        openingPrice: number;
+        highPrice: number;
+        lowPrice: number;
+        tradePrice: number;
+        accTradeVolume: number;
+      }[] = [];
+
+      payload.forEach((candle) => {
+        candles.push({
+          dateTimeKst: candle.candle_date_time_kst,
+          openingPrice: candle.opening_price,
+          highPrice: candle.high_price,
+          lowPrice: candle.low_price,
+          tradePrice: candle.trade_price,
+          accTradeVolume: candle.candle_acc_trade_volume,
+        });
+      });
+
+      state.candles.datas = [...candles.reverse(), ...state.candles.datas];
     },
 
     loadPrevCandleDataFailure: (state, { payload }) => {
