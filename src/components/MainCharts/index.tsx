@@ -96,6 +96,9 @@ export default function MainCharts() {
   const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
   const code = useAppSelector((state) => state.coin.selectedCoin.code);
   const candles = useAppSelector((state) => state.coin.candles);
+  const { loadCandleDataLoading, loadPrevCandleDataLoading } = useAppSelector(
+    (state) => state.coin,
+  );
 
   const handleClick = (type: CandleType) => (e: Event) => {
     dispatch(changeCandleData({ type }));
@@ -148,6 +151,16 @@ export default function MainCharts() {
   }, []);
 
   useEffect(() => {
+    if (chartComponentRef.current) {
+      if (loadPrevCandleDataLoading || loadCandleDataLoading) {
+        chartComponentRef.current.chart.showLoading();
+        return;
+      }
+      chartComponentRef.current.chart.hideLoading();
+    }
+  }, [loadPrevCandleDataLoading, loadCandleDataLoading]);
+
+  useEffect(() => {
     if (chartComponentRef.current && candles.datas.length > 0) {
       chartComponentRef.current.chart.xAxis[0].setExtremes(
         Date.parse(candles.datas[candles.datas.length - 50].dateTimeKst),
@@ -160,63 +173,61 @@ export default function MainCharts() {
     if (candles.datas.length > 0) {
       const ohlc: SeriesOhlcOptions['data'] = [];
       const volume: SeriesColumnOptions['data'] = [];
-      if (chartComponentRef.current) {
-        candles.datas.forEach((candle) => {
-          ohlc.push([
-            Date.parse(candle.dateTimeKst),
-            candle.openingPrice,
-            candle.highPrice,
-            candle.lowPrice,
-            candle.tradePrice,
-          ]);
+      candles.datas.forEach((candle) => {
+        ohlc.push([
+          Date.parse(candle.dateTimeKst),
+          candle.openingPrice,
+          candle.highPrice,
+          candle.lowPrice,
+          candle.tradePrice,
+        ]);
 
-          volume.push({
-            x: Date.parse(candle.dateTimeKst),
-            y: candle.accTradeVolume,
-            color: candle.openingPrice <= candle.tradePrice ? '#c84a31' : '#1976d2',
-          });
+        volume.push({
+          x: Date.parse(candle.dateTimeKst),
+          y: candle.accTradeVolume,
+          color: candle.openingPrice <= candle.tradePrice ? '#c84a31' : '#1976d2',
         });
+      });
 
-        setOptions({
-          xAxis: {
-            events: {
-              setExtremes: function (e) {
-                if (e.min === Date.parse(candles.datas[0].dateTimeKst)) {
-                  dispatch(loadPrevCandleData());
-                }
-              },
+      setOptions({
+        xAxis: {
+          events: {
+            setExtremes: function (e) {
+              if (e.min === Date.parse(candles.datas[0].dateTimeKst)) {
+                dispatch(loadPrevCandleData());
+              }
             },
           },
-          series: [
-            {
-              type: 'candlestick',
-              name: code,
-              id: 'aapl',
-              data: ohlc,
+        },
+        series: [
+          {
+            type: 'candlestick',
+            name: code,
+            id: 'aapl',
+            data: ohlc,
+          },
+          {
+            type: 'sma',
+            params: {
+              period: 15,
             },
-            {
-              type: 'sma',
-              params: {
-                period: 15,
-              },
-              color: 'red',
+            color: 'red',
+          },
+          {
+            type: 'sma',
+            params: {
+              period: 50,
             },
-            {
-              type: 'sma',
-              params: {
-                period: 50,
-              },
-              color: 'lightGreen',
-            },
-            {
-              type: 'column',
-              name: 'Volume',
-              data: volume,
-              yAxis: 1,
-            },
-          ],
-        });
-      }
+            color: 'lightGreen',
+          },
+          {
+            type: 'column',
+            name: 'Volume',
+            data: volume,
+            yAxis: 1,
+          },
+        ],
+      });
     }
   }, [candles]);
 
