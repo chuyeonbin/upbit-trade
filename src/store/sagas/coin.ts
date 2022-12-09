@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { formatISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { call, fork, put, all, takeEvery, select, takeLatest } from 'redux-saga/effects';
 import {
   getCandleByMinutes,
@@ -111,7 +111,7 @@ export function* loadCandleDataSaga(code: string) {
 export function* loadPrevCandleDataSaga() {
   yield put(loadPrevCandleDataRequest());
   const { coin }: RootState = yield select();
-  const date = new Date().toISOString();
+  const date = parseISO(coin.candles.datas[0].dateTimeKst).toISOString();
   try {
     let candles: DayCandles | WeekCandles | MonthCandles | MinuteCandles;
     switch (coin.candles.candleType) {
