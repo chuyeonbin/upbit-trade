@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { DayCandles, WeekCandles, MonthCandles, MinuteCandles } from '../../types/candle';
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
 
@@ -33,6 +34,11 @@ const initialState: CoinState = {
     prevClosingPrice: 0,
   },
 
+  candles: {
+    candleType: 'days',
+    datas: [],
+  },
+
   orderPrice: 0,
 
   loadMarketListLoading: false,
@@ -54,6 +60,14 @@ const initialState: CoinState = {
   loadSelectedCoinDataLoading: false,
   loadSelectedCoinDataDone: false,
   loadSelectedCoinDataError: null,
+
+  loadCandleDataLoading: false,
+  loadCandleDataDone: false,
+  loadCandleDataError: null,
+
+  loadPrevCandleDataLoading: false,
+  loadPrevCandleDataDone: false,
+  loadPrevCandleDataError: null,
 };
 
 const coinSlice = createSlice({
@@ -188,6 +202,85 @@ const coinSlice = createSlice({
       state.loadSelectedCoinDataLoading = false;
       state.loadSelectedCoinDataError = payload.error;
     },
+    loadCandleDataRequest: (state) => {
+      state.loadCandleDataLoading = true;
+      state.loadCandleDataDone = false;
+      state.loadCandleDataError = null;
+    },
+    loadCandleDataSuccess: (
+      state,
+      { payload }: PayloadAction<DayCandles | WeekCandles | MonthCandles | MinuteCandles>,
+    ) => {
+      state.loadCandleDataLoading = false;
+      state.loadCandleDataDone = true;
+
+      const candles: {
+        dateTimeKst: string;
+        openingPrice: number;
+        highPrice: number;
+        lowPrice: number;
+        tradePrice: number;
+        accTradeVolume: number;
+      }[] = [];
+
+      payload.forEach((candle) => {
+        candles.push({
+          dateTimeKst: candle.candle_date_time_kst,
+          openingPrice: candle.opening_price,
+          highPrice: candle.high_price,
+          lowPrice: candle.low_price,
+          tradePrice: candle.trade_price,
+          accTradeVolume: candle.candle_acc_trade_volume,
+        });
+      });
+      state.candles.datas = candles.reverse();
+    },
+    loadCandleDataFailure: (state, { payload }) => {
+      state.loadCandleDataLoading = false;
+      state.loadCandleDataError = payload.error;
+    },
+    loadPrevCandleDataRequest: (state) => {
+      state.loadPrevCandleDataLoading = true;
+      state.loadPrevCandleDataDone = false;
+      state.loadPrevCandleDataError = null;
+    },
+    loadPrevCandleDataSuccess: (
+      state,
+      { payload }: PayloadAction<DayCandles | WeekCandles | MonthCandles | MinuteCandles>,
+    ) => {
+      state.loadPrevCandleDataLoading = false;
+      state.loadPrevCandleDataDone = true;
+
+      const candles: {
+        dateTimeKst: string;
+        openingPrice: number;
+        highPrice: number;
+        lowPrice: number;
+        tradePrice: number;
+        accTradeVolume: number;
+      }[] = [];
+
+      payload.forEach((candle) => {
+        candles.push({
+          dateTimeKst: candle.candle_date_time_kst,
+          openingPrice: candle.opening_price,
+          highPrice: candle.high_price,
+          lowPrice: candle.low_price,
+          tradePrice: candle.trade_price,
+          accTradeVolume: candle.candle_acc_trade_volume,
+        });
+      });
+
+      state.candles.datas = [...candles.reverse(), ...state.candles.datas];
+    },
+
+    loadPrevCandleDataFailure: (state, { payload }) => {
+      state.loadPrevCandleDataLoading = false;
+      state.loadPrevCandleDataError = payload.error;
+    },
+    loadPrevCandleData: () => {
+      return;
+    },
     updateTickerList: (state, { payload }: PayloadAction<RealTimeTickers>) => {
       // 중복으로 들어온 코인 제거
       const tickerList = payload.filter((item, i) => {
@@ -277,6 +370,10 @@ const coinSlice = createSlice({
     changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
       state.orderPrice = payload.orderPrice;
     },
+    changeCandleData: (state, { payload }: PayloadAction<{ type: CandleType }>) => {
+      state.candles.candleType = payload.type;
+      state.candles.datas = [];
+    },
   },
 });
 
@@ -296,6 +393,13 @@ export const {
   loadSelectedCoinDataRequest,
   loadSelectedCoinDataSuccess,
   loadSelectedCoinDataFailure,
+  loadCandleDataRequest,
+  loadCandleDataSuccess,
+  loadCandleDataFailure,
+  loadPrevCandleDataRequest,
+  loadPrevCandleDataSuccess,
+  loadPrevCandleDataFailure,
+  loadPrevCandleData,
   updateTickerList,
   updateTradeList,
   updateOrderbook,
@@ -303,6 +407,7 @@ export const {
   changeSelectedCoin,
   changeSelectedMarketName,
   changeOrderPrice,
+  changeCandleData,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;

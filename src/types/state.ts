@@ -1,4 +1,4 @@
-import { Trades } from '.';
+import { CandleType, Trades } from '.';
 
 export interface SocketState {
   presentPriceSocketLoading: boolean;
@@ -72,6 +72,18 @@ export interface CoinState {
     prevClosingPrice: number;
   };
 
+  candles: {
+    candleType: CandleType;
+    datas: {
+      dateTimeKst: string;
+      openingPrice: number;
+      highPrice: number;
+      lowPrice: number;
+      tradePrice: number;
+      accTradeVolume: number;
+    }[];
+  };
+
   orderPrice: number;
 
   loadMarketListLoading: boolean;
@@ -93,6 +105,14 @@ export interface CoinState {
   loadSelectedCoinDataLoading: boolean;
   loadSelectedCoinDataDone: boolean;
   loadSelectedCoinDataError: Error | null;
+
+  loadCandleDataLoading: boolean;
+  loadCandleDataDone: boolean;
+  loadCandleDataError: Error | null;
+
+  loadPrevCandleDataLoading: boolean;
+  loadPrevCandleDataDone: boolean;
+  loadPrevCandleDataError: Error | null;
 }
 
 export default interface RootState {

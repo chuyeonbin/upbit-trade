@@ -7,6 +7,7 @@ import {
 import { startInit } from '../modules/start';
 import { RootState } from '../store';
 import coinSaga, {
+  loadCandleDataSaga,
   loadMarketList,
   loadOrderbookSaga,
   loadSelectedCoinDataSaga,
@@ -26,6 +27,7 @@ function* initSaga() {
   yield loadTradeListSaga(coin.selectedCoin.code);
   yield loadOrderbookSaga([coin.selectedCoin.code]);
   yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
+  yield loadCandleDataSaga(coin.selectedCoin.code);
 
   yield put(presentPriceSocketRequest({ codes: markets })); // 현재가 소켓 연결 요청
 

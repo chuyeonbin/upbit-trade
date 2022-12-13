@@ -1,17 +1,34 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { call, fork, put, all, takeEvery } from 'redux-saga/effects';
-import { getMarketCodes, getOrderBooks, getPresentPrice, getTrades } from '../../api';
-import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { parseISO } from 'date-fns';
+import { call, fork, put, all, takeEvery, select, throttle } from 'redux-saga/effects';
+import {
+  getCandleByMinutes,
+  getCandleByData,
+  getMarketCodes,
+  getOrderBooks,
+  getPresentPrice,
+  getTrades,
+} from '../../api';
+import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { DayCandles, MinuteCandles, MonthCandles, WeekCandles } from '../../types/candle';
 
 import {
+  changeCandleData,
   changeSelectedCoin,
   changeSelectedMarketName,
+  loadCandleDataFailure,
+  loadCandleDataRequest,
+  loadCandleDataSuccess,
   loadMarketListFailure,
   loadMarketListRequest,
   loadMarketListSuccess,
   loadOrderbookFailure,
   loadOrderbookRequest,
   loadOrderbookSuccess,
+  loadPrevCandleData,
+  loadPrevCandleDataFailure,
+  loadPrevCandleDataRequest,
+  loadPrevCandleDataSuccess,
   loadSelectedCoinDataFailure,
   loadSelectedCoinDataRequest,
   loadSelectedCoinDataSuccess,
@@ -22,6 +39,7 @@ import {
   loadTradeListRequest,
   loadTradeListSuccess,
 } from '../modules/coin';
+import { RootState } from '../store';
 
 export function* loadMarketList() {
   yield put(loadMarketListRequest());
@@ -79,11 +97,99 @@ export function* loadOrderbookSaga(codes: string[]) {
   }
 }
 
+export function* loadCandleDataSaga(code: string) {
+  yield put(loadCandleDataRequest());
+  const date = new Date().toISOString();
+  try {
+    const candles: DayCandles = yield call(getCandleByData, code, 'days', date);
+    yield put(loadCandleDataSuccess(candles));
+  } catch (error) {
+    yield put(loadCandleDataFailure({ error }));
+  }
+}
+
+export function* loadPrevCandleDataSaga() {
+  yield put(loadPrevCandleDataRequest());
+  const { coin }: RootState = yield select();
+  const date = parseISO(coin.candles.datas[0].dateTimeKst).toISOString();
+  try {
+    let candles: DayCandles | WeekCandles | MonthCandles | MinuteCandles;
+    switch (coin.candles.candleType) {
+      case 'days':
+        candles = yield call(getCandleByData<DayCandles>, coin.selectedCoin.code, 'days', date);
+        break;
+      case 'weeks':
+        candles = yield call(getCandleByData<WeekCandles>, coin.selectedCoin.code, 'weeks', date);
+        break;
+      case 'months':
+        candles = yield call(getCandleByData<MonthCandles>, coin.selectedCoin.code, 'months', date);
+        break;
+      case '1minutes':
+        candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 1, date);
+        break;
+      case '5minutes':
+        candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 5, date);
+        break;
+      case '10minutes':
+        candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 10, date);
+        break;
+      default:
+        throw new Error('알수 없는 타입입니다.' + coin.candles.candleType);
+    }
+    yield put(loadPrevCandleDataSuccess(candles));
+  } catch (error) {
+    yield put(loadPrevCandleDataFailure({ error }));
+  }
+}
+
+export function* changeCandleDataSaga({ payload }: PayloadAction<{ type: CandleType }>) {
+  yield put(loadCandleDataRequest());
+  const { coin }: RootState = yield select();
+  const date = new Date().toISOString();
+  try {
+    let candles: DayCandles | WeekCandles | MonthCandles | MinuteCandles;
+    switch (payload.type) {
+      case 'days':
+        candles = yield call(getCandleByData<DayCandles>, coin.selectedCoin.code, 'days', date);
+        break;
+      case 'weeks':
+        candles = yield call(getCandleByData<WeekCandles>, coin.selectedCoin.code, 'weeks', date);
+        break;
+      case 'months':
+        candles = yield call(getCandleByData<MonthCandles>, coin.selectedCoin.code, 'months', date);
+        break;
+      case '1minutes':
+        candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 1, date);
+        break;
+      case '5minutes':
+        candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 5, date);
+        break;
+      case '10minutes':
+        candles = yield call(getCandleByMinutes, coin.selectedCoin.code, 10, date);
+        break;
+      default:
+        throw new Error('알수 없는 타입입니다.' + payload.type);
+    }
+    yield put(loadCandleDataSuccess(candles));
+  } catch (error) {
+    yield put(loadCandleDataFailure({ error }));
+  }
+}
+
 function* changeSelectedCoinSaga({ payload }: PayloadAction<{ marketName: string; code: string }>) {
   yield loadSelectedCoinDataSaga(payload.code);
   yield loadTradeListSaga(payload.code);
   yield loadOrderbookSaga([payload.code]);
+  yield loadCandleDataSaga(payload.code);
   yield put(changeSelectedMarketName({ marketName: payload.marketName }));
+}
+
+function* watchPrevCandleDataSaga() {
+  yield throttle(500, loadPrevCandleData, loadPrevCandleDataSaga);
+}
+
+function* watchChangeCandleDataSaga() {
+  yield takeEvery(changeCandleData, changeCandleDataSaga);
 }
 
 function* watchChangeSelectedCoinSaga() {
@@ -91,5 +197,9 @@ function* watchChangeSelectedCoinSaga() {
 }
 
 export default function* coinSaga() {
-  yield all([fork(watchChangeSelectedCoinSaga)]);
+  yield all([
+    fork(watchChangeSelectedCoinSaga),
+    fork(watchChangeCandleDataSaga),
+    fork(watchPrevCandleDataSaga),
+  ]);
 }
