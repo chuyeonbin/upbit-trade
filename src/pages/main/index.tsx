@@ -41,6 +41,7 @@ const Container = styled.div`
 
 const OrderContainer = styled.div`
   display: flex;
+  margin-bottom: 10px;
 `;
 
 const LayoutA = styled.section`
