@@ -96,7 +96,6 @@ export default function CoinList() {
 }
 
 const Wrapper = styled.section`
-  width: 400px;
   background-color: white;
 `;
 
