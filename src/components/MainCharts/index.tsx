@@ -6,6 +6,7 @@ import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { changeCandleData, loadPrevCandleData } from '../../store/modules/coin';
 import { CandleType } from '../../types';
+import styled from 'styled-components';
 
 indicators(Highcharts);
 
@@ -236,13 +237,17 @@ export default function MainCharts() {
   }, [candles]);
 
   return (
-    <div>
+    <Wrapper>
       <HighchartsReact
         ref={chartComponentRef}
         highcharts={Highcharts}
         constructorType={'stockChart'}
         options={options}
       />
-    </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  margin-bottom: 10px;
+`;
