@@ -1,3 +1,54 @@
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import CoinHeader from '../../components/CoinHeader';
+import CoinList from '../../components/CoinList';
+import MainCharts from '../../components/MainCharts';
+import Order from '../../components/Order';
+import Orderbook from '../../components/Orderbook';
+import TradeList from '../../components/TradeList';
+import { startInit } from '../../store/modules/start';
+
 export default function Main() {
-  return <div>main</div>;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(startInit());
+  }, [dispatch]);
+  return (
+    <Container>
+      <LayoutA>
+        <CoinHeader />
+        <MainCharts />
+        <OrderContainer>
+          <Orderbook />
+          <Order />
+        </OrderContainer>
+        <TradeList />
+      </LayoutA>
+      <LayoutB>
+        <CoinList />
+      </LayoutB>
+    </Container>
+  );
 }
+
+const Container = styled.div`
+  margin: 5px auto;
+  display: flex;
+  width: 1400px;
+`;
+
+const OrderContainer = styled.div`
+  display: flex;
+`;
+
+const LayoutA = styled.section`
+  margin-right: 5px;
+  width: 990px;
+`;
+
+const LayoutB = styled.section`
+  margin-left: 5px;
+  flex-grow: 1;
+`;
