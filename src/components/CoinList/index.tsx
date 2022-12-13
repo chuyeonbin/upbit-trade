@@ -100,7 +100,7 @@ const Wrapper = styled.section`
 `;
 
 const CoinSerach = styled.div`
-  padding: 0.7rem;
+  padding: 0.5rem;
   display: flex;
   border-bottom: 1px solid #d5d6dc;
 `;
