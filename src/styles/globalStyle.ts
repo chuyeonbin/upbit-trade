@@ -19,6 +19,9 @@ const GlobalStyle = createGlobalStyle`
   i {
     font-style: normal;
   }
+  body {
+    background-color: #e9ecf1;
+  }
 `;
 
 export default GlobalStyle;
