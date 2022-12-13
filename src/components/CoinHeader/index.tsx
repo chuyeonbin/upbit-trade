@@ -67,6 +67,7 @@ export default function CoinHeader() {
 
 const HeaderWrapper = styled.article`
   width: 990px;
+  background-color: white;
 `;
 
 const HeaderBody = styled.div`
