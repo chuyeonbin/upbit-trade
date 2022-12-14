@@ -52,4 +52,8 @@ const LayoutA = styled.section`
 const LayoutB = styled.section`
   margin-left: 5px;
   flex-grow: 1;
+  position: sticky;
+  top: 5px;
+  height: 100vh;
+  overflow: scroll;
 `;
