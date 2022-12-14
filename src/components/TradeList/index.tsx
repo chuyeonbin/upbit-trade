@@ -64,7 +64,7 @@ export default function TradeList() {
 }
 
 const Wrapper = styled.div`
-  width: 990px;
+  background-color: white;
 `;
 
 const Tabs = styled.ul`

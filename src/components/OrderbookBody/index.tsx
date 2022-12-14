@@ -48,4 +48,7 @@ export default function OrderbookBody({ orderbook }: OrderbookBodyProps) {
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  height: 600px;
+  overflow: scroll;
+`;

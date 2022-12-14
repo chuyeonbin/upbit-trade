@@ -19,5 +19,7 @@ export default function Orderbook() {
 }
 
 const Wrapper = styled.section`
-  width: 500px;
+  margin-right: 5px;
+  width: 50%;
+  background-color: white;
 `;

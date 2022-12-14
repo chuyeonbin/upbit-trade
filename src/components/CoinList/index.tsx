@@ -96,11 +96,11 @@ export default function CoinList() {
 }
 
 const Wrapper = styled.section`
-  width: 400px;
+  background-color: white;
 `;
 
 const CoinSerach = styled.div`
-  padding: 0.7rem;
+  padding: 0.5rem;
   display: flex;
   border-bottom: 1px solid #d5d6dc;
 `;

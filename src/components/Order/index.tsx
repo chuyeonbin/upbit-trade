@@ -83,7 +83,9 @@ export default function Order() {
 }
 
 const Wrapper = styled.section`
-  width: 495px;
+  margin-left: 5px;
+  width: 50%;
+  background-color: white;
 `;
 
 const TabList = styled.ul`
