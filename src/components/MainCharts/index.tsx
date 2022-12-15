@@ -97,9 +97,9 @@ export default function MainCharts() {
   const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
   const code = useAppSelector((state) => state.coin.selectedCoin.code);
   const candles = useAppSelector((state) => state.coin.candles);
-  const { loadCandleDataLoading, loadPrevCandleDataLoading } = useAppSelector(
-    (state) => state.coin,
-  );
+  const loadCandleDataLoading = useAppSelector((state) => state.coin.loadCandleDataLoading);
+
+  const loadPrevCandleDataLoading = useAppSelector((state) => state.coin.loadPrevCandleDataLoading);
 
   const handleClick = (type: CandleType) => (e: Event) => {
     dispatch(changeCandleData({ type }));
