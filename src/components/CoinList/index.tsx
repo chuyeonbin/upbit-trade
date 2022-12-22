@@ -13,7 +13,7 @@ export default function CoinList() {
   const dispatch = useDispatch();
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const marketList = useAppSelector((state) => state.coin.marketList);
+  const searchMarketList = useAppSelector((state) => state.coin.searchMarketList);
 
   const tickerList = useAppSelector((state) => state.coin.tickerList);
 
@@ -56,7 +56,7 @@ export default function CoinList() {
         </CoinHead>
         {Object.keys(tickerList).length > 0 ? (
           <CoinBody>
-            {marketList.map((value) => (
+            {searchMarketList.map((value) => (
               <CoinRow
                 onClick={() => handleCoinItemClick(value.koreanName, value.code)}
                 change={tickerList[value.code].signedChangePrice}

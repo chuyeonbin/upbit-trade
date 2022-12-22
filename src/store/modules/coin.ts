@@ -7,6 +7,8 @@ import { CoinState } from '../../types/state';
 const initialState: CoinState = {
   marketList: [],
 
+  searchMarketList: [],
+
   tickerList: {},
 
   tradeList: [],
@@ -93,6 +95,8 @@ const coinSlice = createSlice({
           });
         }
       });
+
+      state.searchMarketList = [...state.marketList];
     },
     loadMarketListFailure: (state, { payload }) => {
       state.loadMarketListLoading = false;
