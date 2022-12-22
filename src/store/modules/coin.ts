@@ -3,6 +3,7 @@ import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../.
 import { DayCandles, WeekCandles, MonthCandles, MinuteCandles } from '../../types/candle';
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
+import { createFuzzyMatcher } from '../../utils';
 
 const initialState: CoinState = {
   marketList: [],
@@ -378,6 +379,21 @@ const coinSlice = createSlice({
       state.candles.candleType = payload.type;
       state.candles.datas = [];
     },
+    searchMarketName: (state, { payload }: PayloadAction<{ word: string }>) => {
+      if (payload.word === '') {
+        state.searchMarketList = [...state.marketList];
+        return;
+      }
+      const regex = createFuzzyMatcher(payload.word);
+      const searchMarketList = [];
+
+      for (let i = 0; i < state.marketList.length; i++) {
+        if (regex.test(state.marketList[i].koreanName)) {
+          searchMarketList.push(state.marketList[i]);
+        }
+      }
+      state.searchMarketList = searchMarketList;
+    },
   },
 });
 
@@ -412,6 +428,7 @@ export const {
   changeSelectedMarketName,
   changeOrderPrice,
   changeCandleData,
+  searchMarketName,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
