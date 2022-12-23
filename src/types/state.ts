@@ -21,6 +21,12 @@ export interface CoinState {
     englishName: string;
   }[];
 
+  searchMarketList: {
+    code: string;
+    koreanName: string;
+    englishName: string;
+  }[];
+
   tickerList: {
     [key: string]: {
       tradePrice: number;

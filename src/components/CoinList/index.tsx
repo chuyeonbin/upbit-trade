@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import StarIcon from '@mui/icons-material/Star';
@@ -7,13 +7,13 @@ import { useAppSelector } from '../../store/store';
 import { dayToDayFormat, signedChangePriceFormat, tradingValueFormat } from '../../utils';
 import Price from './Price';
 import { useDispatch } from 'react-redux';
-import { changeSelectedCoin } from '../../store/modules/coin';
+import { changeSelectedCoin, searchMarketName } from '../../store/modules/coin';
 
 export default function CoinList() {
   const dispatch = useDispatch();
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
-  const marketList = useAppSelector((state) => state.coin.marketList);
+  const searchMarketList = useAppSelector((state) => state.coin.searchMarketList);
 
   const tickerList = useAppSelector((state) => state.coin.tickerList);
 
@@ -30,10 +30,15 @@ export default function CoinList() {
     }
   };
 
+  const handleChangeSearchMarketList = (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    dispatch(searchMarketName({ word: target.value }));
+  };
+
   return (
     <Wrapper>
       <CoinSerach>
-        <SearchInput placeholder='코인명/심볼검색' />
+        <SearchInput placeholder='코인명 검색' onChange={handleChangeSearchMarketList} />
         <SearchIcon sx={{ fontSize: 26, cursor: 'pointer' }} color='primary' />
       </CoinSerach>
       <TabList>
@@ -56,7 +61,7 @@ export default function CoinList() {
         </CoinHead>
         {Object.keys(tickerList).length > 0 ? (
           <CoinBody>
-            {marketList.map((value) => (
+            {searchMarketList.map((value) => (
               <CoinRow
                 onClick={() => handleCoinItemClick(value.koreanName, value.code)}
                 change={tickerList[value.code].signedChangePrice}
