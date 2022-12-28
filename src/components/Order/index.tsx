@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { changeOrderPrice } from '../../store/modules/coin';
@@ -25,6 +25,14 @@ export default function Order() {
   const handleChangeOrderPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const orderPrice = Number(e.target.value.replace(/[^0-9]/g, ''));
     dispatch(changeOrderPrice({ orderPrice }));
+  };
+
+  const handleChangeOrderCount = () => {
+    if (orderCountRef.current && totalPriceRef.current) {
+      if (!isNaN(Number(orderCountRef.current.value))) {
+        totalPriceRef.current.value = `${Number(orderCountRef.current.value) * orderPrice}`;
+      }
+    }
   };
 
   const handleChangeTotalPrice = () => {
@@ -81,7 +89,12 @@ export default function Order() {
           주문수량<i>({code.substring(4)})</i>
         </Dt>
         <Dd>
-          <Input type='text' placeholder='0' ref={orderCountRef} />
+          <Input
+            type='text'
+            placeholder='0'
+            ref={orderCountRef}
+            onChange={handleChangeOrderCount}
+          />
         </Dd>
         <Dt>
           주문총액<i>(KRW)</i>
