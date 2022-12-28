@@ -60,6 +60,7 @@ export default function Order() {
             <a
               href='#'
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                e.preventDefault();
                 const target = e.target as HTMLLIElement;
                 handleTabClick(index, target.title);
               }}

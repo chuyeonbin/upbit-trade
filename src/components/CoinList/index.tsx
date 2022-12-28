@@ -44,7 +44,7 @@ export default function CoinList() {
       <TabList>
         {tabList.map((tab, index) => (
           <TabItem key={tab} onClick={() => handleTabClick(index)} selected={selectedTab === index}>
-            <a href='#'>{tab}</a>
+            <span>{tab}</span>
           </TabItem>
         ))}
       </TabList>
@@ -128,7 +128,7 @@ const TabItem = styled.li<{ selected: boolean }>`
   border-bottom: ${({ selected }) => (selected ? '3px' : '1px')} solid
     ${({ selected }) => (selected ? '#1976d2' : '#d5d6dc')};
 
-  & > a {
+  & > span {
     height: 42px;
     display: block;
     line-height: 42px;
