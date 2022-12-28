@@ -10,6 +10,7 @@ const tabList = ['매수', '매도', '거래내역'];
 export default function Order() {
   const dispatch = useDispatch();
   const orderPrice = useAppSelector((state) => state.coin.orderPrice);
+  const code = useAppSelector((state) => state.coin.selectedCoin.code);
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [askBid, setAskBid] = useState('매수');
@@ -65,7 +66,7 @@ export default function Order() {
           </InputWrapper>
         </Dd>
         <Dt>
-          주문수량<i>(BTC)</i>
+          주문수량<i>({code.substring(4)})</i>
         </Dt>
         <Dd>
           <Input type='text' placeholder='0' />
