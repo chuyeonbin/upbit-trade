@@ -202,6 +202,8 @@ const coinSlice = createSlice({
       state.selectedCoin.accTradeVolume24h = payload[0].acc_trade_volume_24h;
       state.selectedCoin.accTradePrice24h = payload[0].acc_trade_price_24h;
       state.selectedCoin.prevClosingPrice = payload[0].prev_closing_price;
+
+      state.orderPrice = payload[0].trade_price;
     },
     loadSelectedCoinDataFailure: (state, { payload }) => {
       state.loadSelectedCoinDataLoading = false;

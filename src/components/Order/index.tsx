@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { changeOrderPrice } from '../../store/modules/coin';
@@ -9,7 +9,10 @@ const tabList = ['매수', '매도', '거래내역'];
 
 export default function Order() {
   const dispatch = useDispatch();
+  const orderCountRef = useRef<HTMLInputElement>(null);
+  const totalPriceRef = useRef<HTMLInputElement>(null);
   const orderPrice = useAppSelector((state) => state.coin.orderPrice);
+  const code = useAppSelector((state) => state.coin.selectedCoin.code);
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [askBid, setAskBid] = useState('매수');
@@ -24,6 +27,31 @@ export default function Order() {
     dispatch(changeOrderPrice({ orderPrice }));
   };
 
+  const handleChangeOrderCount = () => {
+    if (orderCountRef.current && totalPriceRef.current) {
+      if (!isNaN(Number(orderCountRef.current.value))) {
+        totalPriceRef.current.value = `${Number(orderCountRef.current.value) * orderPrice}`;
+      }
+    }
+  };
+
+  const handleChangeTotalPrice = () => {
+    if (orderCountRef.current && totalPriceRef.current) {
+      if (!isNaN(Number(totalPriceRef.current.value))) {
+        orderCountRef.current.value = `${(Number(totalPriceRef.current.value) / orderPrice).toFixed(
+          8,
+        )}`;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (orderCountRef.current && totalPriceRef.current) {
+      orderCountRef.current.value = '';
+      totalPriceRef.current.value = '';
+    }
+  }, [orderPrice]);
+
   return (
     <Wrapper>
       <TabList>
@@ -32,6 +60,7 @@ export default function Order() {
             <a
               href='#'
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                e.preventDefault();
                 const target = e.target as HTMLLIElement;
                 handleTabClick(index, target.title);
               }}
@@ -65,16 +94,26 @@ export default function Order() {
           </InputWrapper>
         </Dd>
         <Dt>
-          주문수량<i>(BTC)</i>
+          주문수량<i>({code.substring(4)})</i>
         </Dt>
         <Dd>
-          <Input type='text' placeholder='0' />
+          <Input
+            type='text'
+            placeholder='0'
+            ref={orderCountRef}
+            onChange={handleChangeOrderCount}
+          />
         </Dd>
         <Dt>
           주문총액<i>(KRW)</i>
         </Dt>
         <Dd>
-          <Input type='text' placeholder='0' />
+          <Input
+            type='text'
+            placeholder='0'
+            ref={totalPriceRef}
+            onChange={handleChangeTotalPrice}
+          />
         </Dd>
         <AskBidButton askbid={askBid}>{askBid === '매수' ? '매수' : '매도'}</AskBidButton>
       </Dl>
