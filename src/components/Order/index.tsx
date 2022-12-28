@@ -45,6 +45,13 @@ export default function Order() {
     }
   };
 
+  useEffect(() => {
+    if (orderCountRef.current && totalPriceRef.current) {
+      orderCountRef.current.value = '';
+      totalPriceRef.current.value = '';
+    }
+  }, [orderPrice]);
+
   return (
     <Wrapper>
       <TabList>
