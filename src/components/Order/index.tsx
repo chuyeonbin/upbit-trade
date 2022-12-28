@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { changeOrderPrice } from '../../store/modules/coin';
@@ -9,6 +9,8 @@ const tabList = ['매수', '매도', '거래내역'];
 
 export default function Order() {
   const dispatch = useDispatch();
+  const orderCountRef = useRef<HTMLInputElement>(null);
+  const totalPriceRef = useRef<HTMLInputElement>(null);
   const orderPrice = useAppSelector((state) => state.coin.orderPrice);
   const code = useAppSelector((state) => state.coin.selectedCoin.code);
 
@@ -23,6 +25,16 @@ export default function Order() {
   const handleChangeOrderPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const orderPrice = Number(e.target.value.replace(/[^0-9]/g, ''));
     dispatch(changeOrderPrice({ orderPrice }));
+  };
+
+  const handleChangeTotalPrice = () => {
+    if (orderCountRef.current && totalPriceRef.current) {
+      if (!isNaN(Number(totalPriceRef.current.value))) {
+        orderCountRef.current.value = `${(Number(totalPriceRef.current.value) / orderPrice).toFixed(
+          8,
+        )}`;
+      }
+    }
   };
 
   return (
@@ -69,13 +81,18 @@ export default function Order() {
           주문수량<i>({code.substring(4)})</i>
         </Dt>
         <Dd>
-          <Input type='text' placeholder='0' />
+          <Input type='text' placeholder='0' ref={orderCountRef} />
         </Dd>
         <Dt>
           주문총액<i>(KRW)</i>
         </Dt>
         <Dd>
-          <Input type='text' placeholder='0' />
+          <Input
+            type='text'
+            placeholder='0'
+            ref={totalPriceRef}
+            onChange={handleChangeTotalPrice}
+          />
         </Dd>
         <AskBidButton askbid={askBid}>{askBid === '매수' ? '매수' : '매도'}</AskBidButton>
       </Dl>
