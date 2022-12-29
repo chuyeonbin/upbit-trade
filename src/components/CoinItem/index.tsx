@@ -26,21 +26,14 @@ export default memo(function CoinItem({ code, koreanName, englishName, coin }: C
 
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
 
-  const handleCoinItemClick = useCallback(
-    (marketName: string, code: string) => {
-      if (selectedCoin.marketName !== marketName) {
-        dispatch(changeSelectedCoin({ marketName, code }));
-      }
-    },
-    [selectedCoin],
-  );
+  const handleCoinItemClick = useCallback(() => {
+    if (selectedCoin.marketName !== koreanName) {
+      dispatch(changeSelectedCoin({ marketName: koreanName, code }));
+    }
+  }, [selectedCoin]);
 
   return (
-    <CoinRow
-      onClick={() => handleCoinItemClick(koreanName, code)}
-      change={coin.signedChangePrice}
-      key={englishName}
-    >
+    <CoinRow onClick={handleCoinItemClick} change={coin.signedChangePrice} key={englishName}>
       <CoinCell sx={{ '&&': { p: '0 14px' } }}>
         <Star style={{ fontSize: '16px' }} />
       </CoinCell>
