@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { changeSelectedCoin } from '../../store/modules/coin';
@@ -12,12 +12,17 @@ interface CoinItemProps {
   code: string;
   koreanName: string;
   englishName: string;
+  coin: {
+    tradePrice: number;
+    changePrice: number;
+    accTradePrice24h: number;
+    prevClosingPrice: number;
+    signedChangePrice: number;
+  };
 }
 
-export default function CoinItem({ code, koreanName, englishName }: CoinItemProps) {
+export default memo(function CoinItem({ code, koreanName, englishName, coin }: CoinItemProps) {
   const dispatch = useDispatch();
-
-  const tickerList = useAppSelector((state) => state.coin.tickerList);
 
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
 
@@ -33,7 +38,7 @@ export default function CoinItem({ code, koreanName, englishName }: CoinItemProp
   return (
     <CoinRow
       onClick={() => handleCoinItemClick(koreanName, code)}
-      change={tickerList[code].signedChangePrice}
+      change={coin.signedChangePrice}
       key={englishName}
     >
       <CoinCell sx={{ '&&': { p: '0 14px' } }}>
@@ -43,20 +48,18 @@ export default function CoinItem({ code, koreanName, englishName }: CoinItemProp
         <p style={{ cursor: 'pointer' }}>{koreanName}</p>
         <p style={{ fontSize: '10px', color: '#666' }}>{code.substring(4)}/KRW</p>
       </CoinCell>
-      <Price price={tickerList[code].tradePrice} />
+      <Price price={coin.tradePrice} />
       <CoinCell>
-        <p>
-          {dayToDayFormat(tickerList[code].signedChangePrice, tickerList[code].prevClosingPrice)}%
-        </p>
-        <p>{signedChangePriceFormat(tickerList[code].signedChangePrice)}</p>
+        <p>{dayToDayFormat(coin.signedChangePrice, coin.prevClosingPrice)}%</p>
+        <p>{signedChangePriceFormat(coin.signedChangePrice)}</p>
       </CoinCell>
       <CoinCell>
-        {tradingValueFormat(tickerList[code].accTradePrice24h)}
+        {tradingValueFormat(coin.accTradePrice24h)}
         <i>백만</i>
       </CoinCell>
     </CoinRow>
   );
-}
+});
 
 const CoinCell = styled(TableCell)`
   height: 45px;

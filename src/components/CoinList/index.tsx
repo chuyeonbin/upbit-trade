@@ -57,6 +57,7 @@ export default function CoinList() {
                 code={value.code}
                 koreanName={value.koreanName}
                 englishName={value.englishName}
+                coin={tickerList[value.code]}
               />
             ))}
           </CoinBody>
