@@ -18,7 +18,7 @@ export default function CoinList() {
 
   const tickerList = useAppSelector((state) => state.coin.tickerList);
 
-  const handleTabClick = (index: number) => setSelectedTab(index);
+  const handleTabClick = useCallback((index: number) => setSelectedTab(index), []);
 
   const handleChangeSearchMarketList = useCallback((e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
