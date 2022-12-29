@@ -1,6 +1,6 @@
 import { TableCell } from '@mui/material';
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 interface PriceProps {
   price: number;
@@ -31,12 +31,23 @@ const Highlight = styled.span`
   height: 94%;
 `;
 
+const borderColor = (color: string) => keyframes`
+  0% {
+    border: 1px solid ${color};
+  }
+  100% {
+    border: 1px solid ${color};
+  }
+`;
+
 const Up = styled(Highlight)`
-  border: 1px solid ${({ theme }) => theme.colors.lightRed};
+  border: 1px solid transparent;
+  animation: ${({ theme }) => borderColor(theme.colors.lightRed)} 0.5s;
 `;
 
 const Down = styled(Highlight)`
-  border: 1px solid ${({ theme }) => theme.colors.lightBlue};
+  border: 1px solid transparent;
+  animation: ${({ theme }) => borderColor(theme.colors.lightBlue)} 0.5s;
 `;
 
 const CoinCell = styled(TableCell)`
