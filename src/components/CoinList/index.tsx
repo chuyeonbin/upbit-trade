@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import StarIcon from '@mui/icons-material/Star';
@@ -24,16 +24,19 @@ export default function CoinList() {
 
   const handleTabClick = (index: number) => setSelectedTab(index);
 
-  const handleCoinItemClick = (marketName: string, code: string) => {
-    if (selectedCoin.marketName !== marketName) {
-      dispatch(changeSelectedCoin({ marketName, code }));
-    }
-  };
+  const handleCoinItemClick = useCallback(
+    (marketName: string, code: string) => {
+      if (selectedCoin.marketName !== marketName) {
+        dispatch(changeSelectedCoin({ marketName, code }));
+      }
+    },
+    [selectedCoin],
+  );
 
-  const handleChangeSearchMarketList = (e: ChangeEvent) => {
+  const handleChangeSearchMarketList = useCallback((e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     dispatch(searchMarketName({ word: target.value }));
-  };
+  }, []);
 
   return (
     <Wrapper>
