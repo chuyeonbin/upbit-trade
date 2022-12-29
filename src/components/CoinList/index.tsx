@@ -1,13 +1,14 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
-import StarIcon from '@mui/icons-material/Star';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useAppSelector } from '../../store/store';
-import { dayToDayFormat, signedChangePriceFormat, tradingValueFormat } from '../../utils';
-import Price from './Price';
 import { useDispatch } from 'react-redux';
-import { changeSelectedCoin, searchMarketName } from '../../store/modules/coin';
+import { searchMarketName } from '../../store/modules/coin';
+import CoinItem from '../CoinItem';
+
+const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
+const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
 
 export default function CoinList() {
   const dispatch = useDispatch();
@@ -17,21 +18,7 @@ export default function CoinList() {
 
   const tickerList = useAppSelector((state) => state.coin.tickerList);
 
-  const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
-
-  const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
-  const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
-
   const handleTabClick = (index: number) => setSelectedTab(index);
-
-  const handleCoinItemClick = useCallback(
-    (marketName: string, code: string) => {
-      if (selectedCoin.marketName !== marketName) {
-        dispatch(changeSelectedCoin({ marketName, code }));
-      }
-    },
-    [selectedCoin],
-  );
 
   const handleChangeSearchMarketList = useCallback((e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
@@ -65,39 +52,15 @@ export default function CoinList() {
         {Object.keys(tickerList).length > 0 ? (
           <CoinBody>
             {searchMarketList.map((value) => (
-              <CoinRow
-                onClick={() => handleCoinItemClick(value.koreanName, value.code)}
-                change={tickerList[value.code].signedChangePrice}
-                key={value.englishName}
-              >
-                <CoinCell sx={{ '&&': { p: '0 14px' } }}>
-                  <Star style={{ fontSize: '16px' }} />
-                </CoinCell>
-                <CoinCell>
-                  <p style={{ cursor: 'pointer' }}>{value.koreanName}</p>
-                  <p style={{ fontSize: '10px', color: '#666' }}>{value.code.substring(4)}/KRW</p>
-                </CoinCell>
-                <Price price={tickerList[value.code].tradePrice} />
-                <CoinCell>
-                  <p>
-                    {dayToDayFormat(
-                      tickerList[value.code].signedChangePrice,
-                      tickerList[value.code].prevClosingPrice,
-                    )}
-                    %
-                  </p>
-                  <p>{signedChangePriceFormat(tickerList[value.code].signedChangePrice)}</p>
-                </CoinCell>
-                <CoinCell>
-                  {tradingValueFormat(tickerList[value.code].accTradePrice24h)}
-                  <i>백만</i>
-                </CoinCell>
-              </CoinRow>
+              <CoinItem
+                key={value.code}
+                code={value.code}
+                koreanName={value.koreanName}
+                englishName={value.englishName}
+              />
             ))}
           </CoinBody>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </CoinTable>
     </Wrapper>
   );
@@ -167,22 +130,6 @@ const CoinHead = styled(TableHead)`
     }
   }
 `;
-
-const CoinCell = styled(TableCell)`
-  height: 45px;
-
-  && {
-    padding: 0;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 500;
-  }
-
-  & > i {
-    color: #666;
-  }
-`;
-
 const CoinBody = styled(TableBody)`
   & > tr > td:nth-child(1) {
     display: flex;
@@ -202,22 +149,4 @@ const CoinBody = styled(TableBody)`
   & > tr > td:nth-child(5) {
     color: black;
   }
-`;
-
-const CoinRow = styled(TableRow)<{ change: number }>`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
-  &:hover {
-    background-color: #f4f5f8;
-  }
-
-  & > td {
-    color: ${({ change, theme }) =>
-      change > 0 ? theme.colors.lightRed : change < 0 ? theme.colors.lightBlue : 'black'};
-    border-bottom: 0;
-  }
-`;
-
-const Star = styled(StarIcon)`
-  color: #ddd;
-  cursor: pointer;
 `;
