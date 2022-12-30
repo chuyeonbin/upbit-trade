@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/upbit-trade/static/js/main.99cd887c.js",
+    "index.html": "/upbit-trade/index.html",
+    "main.99cd887c.js.map": "/upbit-trade/static/js/main.99cd887c.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.99cd887c.js"
+  ]
+}
