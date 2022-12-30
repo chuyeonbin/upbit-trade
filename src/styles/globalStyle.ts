@@ -10,10 +10,17 @@ const GlobalStyle = createGlobalStyle`
   }
   ul {
     list-style: none;
+    padding: 0;
   }
   a {
     text-decoration: none;
     color: black;
+  }
+  i {
+    font-style: normal;
+  }
+  body {
+    background-color: #e9ecf1;
   }
 `;
 

@@ -1,5 +1,11 @@
-function App() {
-  return <div>upbit-clone</div>;
-}
+import Header from './components/Header';
+import DefaultRouter from './routes/DefaultRouter';
 
-export default App;
+export default function App() {
+  return (
+    <>
+      <Header />
+      <DefaultRouter />
+    </>
+  );
+}
