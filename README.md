@@ -8,6 +8,8 @@
 
 [4. 기술스택](#4-기술스택)
 
+[5. 주요 기능](#5-주요-기능)
+
 ## 1. 배포
 https://chuyeonbin.github.io/upbit-trade
 
@@ -25,3 +27,8 @@ yarn start
 <p>websocket과 redux-saga를 공부하면서 개인 프로젝트를 같이 진행 해보고 싶어서 만들게 되었습니다.</p>
 
 ## 4. 기술스택
+<img src=https://img.shields.io/badge/Typescript-v4.4.2-3178C6 /> <img src=https://img.shields.io/badge/React-v18.2.0-61DAFB /> <img src=https://img.shields.io/badge/redux_toolkit-v1.8.5-764ABC /> <img src=https://img.shields.io/badge/redux_saga-v1.2.1-999999 /> <img src=https://img.shields.io/badge/styled_components-v5.3.5-DB7093 /> <img src=https://img.shields.io/badge/material_ui-v5.10.8-007FFF /> <img src=https://img.shields.io/badge/highcharts-v10.3.1-EE672F />
+
+
+## 5. 주요 기능
+
