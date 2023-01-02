@@ -177,10 +177,12 @@ export function* changeCandleDataSaga({ payload }: PayloadAction<{ type: CandleT
 }
 
 function* changeSelectedCoinSaga({ payload }: PayloadAction<{ marketName: string; code: string }>) {
-  yield loadSelectedCoinDataSaga(payload.code);
-  yield loadTradeListSaga(payload.code);
-  yield loadOrderbookSaga([payload.code]);
-  yield loadCandleDataSaga(payload.code);
+  yield all([
+    loadSelectedCoinDataSaga(payload.code),
+    loadTradeListSaga(payload.code),
+    loadOrderbookSaga([payload.code]),
+    loadCandleDataSaga(payload.code),
+  ]);
   yield put(changeSelectedMarketName({ marketName: payload.marketName }));
 }
 
