@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { CandleType, MarketList, Orderbooks, PresentPrices, Trades } from '../../types';
 import { DayCandles, WeekCandles, MonthCandles, MinuteCandles } from '../../types/candle';
 import { RealTimeOrderbooks, RealTimeTickers, RealTimeTrades } from '../../types/realTime';
 import { CoinState } from '../../types/state';
@@ -82,7 +82,7 @@ const coinSlice = createSlice({
       state.loadMarketListDone = false;
       state.loadMarketListError = null;
     },
-    loadMarketListSuccess: (state, { payload }: PayloadAction<MarketCodes>) => {
+    loadMarketListSuccess: (state, { payload }: PayloadAction<MarketList>) => {
       state.loadMarketListLoading = false;
       state.loadMarketListDone = true;
 
