@@ -91,7 +91,7 @@ const initialOptions: Highcharts.Options = {
   },
 };
 
-export default function MainChart() {
+export default function MainCharts() {
   const dispatch = useDispatch();
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
