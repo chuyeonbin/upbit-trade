@@ -21,7 +21,7 @@ function* initSaga() {
 
   const { coin }: RootState = yield select();
 
-  const markets = coin.marketList.map((value) => value.code);
+  const markets = coin.marketList.KRW.map((marketData) => marketData.market);
 
   yield loadTickerList(markets);
   yield loadTradeListSaga(coin.selectedCoin.code);

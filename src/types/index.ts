@@ -1,11 +1,11 @@
-export interface MarketCode {
+export interface Market {
   market: string;
   korean_name: string;
   english_name: string;
   market_warning?: string;
 }
 
-export type MarketCodes = MarketCode[];
+export type MarketList = Market[];
 
 export interface Trade {
   market: string;
