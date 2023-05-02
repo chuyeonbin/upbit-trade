@@ -91,7 +91,7 @@ const coinSlice = createSlice({
       state.loadMarketListDone = true;
 
       payload.forEach((marketData) => {
-        const marketCode = marketData.market.substring(0, 3);
+        const marketCode = marketData.market.substring(0, marketData.market.indexOf('-'));
         switch (marketCode) {
           case 'KRW':
           case 'BTC':
