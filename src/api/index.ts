@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { MinuteCandles, Unit } from '../types/candle';
-import { MarketCodes, Orderbooks, PresentPrices, Trades } from '../types';
+import { MarketList, Orderbooks, PresentPrices, Trades } from '../types';
 
 const BASE_URL = 'https://api.upbit.com/v1';
 
-export async function getMarketCodes(): Promise<MarketCodes> {
+export async function getMarketList(): Promise<MarketList> {
   const query = '/market/all?isDetails=false';
   const response = await axios.get(BASE_URL + query);
   return response.data;
