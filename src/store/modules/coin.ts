@@ -6,7 +6,11 @@ import { CoinState } from '../../types/state';
 import { createFuzzyMatcher } from '../../utils';
 
 const initialState: CoinState = {
-  marketList: [],
+  marketList: {
+    KRW: [],
+    BTC: [],
+    USDT: [],
+  },
 
   searchMarketList: [],
 
@@ -86,18 +90,35 @@ const coinSlice = createSlice({
       state.loadMarketListLoading = false;
       state.loadMarketListDone = true;
 
-      // market이 KRW로 시작하는거만 필터링
-      payload.forEach((data) => {
-        if (data.market.substring(0, 3) === 'KRW') {
-          state.marketList.push({
-            code: data.market,
-            koreanName: data.korean_name,
-            englishName: data.english_name,
-          });
+      payload.forEach((marketData) => {
+        const marketCode = marketData.market.substring(0, 3);
+        switch (marketCode) {
+          case 'KRW':
+          case 'BTC':
+          case 'USDT':
+            state.marketList[marketCode].push({
+              market: marketData.market,
+              code: marketCode,
+              koreanName: marketData.korean_name,
+              englishName: marketData.english_name,
+            });
+            break;
+          default:
+            throw new Error(`${marketCode}의 code는 state로 저장할 수 없습니다.`);
         }
       });
 
-      state.searchMarketList = [...state.marketList];
+      // payload.forEach((data) => {
+      //   if (data.market.substring(0, 3) === 'KRW') {
+      //     state.marketList.push({
+      //       code: data.market,
+      //       koreanName: data.korean_name,
+      //       englishName: data.english_name,
+      //     });
+      //   }
+      // });
+
+      // state.searchMarketList = [...state.marketList];
     },
     loadMarketListFailure: (state, { payload }) => {
       state.loadMarketListLoading = false;
@@ -382,19 +403,18 @@ const coinSlice = createSlice({
       state.candles.datas = [];
     },
     searchMarketName: (state, { payload }: PayloadAction<{ word: string }>) => {
-      if (payload.word === '') {
-        state.searchMarketList = [...state.marketList];
-        return;
-      }
-      const regex = createFuzzyMatcher(payload.word);
-      const searchMarketList = [];
-
-      for (let i = 0; i < state.marketList.length; i++) {
-        if (regex.test(state.marketList[i].koreanName)) {
-          searchMarketList.push(state.marketList[i]);
-        }
-      }
-      state.searchMarketList = searchMarketList;
+      // if (payload.word === '') {
+      //   state.searchMarketList = [...state.marketList];
+      //   return;
+      // }
+      // const regex = createFuzzyMatcher(payload.word);
+      // const searchMarketList = [];
+      // for (let i = 0; i < state.marketList.length; i++) {
+      //   if (regex.test(state.marketList[i].koreanName)) {
+      //     searchMarketList.push(state.marketList[i]);
+      //   }
+      // }
+      // state.searchMarketList = searchMarketList;
     },
   },
 });
