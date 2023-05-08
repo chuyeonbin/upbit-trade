@@ -1,11 +1,11 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '@mui/icons-material/Search';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { searchMarketName } from '../../store/modules/coin';
 import CoinItem from '../CoinItem';
+import SearchCoin from './SearchCoin';
 
 const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
 const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
@@ -20,17 +20,14 @@ export default function CoinList() {
 
   const handleTabClick = useCallback((index: number) => setSelectedTab(index), []);
 
-  const handleChangeSearchMarketList = useCallback((e: ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    dispatch(searchMarketName({ word: target.value }));
+  const handleChangeSearchMarketList = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    dispatch(searchMarketName({ word: value }));
   }, []);
 
   return (
     <Wrapper>
-      <CoinSerach>
-        <SearchInput placeholder='코인명 검색' onChange={handleChangeSearchMarketList} />
-        <SearchIcon sx={{ fontSize: 26, cursor: 'pointer' }} color='primary' />
-      </CoinSerach>
+      <SearchCoin onChange={handleChangeSearchMarketList} />
       <TabList>
         {tabList.map((tab, index) => (
           <TabItem key={tab} onClick={() => handleTabClick(index)} selected={selectedTab === index}>
@@ -69,16 +66,6 @@ export default function CoinList() {
 
 const Wrapper = styled.section`
   background-color: white;
-`;
-
-const CoinSerach = styled.div`
-  padding: 0.5rem;
-  display: flex;
-  border-bottom: 1px solid #d5d6dc;
-`;
-
-const SearchInput = styled.input`
-  flex-grow: 1;
 `;
 
 const TabList = styled.ul`
