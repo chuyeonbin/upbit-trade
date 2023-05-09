@@ -36,15 +36,15 @@ export default function CoinList() {
       </TabList>
       <Table>
         <TableHead>
-          <TableRow>
-            <TableCell />
+          <tr>
+            <td />
             {tableHead.map((value) => (
-              <TableCell key={value}>{value}</TableCell>
+              <td key={value}>{value}</td>
             ))}
-          </TableRow>
+          </tr>
         </TableHead>
         {Object.keys(tickerList).length > 0 ? (
-          <TableBody>
+          <tbody>
             {searchMarketList.map((marketData) => (
               <CoinItem
                 key={marketData.market}
@@ -54,7 +54,7 @@ export default function CoinList() {
                 coin={tickerList[marketData.market]}
               />
             ))}
-          </TableBody>
+          </tbody>
         ) : null}
       </Table>
     </Wrapper>
@@ -110,9 +110,3 @@ const TableHead = styled.thead`
   color: ${({ theme }) => theme.colors.darkGray};
   cursor: pointer;
 `;
-
-const TableRow = styled.tr``;
-
-const TableCell = styled.td``;
-
-const TableBody = styled.tbody``;
