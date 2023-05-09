@@ -2,11 +2,11 @@ import { TableCell } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-interface PriceProps {
+interface PriceCellProps {
   price: number;
 }
 
-export default function Price({ price }: PriceProps) {
+export default function PriceCell({ price }: PriceCellProps) {
   const prevPriceRef = useRef(price);
 
   useEffect(() => {
