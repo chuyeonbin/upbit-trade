@@ -1,6 +1,5 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { searchMarketName } from '../../store/modules/coin';
@@ -35,31 +34,29 @@ export default function CoinList() {
           </TabItem>
         ))}
       </TabList>
-      <CoinTable>
-        <CoinHead>
+      <Table>
+        <TableHead>
           <TableRow>
-            <TableCell sx={{ border: 0 }} />
+            <TableCell />
             {tableHead.map((value) => (
-              <TableCell key={value} sx={{ border: 0 }}>
-                {value}
-              </TableCell>
+              <TableCell key={value}>{value}</TableCell>
             ))}
           </TableRow>
-        </CoinHead>
+        </TableHead>
         {Object.keys(tickerList).length > 0 ? (
-          <CoinBody>
-            {searchMarketList.map((value) => (
+          <TableBody>
+            {searchMarketList.map((marketData) => (
               <CoinItem
-                key={value.code}
-                code={value.code}
-                koreanName={value.koreanName}
-                englishName={value.englishName}
-                coin={tickerList[value.code]}
+                key={marketData.market}
+                code={marketData.market}
+                koreanName={marketData.koreanName}
+                englishName={marketData.englishName}
+                coin={tickerList[marketData.market]}
               />
             ))}
-          </CoinBody>
+          </TableBody>
         ) : null}
-      </CoinTable>
+      </Table>
     </Wrapper>
   );
 }
@@ -100,41 +97,22 @@ const TabItem = styled.li<{ selected: boolean }>`
   }
 `;
 
-const CoinTable = styled(Table)``;
+const Table = styled.table`
+  width: 100%;
+  border-spacing: 0px;
+  text-align: center;
+`;
 
-const CoinHead = styled(TableHead)`
+const TableHead = styled.thead`
   height: 30px;
+  font-size: 11px;
   background: #f9fafc;
+  color: ${({ theme }) => theme.colors.darkGray};
   cursor: pointer;
-
-  & > tr > th {
-    padding: 0;
-    color: #666;
-    font-size: 12px;
-    text-align: center;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 `;
-const CoinBody = styled(TableBody)`
-  & > tr > td:nth-child(1) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
-  & > tr > td:nth-child(2) {
-    color: black;
-  }
+const TableRow = styled.tr``;
 
-  & > tr > td:nth-child(3) {
-    position: relative;
-    font-weight: 600;
-  }
+const TableCell = styled.td``;
 
-  & > tr > td:nth-child(5) {
-    color: black;
-  }
-`;
+const TableBody = styled.tbody``;
