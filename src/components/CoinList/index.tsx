@@ -48,7 +48,7 @@ export default function CoinList() {
             {searchMarketList.map((marketData) => (
               <CoinItem
                 key={marketData.market}
-                code={marketData.market}
+                market={marketData.market}
                 koreanName={marketData.koreanName}
                 englishName={marketData.englishName}
                 coin={tickerList[marketData.market]}
