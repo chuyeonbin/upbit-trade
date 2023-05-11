@@ -1,27 +1,34 @@
-import { TableCell } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-interface PriceProps {
-  price: number;
+interface TradePriceCellProps {
+  tradePrice: number;
 }
 
-export default function Price({ price }: PriceProps) {
-  const prevPriceRef = useRef(price);
+export default function TradePriceCell({ tradePrice }: TradePriceCellProps) {
+  const prevTradePriceRef = useRef(tradePrice);
 
   useEffect(() => {
-    if (price !== prevPriceRef.current) {
-      prevPriceRef.current = price;
+    if (tradePrice !== prevTradePriceRef.current) {
+      prevTradePriceRef.current = tradePrice;
     }
-  }, [price]);
+  }, [tradePrice]);
 
   return (
-    <CoinCell>
-      {price.toLocaleString()}
-      {price > prevPriceRef.current ? <Up /> : price < prevPriceRef.current ? <Down /> : null}
-    </CoinCell>
+    <Wrapper>
+      <strong>{tradePrice.toLocaleString()}</strong>
+      {tradePrice > prevTradePriceRef.current ? (
+        <Up />
+      ) : tradePrice < prevTradePriceRef.current ? (
+        <Down />
+      ) : null}
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.td`
+  position: relative;
+`;
 
 const Highlight = styled.span`
   position: absolute;
@@ -48,19 +55,4 @@ const Up = styled(Highlight)`
 const Down = styled(Highlight)`
   border: 1px solid transparent;
   animation: ${({ theme }) => borderColor(theme.colors.lightBlue)} 0.5s;
-`;
-
-const CoinCell = styled(TableCell)`
-  height: 45px;
-
-  && {
-    padding: 0;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 500;
-  }
-
-  & > i {
-    color: #666;
-  }
 `;

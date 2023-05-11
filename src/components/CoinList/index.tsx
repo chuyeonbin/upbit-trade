@@ -1,11 +1,10 @@
 import { ChangeEvent, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import SearchIcon from '@mui/icons-material/Search';
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { searchMarketName } from '../../store/modules/coin';
 import CoinItem from '../CoinItem';
+import SearchCoin from './SearchCoin';
 
 const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
 const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
@@ -20,17 +19,14 @@ export default function CoinList() {
 
   const handleTabClick = useCallback((index: number) => setSelectedTab(index), []);
 
-  const handleChangeSearchMarketList = useCallback((e: ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    dispatch(searchMarketName({ word: target.value }));
+  const handleChangeSearchMarketList = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    dispatch(searchMarketName({ word: value }));
   }, []);
 
   return (
     <Wrapper>
-      <CoinSerach>
-        <SearchInput placeholder='코인명 검색' onChange={handleChangeSearchMarketList} />
-        <SearchIcon sx={{ fontSize: 26, cursor: 'pointer' }} color='primary' />
-      </CoinSerach>
+      <SearchCoin onChange={handleChangeSearchMarketList} />
       <TabList>
         {tabList.map((tab, index) => (
           <TabItem key={tab} onClick={() => handleTabClick(index)} selected={selectedTab === index}>
@@ -38,47 +34,35 @@ export default function CoinList() {
           </TabItem>
         ))}
       </TabList>
-      <CoinTable>
-        <CoinHead>
-          <TableRow>
-            <TableCell sx={{ border: 0 }} />
+      <Table>
+        <TableHead>
+          <tr>
+            <td />
             {tableHead.map((value) => (
-              <TableCell key={value} sx={{ border: 0 }}>
-                {value}
-              </TableCell>
+              <td key={value}>{value}</td>
             ))}
-          </TableRow>
-        </CoinHead>
+          </tr>
+        </TableHead>
         {Object.keys(tickerList).length > 0 ? (
-          <CoinBody>
-            {searchMarketList.map((value) => (
+          <tbody>
+            {searchMarketList.map((marketData) => (
               <CoinItem
-                key={value.code}
-                code={value.code}
-                koreanName={value.koreanName}
-                englishName={value.englishName}
-                coin={tickerList[value.code]}
+                key={marketData.market}
+                market={marketData.market}
+                koreanName={marketData.koreanName}
+                englishName={marketData.englishName}
+                coin={tickerList[marketData.market]}
               />
             ))}
-          </CoinBody>
+          </tbody>
         ) : null}
-      </CoinTable>
+      </Table>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.section`
   background-color: white;
-`;
-
-const CoinSerach = styled.div`
-  padding: 0.5rem;
-  display: flex;
-  border-bottom: 1px solid #d5d6dc;
-`;
-
-const SearchInput = styled.input`
-  flex-grow: 1;
 `;
 
 const TabList = styled.ul`
@@ -113,41 +97,16 @@ const TabItem = styled.li<{ selected: boolean }>`
   }
 `;
 
-const CoinTable = styled(Table)``;
-
-const CoinHead = styled(TableHead)`
-  height: 30px;
-  background: #f9fafc;
-  cursor: pointer;
-
-  & > tr > th {
-    padding: 0;
-    color: #666;
-    font-size: 12px;
-    text-align: center;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+const Table = styled.table`
+  width: 100%;
+  border-spacing: 0px;
+  text-align: center;
 `;
-const CoinBody = styled(TableBody)`
-  & > tr > td:nth-child(1) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 
-  & > tr > td:nth-child(2) {
-    color: black;
-  }
-
-  & > tr > td:nth-child(3) {
-    position: relative;
-    font-weight: 600;
-  }
-
-  & > tr > td:nth-child(5) {
-    color: black;
-  }
+const TableHead = styled.thead`
+  height: 30px;
+  font-size: 11px;
+  background: #f9fafc;
+  color: ${({ theme }) => theme.colors.darkGray};
+  cursor: pointer;
 `;

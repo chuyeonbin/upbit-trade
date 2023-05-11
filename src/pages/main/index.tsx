@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import CoinHeader from '../../components/CoinHeader';
 import CoinList from '../../components/CoinList';
-import MainCharts from '../../components/MainCharts';
+import MainChart from '../../components/MainChart';
 import Order from '../../components/Order';
 import Orderbook from '../../components/Orderbook';
 import TradeList from '../../components/TradeList';
@@ -19,7 +19,7 @@ export default function Main() {
     <Container>
       <LayoutA>
         <CoinHeader />
-        <MainCharts />
+        <MainChart />
         <OrderContainer>
           <Orderbook />
           <Order />

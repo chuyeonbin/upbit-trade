@@ -28,11 +28,7 @@ export interface CoinState {
     [key in MarketCodeType]: MarketState[];
   };
 
-  searchMarketList: {
-    code: string;
-    koreanName: string;
-    englishName: string;
-  }[];
+  searchMarketList: Omit<MarketState, 'code'>[];
 
   tickerList: {
     [key: string]: {
