@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../store/store';
 import { useDispatch } from 'react-redux';
-import { searchMarketName } from '../../store/modules/coin';
+import { searchMarket } from '../../store/modules/coin';
 import CoinItem from '../CoinItem';
 import SearchCoin from './SearchCoin';
 
@@ -21,7 +21,7 @@ export default function CoinList() {
 
   const handleChangeSearchMarketList = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    dispatch(searchMarketName({ word: value }));
+    dispatch(searchMarket({ word: value }));
   }, []);
 
   return (
