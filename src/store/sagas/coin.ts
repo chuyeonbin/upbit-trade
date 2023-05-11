@@ -4,12 +4,12 @@ import { call, fork, put, all, takeEvery, select, throttle } from 'redux-saga/ef
 import {
   getCandleByMinutes,
   getCandleByData,
-  getMarketCodes,
+  getMarketList,
   getOrderBooks,
   getPresentPrice,
   getTrades,
 } from '../../api';
-import { CandleType, MarketCodes, Orderbooks, PresentPrices, Trades } from '../../types';
+import { CandleType, MarketList, Orderbooks, PresentPrices, Trades } from '../../types';
 import { DayCandles, MinuteCandles, MonthCandles, WeekCandles } from '../../types/candle';
 
 import {
@@ -44,7 +44,7 @@ import { RootState } from '../store';
 export function* loadMarketList() {
   yield put(loadMarketListRequest());
   try {
-    const marketList: MarketCodes = yield call(getMarketCodes);
+    const marketList: MarketList = yield call(getMarketList);
     yield put(loadMarketListSuccess(marketList));
   } catch (error) {
     yield put(loadMarketListFailure({ error }));

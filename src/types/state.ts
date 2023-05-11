@@ -1,4 +1,4 @@
-import { CandleType, Trades } from '.';
+import { CandleType } from '.';
 
 export interface SocketState {
   presentPriceSocketLoading: boolean;
@@ -14,12 +14,19 @@ export interface SocketState {
   orderbookSocketError: Error | null;
 }
 
+type MarketCodeType = 'KRW' | 'BTC' | 'USDT';
+
+interface MarketState {
+  code: string;
+  market: string;
+  koreanName: string;
+  englishName: string;
+}
+
 export interface CoinState {
   marketList: {
-    code: string;
-    koreanName: string;
-    englishName: string;
-  }[];
+    [key in MarketCodeType]: MarketState[];
+  };
 
   searchMarketList: {
     code: string;
