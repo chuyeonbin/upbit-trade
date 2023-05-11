@@ -392,19 +392,19 @@ const coinSlice = createSlice({
       state.candles.candleType = payload.type;
       state.candles.datas = [];
     },
-    searchMarketName: (state, { payload }: PayloadAction<{ word: string }>) => {
-      // if (payload.word === '') {
-      //   state.searchMarketList = [...state.marketList];
-      //   return;
-      // }
-      // const regex = createFuzzyMatcher(payload.word);
-      // const searchMarketList = [];
-      // for (let i = 0; i < state.marketList.length; i++) {
-      //   if (regex.test(state.marketList[i].koreanName)) {
-      //     searchMarketList.push(state.marketList[i]);
-      //   }
-      // }
-      // state.searchMarketList = searchMarketList;
+    searchMarket: (state, { payload }: PayloadAction<{ word: string }>) => {
+      if (payload.word === '') {
+        state.searchMarketList = [...state.marketList.KRW];
+        return;
+      }
+      const regex = createFuzzyMatcher(payload.word);
+      const searchMarketList = [];
+      for (let i = 0; i < state.marketList.KRW.length; i++) {
+        if (regex.test(state.marketList.KRW[i].koreanName)) {
+          searchMarketList.push(state.marketList.KRW[i]);
+        }
+      }
+      state.searchMarketList = searchMarketList;
     },
   },
 });
@@ -440,7 +440,7 @@ export const {
   changeSelectedMarketName,
   changeOrderPrice,
   changeCandleData,
-  searchMarketName,
+  searchMarket,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;

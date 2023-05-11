@@ -1,8 +1,6 @@
-import { ChangeEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../../store/store';
-import { useDispatch } from 'react-redux';
-import { searchMarketName } from '../../store/modules/coin';
 import CoinItem from '../CoinItem';
 import SearchCoin from './SearchCoin';
 
@@ -10,8 +8,6 @@ const tabList = ['원화', 'BTC', 'USDT', '보유', '관심'];
 const tableHead = ['한글명', '현재가', '전일대비', '거래대금'];
 
 export default function CoinList() {
-  const dispatch = useDispatch();
-
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const searchMarketList = useAppSelector((state) => state.coin.searchMarketList);
 
@@ -19,14 +15,9 @@ export default function CoinList() {
 
   const handleTabClick = useCallback((index: number) => setSelectedTab(index), []);
 
-  const handleChangeSearchMarketList = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    dispatch(searchMarketName({ word: value }));
-  }, []);
-
   return (
     <Wrapper>
-      <SearchCoin onChange={handleChangeSearchMarketList} />
+      <SearchCoin />
       <TabList>
         {tabList.map((tab, index) => (
           <TabItem key={tab} onClick={() => handleTabClick(index)} selected={selectedTab === index}>
