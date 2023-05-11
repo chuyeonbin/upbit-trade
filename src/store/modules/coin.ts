@@ -107,23 +107,8 @@ const coinSlice = createSlice({
             throw new Error(`${marketCode}의 code는 state로 저장할 수 없습니다.`);
         }
       });
-<<<<<<< HEAD
 
-      // payload.forEach((data) => {
-      //   if (data.market.substring(0, 3) === 'KRW') {
-      //     state.marketList.push({
-      //       code: data.market,
-      //       koreanName: data.korean_name,
-      //       englishName: data.english_name,
-      //     });
-      //   }
-      // });
-
-      // state.searchMarketList = [...state.marketList];
-=======
-      
       state.searchMarketList = [...state.marketList.KRW];
->>>>>>> develop
     },
     loadMarketListFailure: (state, { payload }) => {
       state.loadMarketListLoading = false;
