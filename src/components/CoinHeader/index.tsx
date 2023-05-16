@@ -9,7 +9,7 @@ export default function CoinHeader() {
 
   return (
     <HeaderWrapper>
-      <HeaderTitle market={selectedCoin.code} koreanName={selectedCoin.marketName} />
+      <HeaderTitle market={selectedCoin.market} koreanName={selectedCoin.marketName} />
       <HeaderBody>
         <HeaderLeft
           signedChangePrice={selectedCoin.signedChangePrice}
@@ -21,7 +21,7 @@ export default function CoinHeader() {
           lowPrice={selectedCoin.lowPrice}
           accTradeVolume24h={selectedCoin.accTradeVolume24h}
           accTradePrice24h={selectedCoin.accTradePrice24h}
-          market={selectedCoin.code}
+          market={selectedCoin.market}
         />
       </HeaderBody>
     </HeaderWrapper>

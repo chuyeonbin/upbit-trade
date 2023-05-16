@@ -12,7 +12,7 @@ export default function Inner1() {
         <Dt>거래량</Dt>
         <Dd>
           {Number(selectedCoin.accTradeVolume24h.toFixed()).toLocaleString()}
-          <I>{selectedCoin.code.substring(4)}</I>
+          <I>{selectedCoin.market.substring(4)}</I>
         </Dd>
         <Dt>거래 대금</Dt>
         <Dd>

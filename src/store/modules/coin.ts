@@ -27,7 +27,7 @@ const initialState: CoinState = {
 
   selectedCoin: {
     marketName: '비트코인',
-    code: 'KRW-BTC',
+    market: 'KRW-BTC',
     tradePrice: 0,
     highPrice: 0,
     lowPrice: 0,
@@ -200,7 +200,7 @@ const coinSlice = createSlice({
       state.loadSelectedCoinDataLoading = false;
       state.loadSelectedCoinDataDone = true;
 
-      state.selectedCoin.code = payload[0].market;
+      state.selectedCoin.market = payload[0].market;
       state.selectedCoin.tradePrice = payload[0].trade_price;
       state.selectedCoin.highPrice = payload[0].high_price;
       state.selectedCoin.lowPrice = payload[0].low_price;
@@ -320,7 +320,7 @@ const coinSlice = createSlice({
     },
     updateTradeList: (state, { payload }: PayloadAction<RealTimeTrades>) => {
       // 중복으로 들어온 코드 제거
-      const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.code);
+      const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.market);
 
       // 들어온 데이터가 기존데이터에 존재할 경우 업데이트 안함
       tradeList.forEach((trade) => {
@@ -344,7 +344,7 @@ const coinSlice = createSlice({
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
       // 마지막 호가 데이터로 업데이트
       const codes = payload.map((orderbook) => orderbook.code);
-      const lastIndex = codes.lastIndexOf(state.selectedCoin.code);
+      const lastIndex = codes.lastIndexOf(state.selectedCoin.market);
 
       if (lastIndex !== -1) {
         state.orderbook.timestamp = payload[lastIndex].timestamp;
@@ -362,7 +362,7 @@ const coinSlice = createSlice({
     },
     updateSelectedCoin: (state, { payload }: PayloadAction<RealTimeTickers>) => {
       // code에 맞는거만 필터링
-      const coinList = payload.filter((value) => value.code === state.selectedCoin.code);
+      const coinList = payload.filter((value) => value.code === state.selectedCoin.market);
 
       // 마지막 코인 데이터로 업데이트
       const coin = coinList[coinList.length - 1];
@@ -377,7 +377,7 @@ const coinSlice = createSlice({
     },
     changeSelectedCoin: (
       state,
-      { payload }: PayloadAction<{ marketName: string; code: string }>,
+      { payload }: PayloadAction<{ marketName: string; market: string }>,
     ) => {
       undefined;
     },
