@@ -3,19 +3,13 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useAppSelector } from '../../store/store';
 import { dayToDayFormat, signedChangePriceFormat, tradeVolume24hFormat } from '../../utils';
+import HeaderTitle from './HeaderTitle';
 
 export default function CoinHeader() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
-
-  const logoUrl = `https://static.upbit.com/logos/${selectedCoin.code.substring(4)}.png`;
-
   return (
     <HeaderWrapper>
-      <TitleWrapper>
-        <Logo src={logoUrl} />
-        <KoreanName>{selectedCoin.marketName}</KoreanName>
-        <EnglishName>{selectedCoin.code.substring(4)}/KRW</EnglishName>
-      </TitleWrapper>
+      <HeaderTitle market={selectedCoin.code} koreanName={selectedCoin.marketName} />
       <HeaderBody>
         <TradePriceWrapper change={selectedCoin.signedChangePrice}>
           <TradePrice>
