@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useAppSelector } from '../../store/store';
-import { dayToDayFormat, signedChangePriceFormat, tradeVolume24hFormat } from '../../utils';
+import { tradeVolume24hFormat } from '../../utils';
 import HeaderTitle from './HeaderTitle';
+import HeaderLeft from './HeaderLeft';
 
 export default function CoinHeader() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);
@@ -11,24 +10,11 @@ export default function CoinHeader() {
     <HeaderWrapper>
       <HeaderTitle market={selectedCoin.code} koreanName={selectedCoin.marketName} />
       <HeaderBody>
-        <TradePriceWrapper change={selectedCoin.signedChangePrice}>
-          <TradePrice>
-            {selectedCoin.tradePrice.toLocaleString()}
-            <span>KRW</span>
-          </TradePrice>
-          <ChangeWrapper>
-            <span>전일대비</span>
-            <span>
-              {dayToDayFormat(selectedCoin.signedChangePrice, selectedCoin.prevClosingPrice)}%
-            </span>
-            {selectedCoin.signedChangePrice > 0 ? (
-              <ArrowDropUpIcon />
-            ) : selectedCoin.signedChangePrice < 0 ? (
-              <ArrowDropDownIcon />
-            ) : null}
-            <span>{signedChangePriceFormat(selectedCoin.signedChangePrice)}</span>
-          </ChangeWrapper>
-        </TradePriceWrapper>
+        <HeaderLeft
+          signedChangePrice={selectedCoin.signedChangePrice}
+          tradePrice={selectedCoin.tradePrice}
+          prevClosingPrice={selectedCoin.prevClosingPrice}
+        />
         <PriceWrapper>
           <PriceA>
             <HP>
@@ -68,59 +54,6 @@ const HeaderBody = styled.div`
   padding: 18px 20px 14px;
   display: flex;
   justify-content: space-between;
-`;
-
-const TitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  height: 44px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.lightGray};
-`;
-
-const Logo = styled.img`
-  margin-left: 14px;
-  width: 26px;
-  height: 26px;
-`;
-
-const KoreanName = styled.h4`
-  margin-left: 12px;
-`;
-
-const EnglishName = styled.p`
-  margin-top: 7px;
-  margin-left: 3px;
-  font-size: 12px;
-  color: #666;
-`;
-
-const TradePriceWrapper = styled.div<{ change: number }>`
-  display: flex;
-  flex-direction: column;
-
-  color: ${({ theme, change }) =>
-    change > 0 ? theme.colors.lightRed : change < 0 ? theme.colors.lightBlue : 'black'};
-`;
-
-const TradePrice = styled.h2`
-  font-size: ${({ theme }) => theme.fontSize.large};
-  font-weight: 500;
-
-  & > span {
-    font-size: ${({ theme }) => theme.fontSize.micro};
-  }
-`;
-
-const ChangeWrapper = styled.div`
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-
-  & > span:nth-child(1) {
-    margin-right: 4px;
-    font-size: 11px;
-    color: ${({ theme }) => theme.colors.darkGray};
-  }
 `;
 
 const PriceWrapper = styled.div`
