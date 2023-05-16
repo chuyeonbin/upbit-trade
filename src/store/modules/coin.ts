@@ -98,7 +98,6 @@ const coinSlice = createSlice({
           case 'USDT':
             state.marketList[marketCode].push({
               market: marketData.market,
-              code: marketCode,
               koreanName: marketData.korean_name,
               englishName: marketData.english_name,
             });
