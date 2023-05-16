@@ -17,7 +17,6 @@ export interface SocketState {
 type MarketCodeType = 'KRW' | 'BTC' | 'USDT';
 
 interface MarketState {
-  code: string;
   market: string;
   koreanName: string;
   englishName: string;
@@ -28,7 +27,7 @@ export interface CoinState {
     [key in MarketCodeType]: MarketState[];
   };
 
-  searchMarketList: Omit<MarketState, 'code'>[];
+  searchMarketList: MarketState[];
 
   tickerList: {
     [key: string]: {
