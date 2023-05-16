@@ -66,7 +66,7 @@ export interface CoinState {
 
   selectedCoin: {
     marketName: string;
-    code: string;
+    market: string;
     tradePrice: number;
     highPrice: number;
     lowPrice: number;
