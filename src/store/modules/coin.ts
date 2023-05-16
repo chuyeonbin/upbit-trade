@@ -200,18 +200,21 @@ const coinSlice = createSlice({
       state.loadSelectedCoinDataLoading = false;
       state.loadSelectedCoinDataDone = true;
 
-      state.selectedCoin.market = payload[0].market;
-      state.selectedCoin.tradePrice = payload[0].trade_price;
-      state.selectedCoin.highPrice = payload[0].high_price;
-      state.selectedCoin.lowPrice = payload[0].low_price;
-      state.selectedCoin.high52WeekPrice = payload[0].highest_52_week_price;
-      state.selectedCoin.high52WeekDate = payload[0].highest_52_week_date;
-      state.selectedCoin.low52WeekPrice = payload[0].lowest_52_week_price;
-      state.selectedCoin.low52WeekDate = payload[0].lowest_52_week_date;
-      state.selectedCoin.signedChangePrice = payload[0].signed_change_price;
-      state.selectedCoin.accTradeVolume24h = payload[0].acc_trade_volume_24h;
-      state.selectedCoin.accTradePrice24h = payload[0].acc_trade_price_24h;
-      state.selectedCoin.prevClosingPrice = payload[0].prev_closing_price;
+      state.selectedCoin = {
+        marketName: payload[0].market,
+        market: payload[0].market,
+        tradePrice: payload[0].trade_price,
+        highPrice: payload[0].high_price,
+        lowPrice: payload[0].low_price,
+        high52WeekPrice: payload[0].highest_52_week_price,
+        high52WeekDate: payload[0].highest_52_week_date,
+        low52WeekPrice: payload[0].lowest_52_week_price,
+        low52WeekDate: payload[0].lowest_52_week_date,
+        signedChangePrice: payload[0].signed_change_price,
+        accTradeVolume24h: payload[0].acc_trade_price_24h,
+        accTradePrice24h: payload[0].acc_trade_price_24h,
+        prevClosingPrice: payload[0].prev_closing_price,
+      };
 
       state.orderPrice = payload[0].trade_price;
     },
