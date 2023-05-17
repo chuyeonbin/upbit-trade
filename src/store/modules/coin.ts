@@ -201,7 +201,7 @@ const coinSlice = createSlice({
       state.loadSelectedCoinDataDone = true;
 
       state.selectedCoin = {
-        marketName: payload[0].market,
+        ...state.selectedCoin,
         market: payload[0].market,
         tradePrice: payload[0].trade_price,
         highPrice: payload[0].high_price,
