@@ -364,19 +364,21 @@ const coinSlice = createSlice({
       }
     },
     updateSelectedCoin: (state, { payload }: PayloadAction<RealTimeTickers>) => {
-      // code에 맞는거만 필터링
+      // 마지막 코인 데이터로 업데이트
       const coinList = payload.filter((value) => value.code === state.selectedCoin.market);
 
-      // 마지막 코인 데이터로 업데이트
       const coin = coinList[coinList.length - 1];
 
-      state.selectedCoin.tradePrice = coin.trade_price;
-      state.selectedCoin.highPrice = coin.high_price;
-      state.selectedCoin.lowPrice = coin.low_price;
-      state.selectedCoin.signedChangePrice = coin.signed_change_price;
-      state.selectedCoin.accTradeVolume24h = coin.acc_trade_volume_24h;
-      state.selectedCoin.accTradePrice24h = coin.acc_trade_price_24h;
-      state.selectedCoin.prevClosingPrice = coin.prev_closing_price;
+      state.selectedCoin = {
+        ...state.selectedCoin,
+        tradePrice: coin.trade_price,
+        highPrice: coin.high_price,
+        lowPrice: coin.low_price,
+        signedChangePrice: coin.signed_change_price,
+        accTradeVolume24h: coin.acc_trade_volume_24h,
+        accTradePrice24h: coin.acc_trade_price_24h,
+        prevClosingPrice: coin.prev_closing_price,
+      };
     },
     changeSelectedCoin: (
       state,
