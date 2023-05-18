@@ -78,7 +78,7 @@ export function* presentPriceSocketSaga({ payload }: PayloadAction<{ codes: stri
         yield put(updateTickerList(msg));
       }
 
-      if (msg.find((value) => value.code === selectedCoin.code)) {
+      if (msg.find((value) => value.code === selectedCoin.market)) {
         yield put(updateSelectedCoin(msg));
       }
 
@@ -104,7 +104,7 @@ export function* tradeSocketSaga({ payload }: PayloadAction<{ codes: string[] }>
         coin: { selectedCoin },
       }: RootState = yield select();
 
-      if (msg.length && msg.find((value) => value.code === selectedCoin.code)) {
+      if (msg.length && msg.find((value) => value.code === selectedCoin.market)) {
         yield put(updateTradeList(msg));
       }
       yield delay(500); // 0.5초마다 업데이트

@@ -12,7 +12,7 @@ export default function Order() {
   const orderCountRef = useRef<HTMLInputElement>(null);
   const totalPriceRef = useRef<HTMLInputElement>(null);
   const orderPrice = useAppSelector((state) => state.coin.orderPrice);
-  const code = useAppSelector((state) => state.coin.selectedCoin.code);
+  const market = useAppSelector((state) => state.coin.selectedCoin.market);
 
   const [selectedTab, setSelectedTab] = useState<number>(0);
   const [askBid, setAskBid] = useState('매수');
@@ -94,7 +94,7 @@ export default function Order() {
           </InputWrapper>
         </Dd>
         <Dt>
-          주문수량<i>({code.substring(4)})</i>
+          주문수량<i>({market.substring(4)})</i>
         </Dt>
         <Dd>
           <Input

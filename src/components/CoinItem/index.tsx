@@ -29,7 +29,7 @@ export default memo(function CoinItem({ market, koreanName, englishName, coin }:
 
   const handleCoinItemClick = useCallback(() => {
     if (marketName !== koreanName) {
-      dispatch(changeSelectedCoin({ marketName: koreanName, code: market }));
+      dispatch(changeSelectedCoin({ marketName: koreanName, market }));
     }
   }, [marketName]);
 

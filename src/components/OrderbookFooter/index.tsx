@@ -8,7 +8,7 @@ interface OrderbookFooterProps {
 }
 
 export default function OrderbookFooter({ totalAskSize, totalBidSize }: OrderbookFooterProps) {
-  const code = useAppSelector((state) => state.coin.selectedCoin.code);
+  const market = useAppSelector((state) => state.coin.selectedCoin.market);
 
   return (
     <Wrapper>
@@ -18,7 +18,7 @@ export default function OrderbookFooter({ totalAskSize, totalBidSize }: Orderboo
             <OrderbookFooterCell align='right'>{totalAskSize.toFixed(3)}</OrderbookFooterCell>
             <OrderbookFooterCell align='center'>
               <strong>수량</strong>
-              <i>({code.substring(4)})</i>
+              <i>({market.substring(4)})</i>
             </OrderbookFooterCell>
             <OrderbookFooterCell align='left'>{totalBidSize.toFixed(3)}</OrderbookFooterCell>
           </OrderbookFooterRow>
