@@ -15,7 +15,6 @@ import { DayCandles, MinuteCandles, MonthCandles, WeekCandles } from '../../type
 import {
   changeCandleData,
   changeSelectedCoin,
-  changeSelectedMarketName,
   loadCandleDataFailure,
   loadCandleDataRequest,
   loadCandleDataSuccess,
@@ -195,7 +194,6 @@ function* changeSelectedCoinSaga({
     loadOrderbookSaga(payload.market),
     loadCandleDataSaga(payload.market),
   ]);
-  yield put(changeSelectedMarketName({ marketName: payload.marketName }));
 }
 
 function* watchPrevCandleDataSaga() {

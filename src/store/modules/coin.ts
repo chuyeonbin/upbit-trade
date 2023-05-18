@@ -384,9 +384,6 @@ const coinSlice = createSlice({
       state,
       { payload }: PayloadAction<{ marketName: string; market: string }>,
     ) => {
-      undefined;
-    },
-    changeSelectedMarketName: (state, { payload }: PayloadAction<{ marketName: string }>) => {
       state.selectedCoin.marketName = payload.marketName;
     },
     changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
@@ -441,7 +438,6 @@ export const {
   updateOrderbook,
   updateSelectedCoin,
   changeSelectedCoin,
-  changeSelectedMarketName,
   changeOrderPrice,
   changeCandleData,
   searchMarket,
