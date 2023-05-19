@@ -14,8 +14,6 @@ interface OrderbookBodyProps {
 
 export default function OrderbookBody({ orderbook }: OrderbookBodyProps) {
   const units = orderbook.orderbookUnits;
-  const totalAskSize = orderbook.totalAskSize;
-  const totalBidSize = orderbook.totalBidSize;
   const maxSize = Math.max(
     ...units.map((unit) => (unit.askSize > unit.bidSize ? unit.askSize : unit.bidSize)),
   );
