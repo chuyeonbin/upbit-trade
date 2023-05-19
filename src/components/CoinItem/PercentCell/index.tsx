@@ -12,7 +12,7 @@ export default function PercentCell({ prevClosingPrice, signedChangPrice }: Perc
 
   return (
     <Wrapper>
-      <p>{percent}</p>
+      <p>{percent}%</p>
       <p>{value}</p>
     </Wrapper>
   );
