@@ -1,4 +1,3 @@
-import { Table, TableBody } from '@mui/material';
 import styled from 'styled-components';
 import OrderbookAsk from './OrderbookAsk';
 import OrderbookBid from './OrderbookBid';
@@ -50,3 +49,9 @@ const Wrapper = styled.div`
   height: 600px;
   overflow: scroll;
 `;
+
+const Table = styled.table`
+  border-spacing: 0;
+`;
+
+const TableBody = styled.tbody``;
