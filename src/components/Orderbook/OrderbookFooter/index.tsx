@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
-import { useAppSelector } from '../../store/store';
+import { useAppSelector } from '../../../store/store';
 
 interface OrderbookFooterProps {
   totalAskSize: number;

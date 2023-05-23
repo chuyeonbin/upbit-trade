@@ -1,11 +1,11 @@
 // import React from 'react';
 import styled from 'styled-components';
 import { TableCell, TableRow } from '@mui/material';
-import { useAppSelector } from '../../../store/store';
-import { dayToDayFormat } from '../../../utils';
+import { useAppSelector } from '../../../../store/store';
+import { dayToDayFormat } from '../../../../utils';
 import Inner2 from './inner2';
 import { useDispatch } from 'react-redux';
-import { changeOrderPrice } from '../../../store/modules/coin';
+import { changeOrderPrice } from '../../../../store/modules/coin';
 
 interface OrderbookBidProps {
   index: number;
