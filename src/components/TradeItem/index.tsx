@@ -1,4 +1,3 @@
-import { TableRow, TableCell } from '@mui/material';
 import styled from 'styled-components';
 import { tradePriceFormat } from '../../utils';
 import { getMonth, getDate, getHours, getMinutes } from 'date-fns';
@@ -23,12 +22,12 @@ export default function TradeItem({ trade }: TradeItemProps) {
 
   return (
     <TradeItemRow>
-      <TradeItemCell>
+      <TradeTime>
         {month}.{date}
         <i>
           {hour}:{minute}
         </i>
-      </TradeItemCell>
+      </TradeTime>
       <TradePrice price={trade.tradePrice - prevClosingPrice}>
         {trade.tradePrice.toLocaleString()}
       </TradePrice>
@@ -42,38 +41,38 @@ export default function TradeItem({ trade }: TradeItemProps) {
   );
 }
 
-const TradeItemRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(even)': {
-    backgroundColor: '#f9fafc',
-    color: theme.colors.darkGray,
-  },
-  '& > td': {
-    borderBottom: 0,
-  },
-  '& > td:nth-child(1)': {
-    width: '10%',
-  },
-  '& > td:nth-child(2)': {
-    fontWeight: '600',
-  },
-  '& > td:nth-child(2), & > td:nth-child(3), & > td:nth-child(4)': {
-    textAlign: 'right',
-    width: '30%',
-  },
-  '& > td:nth-child(4)': {
-    paddingRight: '12px',
-  },
-}));
-
-const TradeItemCell = styled(TableCell)`
-  height: 30px;
-
-  && {
-    padding: 0;
-    text-align: center;
-    font-size: 11px;
+const TradeItemRow = styled.tr`
+  &:nth-child(even) {
+    background: #f9fafc;
+    color: ${({ theme }) => theme.colors.darkGray};
+    font-weight: 400;
   }
 
+  & > td:nth-child(2) {
+  }
+
+  & > td:nth-child(2),
+  & > td:nth-child(3),
+  & > td:nth-child(4) {
+    text-align: right;
+    width: 30%;
+  }
+
+  & > td:nth-child(4) {
+    padding-right: 12px;
+    color: black;
+  }
+`;
+
+const TradeItemCell = styled.td`
+  height: 30px;
+  font-size: 11px;
+  text-align: center;
+  border: none;
+`;
+
+const TradeTime = styled(TradeItemCell)`
+  color: black;
   & > i {
     padding-left: 8px;
     color: ${({ theme }) => theme.colors.darkGray};
@@ -81,15 +80,12 @@ const TradeItemCell = styled(TableCell)`
 `;
 
 const TradePrice = styled(TradeItemCell)<{ price: number }>`
-  && {
-    color: ${({ theme, price }) =>
-      price > 0 ? theme.colors.lightRed : price < 0 ? theme.colors.lightBlue : 'black'};
-  }
+  font-weight: 600;
+  color: ${({ theme, price }) =>
+    price > 0 ? theme.colors.lightRed : price < 0 ? theme.colors.lightBlue : 'black'};
 `;
 
 const TradeVolume = styled(TradeItemCell)<{ askbid: 'ASK' | 'BID' }>`
-  && {
-    color: ${({ theme, askbid }) =>
-      askbid === 'BID' ? theme.colors.lightRed : theme.colors.lightBlue};
-  }
+  color: ${({ theme, askbid }) =>
+    askbid === 'BID' ? theme.colors.lightRed : theme.colors.lightBlue};
 `;

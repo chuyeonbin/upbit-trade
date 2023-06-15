@@ -42,8 +42,8 @@ export async function getPresentPrice(markets: string[]): Promise<PresentPrices>
   return response.data;
 }
 
-export async function getOrderBooks(codes: string[]): Promise<Orderbooks> {
-  const query = `/orderbook?markets=${codes.join('&market=')}`;
+export async function getOrderBooks(market: string): Promise<Orderbooks> {
+  const query = `/orderbook?markets=${market}`;
   const response = await axios.get(BASE_URL + query);
   return response.data;
 }

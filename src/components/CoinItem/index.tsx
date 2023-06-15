@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { changeSelectedCoin } from '../../store/modules/coin';
@@ -29,12 +29,17 @@ export default memo(function CoinItem({ market, koreanName, englishName, coin }:
 
   const handleCoinItemClick = useCallback(() => {
     if (marketName !== koreanName) {
-      dispatch(changeSelectedCoin({ marketName: koreanName, code: market }));
+      dispatch(changeSelectedCoin({ marketName: koreanName, market }));
     }
   }, [marketName]);
 
   return (
-    <Wrapper onClick={handleCoinItemClick} change={coin.signedChangePrice} key={market}>
+    <Wrapper
+      onClick={handleCoinItemClick}
+      selected={marketName === koreanName}
+      change={coin.signedChangePrice}
+      key={market}
+    >
       <BookMarkCell />
       <TitleCell koreanName={koreanName} englishName={englishName} market={market} />
       <TradePriceCell tradePrice={coin.tradePrice} />
@@ -47,8 +52,9 @@ export default memo(function CoinItem({ market, koreanName, englishName, coin }:
   );
 });
 
-const Wrapper = styled.tr<{ change: number }>`
+const Wrapper = styled.tr<{ change: number; selected: boolean }>`
   height: 45px;
+  background-color: ${({ selected }) => (selected ? '#f4f5f8' : 'none')};
   border-bottom: 1px solid green;
 
   &:hover {

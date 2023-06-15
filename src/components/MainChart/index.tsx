@@ -95,7 +95,7 @@ export default function MainChart() {
   const dispatch = useDispatch();
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
   const [options, setOptions] = useState<Highcharts.Options>(initialOptions);
-  const code = useAppSelector((state) => state.coin.selectedCoin.code);
+  const market = useAppSelector((state) => state.coin.selectedCoin.market);
   const candles = useAppSelector((state) => state.coin.candles);
   const loadCandleDataLoading = useAppSelector((state) => state.coin.loadCandleDataLoading);
 
@@ -207,7 +207,7 @@ export default function MainChart() {
         series: [
           {
             type: 'candlestick',
-            name: code,
+            name: market,
             id: 'aapl',
             data: ohlc,
           },

@@ -1,15 +1,20 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useCallback } from 'react';
 import styled from 'styled-components';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { searchMarket } from '../../../store/modules/coin';
+import { useDispatch } from 'react-redux';
 
-interface SearchCoinProps {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+export default function SearchCoin() {
+  const dispatch = useDispatch();
 
-export default function SearchCoin({ onChange }: SearchCoinProps) {
+  const handleChangeSearchMarket = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    dispatch(searchMarket({ word: value }));
+  }, []);
+
   return (
     <Wrapper>
-      <Input placeholder='코인명 검색' onChange={onChange} />
+      <Input placeholder='코인명 검색' onChange={handleChangeSearchMarket} />
       <AiOutlineSearch />
     </Wrapper>
   );

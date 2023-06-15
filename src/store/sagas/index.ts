@@ -19,15 +19,17 @@ import socketSaga from './socket';
 function* initSaga() {
   yield loadMarketList();
 
-  const { coin }: RootState = yield select();
+  const {
+    coin: { selectedCoin, marketList },
+  }: RootState = yield select();
 
-  const markets = coin.marketList.KRW.map((marketData) => marketData.market);
+  const markets = marketList.KRW.map((marketData) => marketData.market);
 
   yield loadTickerList(markets);
-  yield loadTradeListSaga(coin.selectedCoin.code);
-  yield loadOrderbookSaga([coin.selectedCoin.code]);
-  yield loadSelectedCoinDataSaga(coin.selectedCoin.code);
-  yield loadCandleDataSaga(coin.selectedCoin.code);
+  yield loadTradeListSaga(selectedCoin.market);
+  yield loadOrderbookSaga(selectedCoin.market);
+  yield loadSelectedCoinDataSaga(selectedCoin.market);
+  yield loadCandleDataSaga(selectedCoin.market);
 
   yield put(presentPriceSocketRequest({ codes: markets })); // 현재가 소켓 연결 요청
 

@@ -27,7 +27,7 @@ const initialState: CoinState = {
 
   selectedCoin: {
     marketName: '비트코인',
-    code: 'KRW-BTC',
+    market: 'KRW-BTC',
     tradePrice: 0,
     highPrice: 0,
     lowPrice: 0,
@@ -98,7 +98,6 @@ const coinSlice = createSlice({
           case 'USDT':
             state.marketList[marketCode].push({
               market: marketData.market,
-              code: marketCode,
               koreanName: marketData.korean_name,
               englishName: marketData.english_name,
             });
@@ -201,18 +200,21 @@ const coinSlice = createSlice({
       state.loadSelectedCoinDataLoading = false;
       state.loadSelectedCoinDataDone = true;
 
-      state.selectedCoin.code = payload[0].market;
-      state.selectedCoin.tradePrice = payload[0].trade_price;
-      state.selectedCoin.highPrice = payload[0].high_price;
-      state.selectedCoin.lowPrice = payload[0].low_price;
-      state.selectedCoin.high52WeekPrice = payload[0].highest_52_week_price;
-      state.selectedCoin.high52WeekDate = payload[0].highest_52_week_date;
-      state.selectedCoin.low52WeekPrice = payload[0].lowest_52_week_price;
-      state.selectedCoin.low52WeekDate = payload[0].lowest_52_week_date;
-      state.selectedCoin.signedChangePrice = payload[0].signed_change_price;
-      state.selectedCoin.accTradeVolume24h = payload[0].acc_trade_volume_24h;
-      state.selectedCoin.accTradePrice24h = payload[0].acc_trade_price_24h;
-      state.selectedCoin.prevClosingPrice = payload[0].prev_closing_price;
+      state.selectedCoin = {
+        ...state.selectedCoin,
+        market: payload[0].market,
+        tradePrice: payload[0].trade_price,
+        highPrice: payload[0].high_price,
+        lowPrice: payload[0].low_price,
+        high52WeekPrice: payload[0].highest_52_week_price,
+        high52WeekDate: payload[0].highest_52_week_date,
+        low52WeekPrice: payload[0].lowest_52_week_price,
+        low52WeekDate: payload[0].lowest_52_week_date,
+        signedChangePrice: payload[0].signed_change_price,
+        accTradeVolume24h: payload[0].acc_trade_price_24h,
+        accTradePrice24h: payload[0].acc_trade_price_24h,
+        prevClosingPrice: payload[0].prev_closing_price,
+      };
 
       state.orderPrice = payload[0].trade_price;
     },
@@ -321,7 +323,7 @@ const coinSlice = createSlice({
     },
     updateTradeList: (state, { payload }: PayloadAction<RealTimeTrades>) => {
       // 중복으로 들어온 코드 제거
-      const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.code);
+      const tradeList = payload.filter((trade) => trade.code === state.selectedCoin.market);
 
       // 들어온 데이터가 기존데이터에 존재할 경우 업데이트 안함
       tradeList.forEach((trade) => {
@@ -345,7 +347,7 @@ const coinSlice = createSlice({
     updateOrderbook: (state, { payload }: PayloadAction<RealTimeOrderbooks>) => {
       // 마지막 호가 데이터로 업데이트
       const codes = payload.map((orderbook) => orderbook.code);
-      const lastIndex = codes.lastIndexOf(state.selectedCoin.code);
+      const lastIndex = codes.lastIndexOf(state.selectedCoin.market);
 
       if (lastIndex !== -1) {
         state.orderbook.timestamp = payload[lastIndex].timestamp;
@@ -362,27 +364,26 @@ const coinSlice = createSlice({
       }
     },
     updateSelectedCoin: (state, { payload }: PayloadAction<RealTimeTickers>) => {
-      // code에 맞는거만 필터링
-      const coinList = payload.filter((value) => value.code === state.selectedCoin.code);
-
       // 마지막 코인 데이터로 업데이트
+      const coinList = payload.filter((value) => value.code === state.selectedCoin.market);
+
       const coin = coinList[coinList.length - 1];
 
-      state.selectedCoin.tradePrice = coin.trade_price;
-      state.selectedCoin.highPrice = coin.high_price;
-      state.selectedCoin.lowPrice = coin.low_price;
-      state.selectedCoin.signedChangePrice = coin.signed_change_price;
-      state.selectedCoin.accTradeVolume24h = coin.acc_trade_volume_24h;
-      state.selectedCoin.accTradePrice24h = coin.acc_trade_price_24h;
-      state.selectedCoin.prevClosingPrice = coin.prev_closing_price;
+      state.selectedCoin = {
+        ...state.selectedCoin,
+        tradePrice: coin.trade_price,
+        highPrice: coin.high_price,
+        lowPrice: coin.low_price,
+        signedChangePrice: coin.signed_change_price,
+        accTradeVolume24h: coin.acc_trade_volume_24h,
+        accTradePrice24h: coin.acc_trade_price_24h,
+        prevClosingPrice: coin.prev_closing_price,
+      };
     },
     changeSelectedCoin: (
       state,
-      { payload }: PayloadAction<{ marketName: string; code: string }>,
+      { payload }: PayloadAction<{ marketName: string; market: string }>,
     ) => {
-      undefined;
-    },
-    changeSelectedMarketName: (state, { payload }: PayloadAction<{ marketName: string }>) => {
       state.selectedCoin.marketName = payload.marketName;
     },
     changeOrderPrice: (state, { payload }: PayloadAction<{ orderPrice: number }>) => {
@@ -392,19 +393,19 @@ const coinSlice = createSlice({
       state.candles.candleType = payload.type;
       state.candles.datas = [];
     },
-    searchMarketName: (state, { payload }: PayloadAction<{ word: string }>) => {
-      // if (payload.word === '') {
-      //   state.searchMarketList = [...state.marketList];
-      //   return;
-      // }
-      // const regex = createFuzzyMatcher(payload.word);
-      // const searchMarketList = [];
-      // for (let i = 0; i < state.marketList.length; i++) {
-      //   if (regex.test(state.marketList[i].koreanName)) {
-      //     searchMarketList.push(state.marketList[i]);
-      //   }
-      // }
-      // state.searchMarketList = searchMarketList;
+    searchMarket: (state, { payload }: PayloadAction<{ word: string }>) => {
+      if (payload.word === '') {
+        state.searchMarketList = [...state.marketList.KRW];
+        return;
+      }
+      const regex = createFuzzyMatcher(payload.word);
+      const searchMarketList = [];
+      for (let i = 0; i < state.marketList.KRW.length; i++) {
+        if (regex.test(state.marketList.KRW[i].koreanName)) {
+          searchMarketList.push(state.marketList.KRW[i]);
+        }
+      }
+      state.searchMarketList = searchMarketList;
     },
   },
 });
@@ -437,10 +438,9 @@ export const {
   updateOrderbook,
   updateSelectedCoin,
   changeSelectedCoin,
-  changeSelectedMarketName,
   changeOrderPrice,
   changeCandleData,
-  searchMarketName,
+  searchMarket,
 } = coinSlice.actions;
 
 export default coinSlice.reducer;
