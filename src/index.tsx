@@ -11,7 +11,7 @@ import theme from './styles/theme';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter basename={process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : '/'}>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />
@@ -21,3 +21,4 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>,
 );
+process.env.PUBLIC_URL;
