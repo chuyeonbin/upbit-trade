@@ -30,9 +30,8 @@ yarn start
 ```
 
 ## 3. 프로젝트 소개
-
-<p>실시간 코인 데이터를 보여주는 업비트 사이트 입니다.</p>
-<p>websocket과 redux-saga를 공부하면서 개인 프로젝트를 같이 진행 해보고 싶어서 만들게 되었습니다.</p>
+<p>upbit에서 제공하는 api를 활용한 실시간 코인 정보 제공 사이트 구현 하였습니다. 100% 혼자 프로젝트를 진행하였습니다.</p>
+<p>redux와 redux-saga를 어떤식으로 사용하는지에 대한 이해와 websocket에서 실시간으로 들어오는 대규모 데이터를 처리하는 방법 배우게 되었습니다.</p>
 
 ## 4. 기술스택
 <img src=https://img.shields.io/badge/Typescript-v4.4.2-3178C6 /> <img src=https://img.shields.io/badge/React-v18.2.0-61DAFB /> 
