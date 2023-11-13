@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { TableCell } from '@mui/material';
-import { useAppSelector } from '../../../../store/store';
-import { dayToDayFormat } from '../../../../utils';
+import { useAppSelector } from '../../../../../store/store';
+import { dayToDayFormat } from '../../../../../utils';
 
 export default function Inner1() {
   const selectedCoin = useAppSelector((state) => state.coin.selectedCoin);

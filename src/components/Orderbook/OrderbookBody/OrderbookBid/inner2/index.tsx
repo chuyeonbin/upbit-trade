@@ -1,6 +1,6 @@
 import { TableCell } from '@mui/material';
 import styled from 'styled-components';
-import { useAppSelector } from '../../../../store/store';
+import { useAppSelector } from '../../../../../store/store';
 
 export default function inner2() {
   const trades = useAppSelector((state) => state.coin.tradeList);
