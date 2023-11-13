@@ -23,6 +23,9 @@ const initialOptions: Highcharts.Options = {
   chart: {
     width: 990,
     height: 450,
+    zooming: {
+      mouseWheel: false,
+    },
   },
   lang: {
     thousandsSep: ',',
